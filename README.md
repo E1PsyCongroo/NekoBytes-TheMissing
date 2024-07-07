@@ -28,6 +28,7 @@ NekoBytes-TheMissing
 ├── Tools/                // 工具
 │   └── Setup/            // Linux初始化配置工具
 ├── Web/                  // 课程主页
+├── Others/               // 其他杂项，比如辅助阅读资源、课程示例代码
 ```
 
 ## 项目说明
