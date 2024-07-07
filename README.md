@@ -6,8 +6,8 @@
   <a href="https://github.com/E1PsyCongroo/NekoBytes-TheMissing/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/E1PsyCongroo/NekoBytes-TheMissing?color=red" alt="license">
   </a>
-  <!-- <a href="https://github.com/E1PsyCongroo/NekoBytes-TheMissing/releases">
-    <img src="https://img.shields.io/github/v/release/E1PsyCongroo/NekoBytes-TheMissing?color=purple&include_prereleases" alt="release"> -->
+  <a href="https://github.com/E1PsyCongroo/NekoBytes-TheMissing/releases">
+    <img src="https://img.shields.io/github/v/release/E1PsyCongroo/NekoBytes-TheMissing?color=purple&include_prereleases" alt="release">
   </a>
   <a href="https://github.com/E1PsyCongroo/NekoBytes-TheMissing/issues">
     <img src="https://img.shields.io/github/issues/E1PsyCongroo/NekoBytes-TheMissing?color=lightgreen" alt="issues">
