@@ -1,3 +1,5 @@
 .DS_Store
 .vscode
-static/
+__pycache__
+*.pyc
+setup.tar.gz
