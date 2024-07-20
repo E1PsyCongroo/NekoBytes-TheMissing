@@ -1,0 +1,4 @@
+[submodule "Projects/Proj2-Snake"]
+    path = Projects/Proj2-Snake
+    url = https://github.com/Atr1ck/NekoBytes-TheMissing.git
+
