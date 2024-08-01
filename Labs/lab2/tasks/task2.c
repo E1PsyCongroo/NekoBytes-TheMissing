@@ -8,22 +8,15 @@ uint16_t i;
 
 void main()
 {
+    LED = 0;
     while (1)
     {
-        for(i=500;i<65535;i--)
-        {
-            LED = 0;
-            delay_ms(1);
-            LED = 1;
-            delay_ms(5);
-        }
-        for(i=1000;i<65535;i--)
-        {
-            LED = 1;
-            delay_ms(1);
-            LED = 0;
-            delay_ms(5);
-        }
+        delay_ms(200);
+        LED = !LED;
+        delay_ms(200);
+        LED = !LED;
+        delay_ms(1000);
+        LED = !LED;
     }
 }
 void delay_ms(uint16_t time)		//@11.0592MHz
