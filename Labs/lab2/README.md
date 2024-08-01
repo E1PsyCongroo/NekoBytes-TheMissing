@@ -323,7 +323,8 @@ tips:
 > 编译代码 sdcc -mmcs51 taskx.c
 > 烧录代码 stcgal -p /dev/ttyUSB0 -b 115200 taskx.ihx
 
-> 任务放在./task文件夹中
+> 任务文件放在./task文件夹中
+> 答题卡是./AnswerSheet.md
 
 ## Part4 虚拟51单片机安装
 很遗憾,我们没有那么多资源购置人手一块的芯片,大家也暂时不会深入研究硬件相关的内容
