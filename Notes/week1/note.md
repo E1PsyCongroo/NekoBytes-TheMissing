@@ -11,7 +11,7 @@
 
 尽管版本控制系统有很多， 其事实上的标准则是 **Git** 。而这篇 [XKCD 漫画](https://xkcd.com/1597/) 则反映出了人们对 Git 的评价：
 
-![[git.png]]
+![](./material/git.png)
 
 ### 如何克隆仓库
 而在本课程中需要使用`git`来克隆任务仓库，下面简单介绍如何使用 `git` 来克隆仓库：
@@ -51,7 +51,7 @@
   获取仓库url
   仓库绿色Code按钮展开后就会给出，复制选中https后给出的url
   （如图中所示，不同仓库的url内容不同，改图仅作参考）
-  ![[Pasted image 20240802212351.png]]
+  ![](./material/git%20clone%20url.png)
    **第三步：**
    使用`git clone`命令进行复制
    
