@@ -4,7 +4,7 @@
 
 你将会学到：
 
-## 工具的选择	
+## 工具的选择
 
 这里使用 vscode 作为编辑器，gcc 作为编译器。
 
@@ -32,8 +32,6 @@
 
 我们为你导出了一个通用的基础配置，当然，我们同时也欢迎你自己去配置你喜欢的、你需求的东西。vscode 作为一个拥有相当丰富的插件库的应用，大部分的配置将会很愉悦（如果你想使用某插件有疑问， RTFM）。但记住，vscode 本质上还是一个文本编辑器，请不要试图当作 IDE 使用（如配置大量的“自动编译、执行”插件等等），你要做的是改善自己的打字体验。至于编译，交给 gcc 吧。
 
-
-
 ### Vim
 
 程序员们对自己正在使用的文本编辑器通常有着 [非常强的执念](https://zh.wikipedia.org/wiki/%E7%BC%96%E8%BE%91%E5%99%A8%E4%B9%8B%E6%88%98)。
@@ -53,6 +51,7 @@ Vim 有着悠久历史；它始于 1976 年的 Vi 编辑器，到现在还在 �
 
 对于vim的安装我们建议STFW，但是这里会留下关于vim的拓展资料
 **拓展资料：**
+
 - `vimtutor` 是一个 Vim 安装时自带的教程
 - [Vim Adventures](https://vim-adventures.com/) 是一个学习使用 Vim 的游戏
 - [Vim Tips Wiki](http://vim.wikia.com/wiki/Vim_Tips_Wiki)
@@ -62,12 +61,12 @@ Vim 有着悠久历史；它始于 1976 年的 Vi 编辑器，到现在还在 �
 - [Vim Screencasts](http://vimcasts.org/)
 - [Practical Vim](https://pragprog.com/titles/dnvim2/)（书籍）
 
-
 ## Git
 
 你是否有这种情况：写代码的时候发现自己很大一段都写错了，想回到曾经的版本发现单纯的撤回完全做不到。或者团队开发项目的时候不知道怎么同步每个人的代码。那么这个时候，你就会想到 Git 的好处了。
 
-**什么是 Git：** 
+### 什么是 Git
+
 版本控制系统 (VCSs) 是一类用于追踪源代码（或其他文件、文件夹）改动的工具。顾名思义，这些工具可以帮助我们管理代码的修改历史；不仅如此，它还可以让协作编码变得更方便。VCS通过一系列的快照将某个文件夹及其内容保存了起来，每个快照都包含了文件或文件夹的完整状态。同时它还维护了快照创建者的信息以及每个快照的相关信息等等。
 
 为什么说版本控制系统非常有用？即使您只是一个人进行编程工作，它也可以帮您创建项目的快照，记录每个改动的目的、基于多分支并行开发等等。和别人协作开发时，它更是一个无价之宝，您可以看到别人对代码进行的修改，同时解决由于并行开发引起的冲突。
@@ -80,70 +79,71 @@ Vim 有着悠久历史；它始于 1976 年的 Vi 编辑器，到现在还在 �
 
 尽管版本控制系统有很多， 其事实上的标准则是 **Git** 。而这篇 [XKCD 漫画](https://xkcd.com/1597/) 则反映出了人们对 Git 的评价：
 
-![](./material/git.png)
+![XKCD 漫画](./material/git.png)
 
+### 我该如何使用 Git
 
-**我该如何使用 Git** 
+#### Git的命令行接口(基础部分)
 
-***Git的命令行接口(基础部分)***
 - `git help <command>`: 获取 git 命令的帮助信息
 - `git init`: 创建一个新的 git 仓库，其数据会存放在一个名为 `.git` 的目录下
 - `git status`: 显示当前的仓库状态
 - `git add <filename>`: 添加文件到暂存区
 - `git commit`: 创建一个新的提交
-    - 如何编写 [良好的提交信息](https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)!
-    - 为何要 [编写良好的提交信息](https://chris.beams.io/posts/git-commit/)
+  - 如何编写 [良好的提交信息](https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)!
+  - 为何要 [编写良好的提交信息](https://chris.beams.io/posts/git-commit/)
 - `git log`: 显示历史日志
 - `git log --all --graph --decorate`: 可视化历史记录（有向无环图）
 - `git diff <filename>`: 显示与暂存区文件的差异
 - `git diff <revision> <filename>`: 显示某个文件两个版本之间的差异
 - `git checkout <revision>`: 更新 HEAD 和目前的分支
 
-
->[!EXAMPLE]
->下面举一个如何clone仓库的例子
+> [!EXAMPLE]
+> 下面举一个如何clone仓库的例子
 >
->- **安装**
->  ```bash
->  # Debian , Ubuntu 
->  sudo apt install git
-> ```
->- **配置**
->  前面提到`git`可以回答**当前模块是谁编写的，是谁作出的修改**等问题。这就需要提前配置好信息——告诉`git`你是谁
+> - **安装**
+>
+>   ```bash
+>   # Debian , Ubuntu 
+>   sudo apt install git
+>   ```
+>
+> - **配置**
+>   前面提到`git`可以回答**当前模块是谁编写的，是谁作出的修改**等问题。这就需要提前配置好信息——告诉`git`你是谁
 >  
->```bash
->  git config --global user.name "Zhang San"            # your name
->  git config --global user.email "zhangsan@foo.com"    # your email
->	```
+>   ```bash
+>    git config --global user.name "Zhang San"            # your name
+>    git config --global user.email "zhangsan@foo.com"    # your email
+>   ```
 >
->  完成以上配置后你的每一次`commit`都会以名称为`Zhang San`邮箱为`zhangsan@foo.com`的信息提交
+>   完成以上配置后你的每一次`commit`都会以名称为`Zhang San`邮箱为`zhangsan@foo.com`的信息提交
 >
->  `git config`可以配置的内容众多，可以自行上网搜索或者使用以下方法中的任意一种获得任何git命令的手册页(manpage)（将verb替换为config即为git config的手册）
->  
->  ```bash
->  git help <verb>
->  git <verb> --help
->  man git-<verb>
->	```
->	
->- **克隆仓库**
->  克隆仓库即下载对应仓库内容到当前目录，下面介绍使用方法
+>   `git config`可以配置的内容众多，可以自行上网搜索或者使用以下方法中的任意一种获得任何git命令的手册页(manpage)（将verb替换为config即为git config的手册）
+>
+>   ```bash
+>   git help <verb>
+>   git <verb> --help
+>   man git-<verb>
+>   ```
+>
+> - **克隆仓库**
+> 克隆仓库即下载对应仓库内容到当前目录，下面介绍使用方法
 >
 >   **第一步：**
->  使用`cd`命令移动到你想要存储仓库的位置
+> 使用`cd`命令移动到你想要存储仓库的位置
 >  
 >   ```bash
 >    cd 路径
->	   ```
->	
+>    ```
+>
 >   **第二步：**
->  获取仓库url
->  仓库绿色Code按钮展开后就会给出，复制选中https后给出的url
->  （如图中所示，不同仓库的url内容不同，改图仅作参考）
->  ![](./material/git%20clone%20url.png)
+>   获取仓库url
+>   仓库绿色Code按钮展开后就会给出，复制选中https后给出的url
+>   （如图中所示，不同仓库的url内容不同，改图仅作参考）
+>   ![url example](./material/git%20clone%20url.png)
 >   **第三步：**
 >   使用`git clone`命令进行复制
->   
+>
 >   ```bash
 >   git clone <url>
 >    ```
@@ -153,6 +153,7 @@ Vim 有着悠久历史；它始于 1976 年的 Vi 编辑器，到现在还在 �
 >   ```bash
 >    git clone https://github.com/camera-2018/git-example.git
 >   ```
+>
 >大功告成！
 
 显然，上面列举的只是最基本最基本的内容，对于真正想使用 Git 的人，其实最推荐的是先学会再使用。但显然我们并没有那么多耐心。所以，当你感觉缺某部分的时候，STFW吧。
@@ -163,21 +164,21 @@ Vim 有着悠久历史；它始于 1976 年的 Vi 编辑器，到现在还在 �
 >
 > 推荐学习：
 >
-> Book:	[Pro Git](https://git-scm.com/book/en/v2)
-> Game:	[Learn Git Branching](https://learngitbranching.js.org/)
-
+> Book: [Pro Git](https://git-scm.com/book/en/v2)
+> Game: [Learn Git Branching](https://learngitbranching.js.org/)
+>
 > [!IMPORTANT]
 >
 > 小作业，学习如何回退到自己的某一个提交，看到这里就开一个仓库练手吧
-
+>
 > [!CAUTION]
 >
 > 为什么这里没有如何创建一个仓库的内容？因为 Github 和 Git 创建的仓库远程默认名称不同，第一次用你可能会晕（当然，最好的方法当然是尝试下），所以这次课程先会建议你先在 Github 上面创建仓库，然后 clone 下来（但我们仍推荐做全部的尝试，因为提前的尝试可以减少未来遇见的恐慌）。
-
+>
 > [!WARNING]
 >
 > 记住，在项目中每做一部分就要提交，不然你一定会后悔的（等项目炸了就老实了）
-
+>
 > [!TIP]
 >
 > Github:
@@ -192,15 +193,18 @@ Vim 有着悠久历史；它始于 1976 年的 Vi 编辑器，到现在还在 �
 <summary>拓展</summary>
 
 ### Git拓展
+
 下面部分大多为理论部分，如果你不感兴趣或是头疼，就跳过这一部分吧:blush:
+
 #### Git的数据模型
+
 进行版本控制的方法很多。Git 拥有一个经过精心设计的模型，这使其能够支持版本控制所需的所有特性，例如维护历史记录、支持分支和促进协作。
 
 ##### 快照
 
 Git 将顶级目录中的文件和文件夹作为集合，并通过一系列快照来管理其历史记录。在Git的术语里，文件被称作Blob对象（数据对象），也就是一组数据。目录则被称之为“树”，它将名字与 Blob 对象或树对象进行映射（使得目录中可以包含其他目录）。快照则是被追踪的最顶层的树。例如，一个树看起来可能是这样的：
 
-```
+``` txt
 <root> (tree)
 |
 +- foo (tree)
@@ -220,7 +224,7 @@ Git 将顶级目录中的文件和文件夹作为集合，并通过一系列快�
 
 在 Git 中，这些快照被称为“提交”。通过可视化的方式来表示这些历史提交记录时，看起来差不多是这样的：
 
-```
+``` txt
 o <-- o <-- o <-- o
             ^
              \
@@ -231,8 +235,7 @@ o <-- o <-- o <-- o
 
 箭头指向了当前提交的父辈（这是一种“在…之前”，而不是“在…之后”的关系）。在第三次提交之后，历史记录分岔成了两条独立的分支。这可能因为此时需要同时开发两个不同的特性，它们之间是相互独立的。开发完成后，这些分支可能会被合并并创建一个新的提交，这个新的提交会同时包含这些特性。新的提交会创建一个新的历史记录，看上去像这样（最新的合并提交用粗体标记）：
 
-```
-
+``` txt
 o <-- o <-- o <-- o <---- o
             ^            /
              \          v
@@ -245,7 +248,7 @@ Git 中的提交是不可改变的。但这并不代表错误不能被修改，�
 
 以伪代码的形式来学习 Git 的数据模型，可能更加清晰：
 
-```
+``` txt
 // 文件就是一组数据
 type blob = array<byte>
 
@@ -267,13 +270,13 @@ type commit = struct {
 
 Git 中的对象可以是 blob、树或提交：
 
-```
+``` txt
 type object = blob | tree | commit
 ```
 
 Git 在储存数据时，所有的对象都会基于它们的 [SHA-1 哈希](https://en.wikipedia.org/wiki/SHA-1) 进行寻址。
 
-```
+``` txt
 objects = map<string, object>
 
 def store(object):
@@ -288,14 +291,14 @@ Blobs、树和提交都一样，它们都是对象。当它们引用其他对象
 
 例如，[上面](https://missing-semester-cn.github.io/2020/version-control/#snapshots)例子中的树（可以通过 `git cat-file -p 698281bc680d1995c5f4caaf3359721a5a58d48d` 来进行可视化），看上去是这样的：
 
-```
+``` txt
 100644 blob 4448adbf7ecd394f42ae135bbeed9676e894af85    baz.txt
 040000 tree c68d233a33c5c06e0340e4c224f0afca87c8ce87    foo
 ```
 
 树本身会包含一些指向其他内容的指针，例如 `baz.txt` (blob) 和 `foo` (树)。如果我们用 `git cat-file -p 4448adbf7ecd394f42ae135bbeed9676e894af85`，即通过哈希值查看 baz.txt 的内容，会得到以下信息：
 
-```
+``` txt
 git is wonderful
 ```
 
@@ -305,7 +308,7 @@ git is wonderful
 
 针对这一问题，Git 的解决方法是给这些哈希值赋予人类可读的名字，也就是引用（references）。引用是指向提交的指针。与对象不同的是，它是可变的（引用可以被更新，指向新的提交）。例如，`master` 引用通常会指向主分支的最新一次提交。
 
-```
+``` txt
 references = map<string, string>
 
 def update_reference(name, id):
@@ -348,12 +351,13 @@ Git 处理这些场景的方法是使用一种叫做 “暂存区（staging area
 tar 是一个常用的命令行工具，可以管理 tar 文件（也就是压缩包）。我们这里简单给你提供两个常用命令。
 
 ```bash
-tar -cvf archive_name.tar /path/to/directory 		// 压缩
-tar -xvf archive_name.tar -C /target/directory		// 解压
+tar -cvf archive_name.tar /path/to/directory   // 压缩
+tar -xvf archive_name.tar -C /target/directory  // 解压
 ```
 
 但有时候`.tar`文件还会出现`.gz`、`.bz2`、`.xz`等不明后缀，这该怎么办呢？
 其实只要多加一个参数即可
+
 ```bash
 tar -xzvf archive_name.tar.gz                       //解压.gz
 tar -xjvf archive_name.tar.bz2                      //解压.bz2
@@ -365,7 +369,7 @@ tar -xJvf archive_name.tar.xz                       //解压.xz
 > 如果你希望了解更多，请 RTFM.
 >
 > 在终端中输入 man tar 来查看
-
+>
 > [!TIP]
 >
 > Why CLI?
@@ -378,6 +382,7 @@ tar -xJvf archive_name.tar.xz                       //解压.xz
 <summary>拓展</summary>
 
 ### 这些是什么文件？
+
 你可能会疑惑`.tar`、`.tar.gz`、`.tar.bz2`、`.tar.xz`这些文件到底是什么
 熟悉Windows的你肯定知道`.rar`、`.zip`、`.7z`等压缩包后缀是使用不同压缩方法压缩后得到的结果
 而`.gz`、`.bz2`、`.xz`本质上就是使用不同压缩方法对tar文件压缩后的结果
@@ -397,7 +402,7 @@ tar -xJvf archive_name.tar.xz                       //解压.xz
 > 什么是编译？
 >
 > 你有没有想过你写的 c 语言程序是如何运行的？你现在可能还没有抽象这个概念（我们以后将会告诉你），但一个事实是，计算机拥有不同的层级。你现在在 c 语言这个层次编写相对易懂的代码，然后 编译器（这里是 gcc）会把他转换成汇编从而变成机器语言（这里面其实有很多的学问），然后你就会获得一个可执行的文件了。
-
+>
 > [!CAUTION]
 >
 > 希望看到这里的时候，你已经完成了环境的配置。接下来，我们将会尝试在你的环境下跑 c 程序。
@@ -431,11 +436,11 @@ gcc - GNU project C and C++ compiler
 
 我们列举 gcc 的一些功能的参数如下：
 
--o 	指定输出文件名
+-o  指定输出文件名
 
 -Wall    开启警告
 
--O(2/3, ...) 	优化
+-O(2/3, ...)  优化
 
 尝试在你的终端中（记得到你保存程序的文件里面）输入：
 
@@ -460,7 +465,7 @@ gcc -o xxx xxx.c
 >
 > 更详细的内容应该在后面会讲到，现在只是引出
 
-尝试输入命令 
+尝试输入命令
 
 ```bash
 make l1
@@ -473,20 +478,20 @@ make l1
 尝试下在你的目录下面创建一个名为 Makefile 的文件，输入
 
 ```makefile
-CFLAGS=-Wall	-g
+CFLAGS=-Wall -g
 
-SRCS	=	l1.c
-TARGETS	=	$(SRCS:.c=)
+SRCS = l1.c
+TARGETS = $(SRCS:.c=)
 
-all:	$(TARGETS)	
+all: $(TARGETS) 
 
-%:	%.c
-	$(CC)	$(CFLAGS)	$<	-o	$@
+%: %.c
+ $(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm	-f	$(TARGETS)	
+ rm -f $(TARGETS) 
 
-.PHONY:	all	clean
+.PHONY: all clean
 
 
 ```
@@ -496,4 +501,3 @@ clean:
 > [!TIP]
 >
 > 想办法让这个 Makefile 可以编译多个文件而不只是 l1.c
-
