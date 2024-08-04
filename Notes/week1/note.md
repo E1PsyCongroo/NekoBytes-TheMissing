@@ -99,6 +99,7 @@ Vim 有着悠久历史；它始于 1976 年的 Vi 编辑器，到现在还在 �
 - `git checkout <revision>`: 更新 HEAD 和目前的分支
 
 > [!EXAMPLE]
+>
 > 下面举一个如何clone仓库的例子
 >
 > - **安装**
