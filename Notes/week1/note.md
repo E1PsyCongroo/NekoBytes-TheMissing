@@ -98,9 +98,7 @@ Vim 有着悠久历史；它始于 1976 年的 Vi 编辑器，到现在还在 �
 - `git diff <revision> <filename>`: 显示某个文件两个版本之间的差异
 - `git checkout <revision>`: 更新 HEAD 和目前的分支
 
-> [!EXAMPLE]
->
-> 下面举一个如何clone仓库的例子
+> **下面举一个clone仓库的例子**
 >
 > - **安装**
 >
