@@ -149,12 +149,16 @@ Vector calculate_regression_coefficients(Matrix X, Vector y) {
     Matrix X_T = transpose_matrix(X);
     Matrix X_T_X = multiply_matrices(X_T, X);
     Matrix X_T_X_inv = invert_matrix(X_T_X);
-    Matrix X_T_y = multiply_matrices(X_T, create_matrix_from_vector(y));
-    Vector beta = create_vector_from_matrix(multiply_matrices(X_T_X_inv, X_T_y));
+    Matrix temp1 = create_matrix_from_vector(y);
+    Matrix X_T_y = multiply_matrices(X_T, temp1);
+    Matrix temp2 = multiply_matrices(X_T_X_inv, X_T_y);
+    Vector beta = create_vector_from_matrix(temp2);
     free_matrix(X_T);
     free_matrix(X_T_X);
     free_matrix(X_T_X_inv);
     free_matrix(X_T_y);
+    free_matrix(temp1);
+    free_matrix(temp2);
     return beta;
 }
 
