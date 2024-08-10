@@ -29,13 +29,13 @@ int main() {
 
     train(n,train_data,train_ans,train_len,n_epoch,learnint_rate,ReLU,ReLU_derivative);
     printf("TEST LOSS :");
-    test_loss(n,test_date,test_ans,test_len,ReLU,1);
+    print_loss(n,test_date,test_ans,test_len,ReLU,1);
 
     //释放内存
-    delete_NeuralNet(&n);
-    delete_csv_data(&train_data,train_len);
-    delete_csv_data(&train_ans,train_len);
-    delete_csv_data(&test_date,test_len);
-    delete_csv_data(&test_ans,test_len);
+    delete_NeuralNet(n);
+    delete_csv_data(train_data,train_len);
+    delete_csv_data(train_ans,train_len);
+    delete_csv_data(test_date,test_len);
+    delete_csv_data(test_ans,test_len);
     return 0;
 }

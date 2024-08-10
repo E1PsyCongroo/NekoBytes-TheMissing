@@ -1,3 +1,6 @@
+<h1 style="text-align: center;">Proj3</h1>
+
+
 <div align="center">
   <img src="https://cdn.xyxsw.site/hdu-cs-wiki%20full.svg" alt="logo" width="450rem" height="450rem"/>
 </div>
@@ -6,7 +9,7 @@
 
 ## 1. 项目总览
 本次任务的目标是搭建一个简单的神经网络来实现手机价格区间分类任务
-任务中有关数学的大部分都已完成、。
+任务中有关数学的部分都已完成，<u>要完成的任务只会涉及一些C语言基础和神经网络基础知识</u>。
 本次搭建的神经网络非常简单，所以在一些复杂的数据集上取得不好的成绩是正常的
 
 
@@ -151,7 +154,7 @@ a_1 \\
 classification_feed_forward 函数用于执行神经网络的前向传播，以进行分类任务。该函数将输入向量传递给神经网络的输入层，然后依次计算每一层的输出，直到最终输出层。最后，通过 softmax 函数计算输出层的分类概率。
 
 你需要完成：
-
+* 将输入向量 X 赋值给神经网络输入层的输入。
 * 遍历每一层（直到输出层），计算每个神经元的输出。计算公式为：
 \[
 \text{output}[j] = f\left( \sum_{k=0}^{h-1} \text{input}[k] \cdot \text{weight}[j][k] \right) + \text{biases}[j]
@@ -163,7 +166,6 @@ classification_feed_forward 函数用于执行神经网络的前向传播，以�
 \]
 
 * 对输出层的结果应用 softmax 函数，计算分类概率。
-* 第一层的输入是input,其他层的输入是前一层的输出
 
 
 你可能需要用到的函数:
@@ -182,6 +184,7 @@ train 函数用于训练神经网络，以最小化损失函数。该函数将�
 * 重复上述步骤，直到达到指定的训练轮数
 
 你可能需要用到的函数:
+* feed_forward 前向传播函数(目前这个函数指针指向classification_feed_forward，所以就当成classification_feed_forward使用就可以)
 * backpropagation(NeuralNet* ann, float* input, float* y_true, float learning_rate, ActivationDerivative f):反向传播函数，在前向传播后调用来计算梯度并更新参数
 
 ***
@@ -198,6 +201,7 @@ read_csv 函数用于从指定的CSV文件中读取数据。该函数从指定�
 
 你需要完成：
 
+* 打开指定的CSV文件并检查是否成功打开
 * 跳过指定的行数，开始读取数据
 * 从指定的列开始读取数据，并存储在二维浮点数组中
 * 读取完成后，返回指向该数组的指针
@@ -277,14 +281,15 @@ decode_vector_to_category 函数将独热编码向量解码为分类标签。每
 我们在main中使用了ReLU作为激活函数，你可以尝试使用其他激活函数，观察神经网络的表现
 修改ReLU,ReLU_derivative为对应的激活函数和激活函数的导数
 
-* 如果想使用tanh,需要调用tanh_函数，因为tanh已经被定义在了math.h中
-* 更换激活函数你可能会看到正确率下降。每个激活函数对学习率的敏感度不同，你可能需要调整学习率来适应你选择的激活函数
-
 ### 线性回归预测
 
 我们之前完成的神经网络，只能用于分类问题，现在我们尝试使用神经网络进行线性回归预测。
 
 完成perceptron.c中的linear_regression_feed_forward函数。他与classification_feed_forward的唯一区别就是最后一层不需要应用任何的激活函数.
-同时需要修改train,更换前向传播的函数和测试函数，需要将test_loss改为linear_test_loss(已完成),不需要修改test_loss传递的参数,不需要修改反向传播函数.
+完成之后修改函数,将perceptron.c中的开头两句改为
 
+```c
+void (*print_loss)(NeuralNet *,float**,float**,int,Activation,int) = linear_test_loss;
+void (*feed_forward)(NeuralNet *,float*,Activation) = linear_feed_forward;
+```
 完成之后请尝试自己编写main程序，自己设计神经网络.可以使用linear_data.csv进行测试,这是一份关于水泥强硬度的数据集。你也可以尝试寻找其他的训练集进行测试

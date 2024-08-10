@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void (*print_loss)(NeuralNet *,float**,float**,int,Activation,int) = linear_test_loss;
+void (*feed_forward)(NeuralNet *,float*,Activation) = linear_feed_forward;
+
 layer* init_layer(int h){
     layer* new = (layer*)malloc(sizeof(layer));
     new->dim.h = h;
@@ -17,23 +20,23 @@ layer* init_layer(int h){
     return new;
 }
 
-void delete_layer(layer** n) {
-    if (n == NULL || *n == NULL)
+void delete_layer(layer* n) {
+    if (n == NULL) {
         return;
-    if ((*n)->output != NULL) {
-        free((*n)->output);
     }
-    if ((*n)->weight != NULL) {
-        for (int i = 0; i < (*n)->dim.w; i++) {
-            free((*n)->weight[i]);
+    if (n->output != NULL) {
+        free(n->output);
+    }
+    if (n->weight != NULL) {
+        for (int i = 0; i < n->dim.w; i++) {
+            free(n->weight[i]);
         }
-        free((*n)->weight);
+        free(n->weight);
     }
-    if ((*n)->biases != NULL) {
-        free((*n)->biases);
+    if (n->biases != NULL) {
+        free(n->biases);
     }
-    free(*n);
-    *n = NULL;
+    free(n);
 }
 
 
@@ -46,17 +49,16 @@ NeuralNet* init_NeuralNet(int input,int output) {
     return new;
 }
 
-void delete_NeuralNet(NeuralNet** n) {
-    if (n == NULL || *n == NULL)
+void delete_NeuralNet(NeuralNet* n) {
+    if (n == NULL)
         return;
-    layer* p = (*n)->input;
+    layer* p = n->input;
     while (p != NULL) {
         layer* next = p->next;
-        delete_layer(&p);
+        delete_layer(p);
         p = next;
     }
-    free(*n);
-    *n = NULL;
+    free(n);
 }
 
 void connect(layer* pre,layer* next){
@@ -105,7 +107,7 @@ void add_hidden_layer(NeuralNet* neuralnet,int h) {
         neuralnet->prediction = new -> output;
 }
 
-void linear_regression_feed_forward(NeuralNet *ann, float *X,Activation f) {
+void linear_feed_forward(NeuralNet *ann, float *X,Activation f) {
     ann->input->input = X;
 
     layer* i = ann->input;
@@ -139,14 +141,14 @@ void train(NeuralNet *ann, float **X, float **y, int n_samples,int n_epoch,float
     //遍历n_epoch次，每次遍历n_samples个样本
     for (int epoch = 0; epoch < n_epoch; epoch++) {
         for (int i = 0; i < n_samples; i++) {
-            classification_feed_forward(ann, X[i],f);
+            feed_forward(ann, X[i],f);
             backpropagation(ann, X[i],y[i], learning_rate, fd);
         }
         if(epoch % 100 == 0) {
             printf("Epoch: %d / %d   ",epoch,n_epoch);
-            test_loss(ann,X,y,n_samples,f,0);
+            print_loss(ann,X,y,n_samples,f,0);
         }
     }
     printf("Epoch: %d / %d   ",n_epoch,n_epoch);
-    test_loss(ann,X,y,n_samples,f,0);
+    print_loss(ann,X,y,n_samples,f,0);
 }

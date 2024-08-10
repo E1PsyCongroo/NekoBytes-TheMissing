@@ -30,19 +30,22 @@ typedef struct NeuralNet {
 typedef float (*Activation) (float); // 激活函数
 typedef float (*ActivationDerivative)(float); // 激活函数的导数
 
+extern void (*print_loss)(NeuralNet *,float**,float**,int,Activation,int);
+extern void (*feed_forward)(NeuralNet *,float*,Activation);
+
 // 函数声明部分
 
 // 初始化一层，返回指向该层的指针
 layer* init_layer(int h);
 
 // 删除一层，释放内存
-void delete_layer(layer** n);
+void delete_layer(layer* n);
 
 // 初始化一个神经网络，返回指向该神经网络的指针
 NeuralNet* init_NeuralNet(int input, int output);
 
 // 删除一个神经网络，释放内存
-void delete_NeuralNet(NeuralNet** n);
+void delete_NeuralNet(NeuralNet* n);
 
 // 连接两层
 void connect(layer* pre, layer* next);
@@ -51,7 +54,7 @@ void connect(layer* pre, layer* next);
 void add_hidden_layer(NeuralNet* neuralnet, int h);
 
 // 线性回归的前向传播
-void linear_regression_feed_forward(NeuralNet *ann, float *X, Activation f);
+void linear_feed_forward(NeuralNet *ann, float *X, Activation f);
 
 // 分类的前向传播
 void classification_feed_forward(NeuralNet *ann, float *X, Activation f);
@@ -88,13 +91,13 @@ float clip_gradients(float x);
 void softmax(float* v, int size);
 
 // 测试损失函数
-void test_loss(NeuralNet *ann, float **X, float **y, int n_samples, Activation f, int flag);
+void classification_test_loss(NeuralNet *ann, float **X, float **y, int n_samples, Activation f, int flag);
 
 // 线性回归的测试损失函数
 void linear_test_loss(NeuralNet *ann, float **X, float **y, int n_samples, Activation f, int flag);
 
 // 删除读取的CSV数据
-void delete_csv_data(float*** data, int len);
+void delete_csv_data(float** data, int len);
 
 // 读取CSV数据
 float** read_csv(int start_row, int num_rows, int start_col, int num_cols, char* file_path);

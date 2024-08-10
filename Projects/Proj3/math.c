@@ -86,7 +86,7 @@ float clip_gradients(float x) {
     return x;
 }
 
-void test_loss(NeuralNet *ann,float **X, float **y,int n_samples,Activation f,int flag) {
+void classification_test_loss(NeuralNet *ann,float **X, float **y,int n_samples,Activation f,int flag) {
     float loss_count = 0.0f;
     int acc_count = 0;
     float** data = NULL;
@@ -114,7 +114,7 @@ void test_loss(NeuralNet *ann,float **X, float **y,int n_samples,Activation f,in
     if(flag) {
         decode_vector_to_category(y,ann->output->dim.h,n_samples);
         decode_vector_to_category(data,ann->output->dim.h,n_samples);
-        save_predictions_to_file(data,y,n_samples,1,"./data/prediction.csv");
+        save_predictions_to_file(data,y,n_samples,1,"./data/predictions.csv");
     }
     if(flag) {
         for (int i = 0; i < n_samples; i++) {
@@ -133,7 +133,7 @@ void linear_test_loss(NeuralNet *ann,float **X, float **y,int n_samples,Activati
         predictions = (float**)malloc(sizeof(float*) * n_samples);
     }
     for(int i = 0;i < n_samples ;i++) {
-        linear_regression_feed_forward(ann, X[i],f);
+        linear_feed_forward(ann, X[i],f);
         if(predictions != NULL) {
             predictions[i] = (float*)malloc(sizeof(float) * ann->output->dim.h);
             for(int j = 0;j < ann->output->dim.h ;j++) {
@@ -143,7 +143,7 @@ void linear_test_loss(NeuralNet *ann,float **X, float **y,int n_samples,Activati
         loss_count += mse_loss(ann->prediction,y[i],ann->output->dim.h);
     }
     if(predictions != NULL) {
-        save_predictions_to_file(predictions,y,n_samples,1,"./data/prediction.csv");
+        save_predictions_to_file(predictions,y,n_samples,1,"./data/predictions.csv");
     }
     float temp = loss_count / n_samples;
     printf("LOSS: %.5f \n",temp);
