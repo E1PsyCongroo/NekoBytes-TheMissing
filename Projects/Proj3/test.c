@@ -13,17 +13,20 @@ float** v = NULL;
 void setUp() {}
 void tearDown() {
     if(net != NULL) {
-        delete_NeuralNet(&net);
+        delete_NeuralNet(net);
+        net = NULL;
     }
     if(input != NULL) {
         free(input);
         input = NULL;
     }
     if(data!=NULL) {
-        delete_csv_data(&data,3);
+        delete_csv_data(data,3);
+        data = NULL;
     }
     if(v != NULL){
-        delete_csv_data(&v,4);
+        delete_csv_data(v,4);
+        v = NULL;
     }
 }
 
@@ -43,8 +46,6 @@ void connect_test_win() {
     TEST_ASSERT_FLOAT_WITHIN(1e-3,0.199558,t[0][1]);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,0.500222,t[1][0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,-0.245158,t[1][1]);
-
-    delete_NeuralNet(&net);
 }
 
 void add_hidden_layer_test_win() {
@@ -65,13 +66,11 @@ void add_hidden_layer_test_win() {
     TEST_ASSERT_FLOAT_WITHIN(1e-3,-0.980671,t[0][1]);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,1.073890,t[1][0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,1.218092,t[1][1]);
-
-    delete_NeuralNet(&net);
 }
 
 void connect_test() {
     srand(123);
-    NeuralNet* net = init_NeuralNet(2,2);
+    net = init_NeuralNet(2,2);
 
     TEST_ASSERT_EQUAL(net->input->pre,NULL);
     TEST_ASSERT_EQUAL(net->output->weight,NULL);
@@ -83,13 +82,11 @@ void connect_test() {
     TEST_ASSERT_FLOAT_WITHIN(1e-3,0.706233,t[0][1]);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,-0.727331,t[1][0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,-0.370943,t[1][1]);
-
-    delete_NeuralNet(&net);
 }
 
 void add_hidden_layer_test() {
     srand(123);
-    NeuralNet* net = init_NeuralNet(2,2);
+    net = init_NeuralNet(2,2);
     add_hidden_layer(net,2);
 
     TEST_ASSERT_EQUAL(net->input->next->next,net->output);
@@ -105,12 +102,10 @@ void add_hidden_layer_test() {
     TEST_ASSERT_FLOAT_WITHIN(1e-3,-0.894949,t[0][1]);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,-0.303815,t[1][0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,-0.589539,t[1][1]);
-
-    delete_NeuralNet(&net);
 }
 
-void linear_regression_feed_forward_test() {
-    NeuralNet* net = init_NeuralNet(2,2);
+void linear_feed_forward_test() {
+    net = init_NeuralNet(2,2);
     add_hidden_layer(net,2);
     net->input->weight[0][0] = 0;
     net->input->weight[0][1] = 0;
@@ -126,27 +121,24 @@ void linear_regression_feed_forward_test() {
     float* input = (float*)malloc(sizeof(float) * 2);
     input[0] = -1;
     input[1] = -2;
-    linear_regression_feed_forward(net,input,sigmoid);
+    linear_feed_forward(net,input,sigmoid);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,5,net->prediction[0]);
     TEST_ASSERT_FLOAT_WITHIN(1e-3,1,net->prediction[1]);
 
     free(input);
-    delete_NeuralNet(&net);
 }
 
 void read_csv_test() {
      data = read_csv(1,3,1,4,"./data/read_test.csv");
-     TEST_ASSERT_NOT_EQUAL(NULL,data);
     for(int i = 1;i < 4 ;i++) {
         for(int j = 1;j < 5 ;j++) {
             TEST_ASSERT_FLOAT_WITHIN(1e-3,8*i+j,data[i-1][j-1]);
         }
     }
-    delete_csv_data(&data,3);
 }
 
 void classification_feed_forward_test() {
-    NeuralNet* net = init_NeuralNet(2,2);
+    net = init_NeuralNet(2,2);
     add_hidden_layer(net,2);
     net->input->weight[0][0] = 0;
     net->input->weight[0][1] = 0;
@@ -167,7 +159,6 @@ void classification_feed_forward_test() {
     TEST_ASSERT_FLOAT_WITHIN(1e-3,0.01798621,net->prediction[1]);
 
     free(input);
-    delete_NeuralNet(&net);
 }
 
 void decode_vector_to_category_test(){
