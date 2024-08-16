@@ -86,7 +86,7 @@ float clip_gradients(float x) {
     return x;
 }
 
-void test_loss(NeuralNet *ann,float **X, float **y,int n_samples,Activation f,int flag) {
+void classification_test_loss(NeuralNet *ann,float **X, float **y,int n_samples,Activation f,int flag) {
     float loss_count = 0.0f;
     int acc_count = 0;
     float** data = NULL;
@@ -133,7 +133,7 @@ void linear_test_loss(NeuralNet *ann,float **X, float **y,int n_samples,Activati
         predictions = (float**)malloc(sizeof(float*) * n_samples);
     }
     for(int i = 0;i < n_samples ;i++) {
-        linear_regression_feed_forward(ann, X[i],f);
+        linear_feed_forward(ann, X[i],f);
         if(predictions != NULL) {
             predictions[i] = (float*)malloc(sizeof(float) * ann->output->dim.h);
             for(int j = 0;j < ann->output->dim.h ;j++) {

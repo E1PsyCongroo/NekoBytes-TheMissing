@@ -46,15 +46,14 @@ float** read_csv(int start_row, int num_rows, int start_col, int num_cols, char*
     return data;
 }
 
-void delete_csv_data(float*** data, int len) {
-    if (data == NULL || *data == NULL) {
+void delete_csv_data(float** data, int len) {
+    if (data == NULL) {
         return;
     }
     for (int i = 0; i < len; i++) {
-        free((*data)[i]);
+        free(data[i]);
     }
-    free(*data);
-    *data = NULL;
+    free(data);
 }
 
 int get_file_len(char* file_path) {
