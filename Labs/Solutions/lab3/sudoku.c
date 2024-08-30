@@ -46,26 +46,26 @@ bool isSafe(int board[N][N], int row, int col, int num) {
 // 递归解数独
 bool solveSudoku(int board[N][N], int row, int col) {
     // 如果到达最后一行，数独已解完
-    if (_____) {
+    if (row == N - 1 && col == N) {
         return true;
     }
     
     // 如果到达最后一列，移动到下一行
-    if (_____) {
+    if (col == N) {
         row++;
         col = 0;
     }
     
     // 如果当前单元格已填充，递归到下一个单元格
-    if (_____) {
+    if (board[row][col] != 0) {
         return solveSudoku(board, row, col + 1);
     }
     
     // 尝试填充数字 1 到 9
     for (int num = 1; num <= N; num++) {
-        if (_____) {
+        if (isSafe(board, row, col, num)) {
             board[row][col] = num;
-            if (_____) {
+            if (solveSudoku(board, row, col + 1)) {
                 return true;
             }
             // 如果填充失败，回溯
