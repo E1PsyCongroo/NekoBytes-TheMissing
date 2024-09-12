@@ -22,7 +22,8 @@
 - MayGe 有想法，待定
 
 ## Week3
-- 参考[去年Labs](https://github.com/E1PsyCongroo/Basic-Ideals-of-Programming-fa23)
+- 参考[去年的2048](https://github.com/E1PsyCongroo/Basic-Ideals-of-Programming-fa23/blob/main/Labs/Lab2/lab2-2048.md)
+- 可以提供一个 SDL2 的可选绘图任务
 - 添加注释，文档说明
 - 提供标准 Solution
 
@@ -40,7 +41,7 @@
 - 多文件编译与GNU Make
 
 ## Week7
-- 待定，参考笨方法学C
+- 一个简易 Shell 的实现
 
 ## Week8
 - 读取数据集的线性回归预测

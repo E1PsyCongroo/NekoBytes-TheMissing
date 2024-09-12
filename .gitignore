@@ -1,1 +1,13 @@
-.vscode
+*.*
+*
+!*/
+!/Labs/*
+!/Lectures/*
+!/Notes/*
+!/Projects/*
+!/Tools/*
+!.gitignore
+!README.md
+!LICENSE
+!init.sh
+!*.md
