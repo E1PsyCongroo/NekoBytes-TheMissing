@@ -1,11 +1,12 @@
 *.*
 *
 !*/
-!/Labs/*
-!/Lectures/*
-!/Notes/*
-!/Projects/*
-!/Tools/*
+!Labs/*
+!Lectures/*
+!Notes/*
+!Projects/*
+!Tools/*
+!Others/*
 !.gitignore
 !README.md
 !LICENSE
