@@ -337,8 +337,6 @@ if(ptr!=NULL&&*ptr>0) sum+=*ptr;
 
 ## 链表
 
-***可能还是需要将一些过程拆得更细，做一些风格统一的矢量图😟***
-
 参考：https://mathcenter.oxford.emory.edu/site/cs171/linkedLists/
 
 链表是一种可以用于管理动态申请来的空间的数据结构
@@ -351,9 +349,12 @@ if(ptr!=NULL&&*ptr>0) sum+=*ptr;
 
 ### 链表结构
 
+![](static/list-1.png)
+
 - data：数据
 - nxt：记录这个节点之后的节点
 - pre：记录这个节点之前的节点
+
 
 ```C
 typedef int Type;
@@ -393,6 +394,10 @@ node *find(int rank){
 }
 ```
 
+![](static/list-2.png)
+
+![](static/list-3.png)
+
 *不难发现，与数组常数级查询复杂度不同的是，查询数据的时间复杂度与数据总量成正比，这也是链表的一个劣势。*
 
 #### 尾部插入节点
@@ -415,6 +420,12 @@ void add_tail(Type data){
 }
 ```
 
+![](static/list-4.png)
+
+![](static/list-5.png)
+
+![](static/list-6.png)
+
 #### 指定节点后插入节点
 
 ```C
@@ -433,6 +444,12 @@ void add_node(node *pos,Type data){
     pos->nxt=tmp;
 }
 ```
+
+![](static/list-7.png)
+
+![](static/list-8.png)
+
+![](static/list-9.png)
 
 #### 删除指定节点
 
@@ -456,3 +473,9 @@ void delete(node *pos){
     return;
 }
 ```
+
+![](static/list-10.png)
+
+![](static/list-11.png)
+
+![](static/list-12.png)
