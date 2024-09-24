@@ -27,27 +27,43 @@ NekoBytes-TheMissing
 ├── Projects/             // 课程大作业
 ├── Tools/                // 工具
 │   └── Setup/            // Linux初始化配置工具
-├── Web/                  // 课程主页
 ├── Others/               // 其他杂项，比如辅助阅读资源、课程示例代码
 ```
 
 ## 项目说明
 ### Labs
-课程实验，包含Linux、tools、C语言，应保证实验框架注释充分，充分明确，确保每个实验都有对应的README文档提供指引。目录下实验应确保为Linux环境下的`tar.gz`压缩格式。
+
+课程实验，包含Linux、tools、C语言，每个实验都有对应的README文档提供指引。目录下实验为Linux环境下的`tar.gz`压缩格式。
+
 命名格式如下: Lab0.tar.gz, Lab1.tar.gz, Lab2.tar.gz, etc.
+
 #### Solutions
+
 实验配套解决方案，同样为`tar.gz`压缩格式。
 命名格式如下: Lab0-Sol.tar.gz, Lab1-Sol.tar.gz, etc.
+
 ### Lectures
-课程幻灯片，格式确保为PDF，可以使用Latex Beamer，或PPT导出。
+
+课程幻灯片，格式为PDF。
+
 ### Notes
-课程讲义，格式确保为PDF，可以使用Markdown或Latex导出。
+
+课程讲义，格式为PDF。
+
 ### Projects
+
 课程大项目，同样为`tar.gz`压缩格式。
+
 命名格式如下: Proj0.tar.gz, Proj1.tar.gz, etc.
+
 不提供对应的解决方案。
+
 ### Tools
 #### Setup
+
 Linux系统统一配置管理工具
-### Web
-课程前端主页
+
+### Others
+#### VSCode C/C++ 配置文件
+
+请使用VSCode导入配置文件：C-C++.code-profile
