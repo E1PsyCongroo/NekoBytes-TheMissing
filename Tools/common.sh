@@ -49,7 +49,7 @@ usage() {
 run_command() {
     if [ "$VERBOSE" = true ]; then
         # 详细模式：显示所有输出
-        "$@"
+        "$@" | tee -a "$LOG_FILE"
     else
         # 静默模式：只隐藏标准输出，保留错误输出
         "$@" >/dev/null
@@ -59,19 +59,19 @@ run_command() {
 uninstall_neovim() {
     if dpkg -l | grep -q neovim; then
         log_warning "Neovim 已安装，正在卸载..."
-        run_command sudo apt-get remove -y -qq neovim
+        run_command sudo apt-get remove -y neovim
     fi
 }
 
 init() {
     # 初始化
     log_info "正在初始化脚本"
-    run_command sudo apt-get update -qq
+    run_command sudo apt-get update
     uninstall_neovim
 
     # 为 chsrc 安装 curl 测速工具
     log_info "正在安装 curl 测速工具"
-    run_command sudo apt-get install -y -qq curl
+    run_command sudo apt-get install -y curl
 
     # 为 ubuntu 更换镜像源
     log_info "正在为 ubuntu 更换镜像源"
@@ -79,11 +79,11 @@ init() {
 
     # 更新系统
     log_info "正在更新系统"
-    run_command sudo apt-get upgrade -y -qq
+    run_command sudo apt-get upgrade -y
 
     # 安装编程开发环境
     log_info "正在安装编程开发环境和基础 CLI 工具"
-    run_command sudo apt-get install -y -qq build-essential tar man gcc-doc gdb cgdb \
+    run_command sudo apt-get install -y build-essential tar man gcc-doc gdb cgdb \
         libreadline-dev libsdl2-dev wget pip npm cargo ripgrep net-tools \
         valgrind clang clangd bear openssh-server git tldr vim tmux zsh
 
@@ -126,8 +126,8 @@ init() {
 
     # 为 flatpak 更换镜像源
     log_info "正在为 flatpak 更换镜像源"
-    run_command sudo apt-get install -y -qq flatpak
-    run_command sudo apt-get install -y -qq gnome-software-plugin-flatpak
+    run_command sudo apt-get install -y flatpak
+    run_command sudo apt-get install -y gnome-software-plugin-flatpak
     run_command flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     run_command sudo "$(pwd)/chsrc" set flathub
 
@@ -138,11 +138,11 @@ init() {
     # 删除 snap
     log_info "正在删除 snap, 使用 flatpak 替代"
     cd "$(pwd)/unsnap" && run_command "$(pwd)/unsnap" auto
-    run_command sudo apt-get purge -y -qq snapd
+    run_command sudo apt-get purge -y snapd
 
     # 完成
     log_info "正在清理无关软件包"
-    run_command sudo apt-get autoremove --purge -y -qq
+    run_command sudo apt-get autoremove --purge -y
     log_info "系统初始化已完成"
     log_info "如果需要卸载 oh-my-zsh NeoVim LunarVim, 请键入 bash common.sh uninstall"
 }
