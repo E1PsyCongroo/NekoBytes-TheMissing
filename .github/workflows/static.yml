@@ -38,8 +38,8 @@ jobs:
         with:
           # Upload entire repository
           path: |
-            Lectures/Lecture0/**
-            Lectures/Lecture1/**
+            Lectures/Lecture0/index.html
+            Lectures/Lecture0/static/**
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
