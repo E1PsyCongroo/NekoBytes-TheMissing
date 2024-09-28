@@ -90,6 +90,8 @@ departments:
 
 ## 学会提问
 
+学会提问=学会不提问
+
 《[提问的智慧](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md)》/《[别像弱智一样提问](https://github.com/tangx/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md)》
 
 - 提问能反映出你的学习态度: 主动尝试 vs. 被动依赖
