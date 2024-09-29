@@ -83,9 +83,40 @@ init() {
 
     # 安装编程开发环境
     log_info "正在安装编程开发环境和基础 CLI 工具"
-    run_command sudo apt-get install -y build-essential tar man gcc-doc gdb cgdb \
-        libreadline-dev libsdl2-dev wget pip npm cargo ripgrep net-tools \
-        valgrind clang clangd bear openssh-server git tldr vim tmux zsh
+    # 要安装的包列表
+    packages=(
+        build-essential
+        tar
+        man
+        gcc-doc
+        gdb
+        cgdb
+        libreadline-dev
+        libsdl2-dev
+        wget
+        pip
+        npm
+        cargo
+        ripgrep
+        net-tools
+        valgrind
+        clang
+        clangd
+        bear
+        openssh-server
+        git
+        tldr
+        vim
+        tmux
+        zsh
+    )
+
+    # 循环安装每个包并记录信息
+    for package in "${packages[@]}"; do
+        log_info "正在安装 $package..."
+        sudo apt-get install -y -qq "$package"
+        log_info "$package 安装成功"
+    done
 
     # 开启 ssh 服务
     run_command sudo systemctl enable --now ssh
