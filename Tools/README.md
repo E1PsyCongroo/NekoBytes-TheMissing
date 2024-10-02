@@ -6,8 +6,8 @@
 
 - 自动更新系统及更换镜像源
 - 支持安装常用编程工具和开发环境
-- 安装并配置 `oh-my-zsh`、`tmux` 和 `LunarVim`
-- 支持 `unsnap` 并安装 `flatpak` 并配置 `Firefox` 浏览器
+- 安装并配置 `oh-my-zsh`、`oh-my-tmux`
+- 支持 `unsnap` 并安装 `flatpak`
 - 支持静默模式和卸载功能
 
 ## 使用方法
@@ -38,7 +38,7 @@ tar xvf setup.tar.gz
 
 --help, -h: 显示帮助信息。
 --quiet, -q: 以静默模式运行脚本（只输出错误信息到终端，标准输出记录到日志文件）。
---uninstall: 卸载脚本安装的所有软件和配置。
+--uninstall: 卸载脚本安装的软件和配置。
 
 ### 4. 示例
 
@@ -83,17 +83,15 @@ tar xvf setup.tar.gz
 将 oh-my-zsh 安装到用户的 home 目录，并切换默认 Shell 为 zsh。
 6. 安装 Nerd Font 字体:
 自动下载并安装 JetBrains Mono 字体以支持更多终端样式。
-7. 安装 NeoVim 和 LunarVim:
-安装并配置 NeoVim 和 LunarVim，适合开发者使用。
-8. 配置 Oh-My-Tmux:
+7. 配置 Oh-My-Tmux:
 脚本会将 tmux 配置文件复制到用户目录，完成终端管理工具的设置。
-9. 卸载功能:
-支持卸载脚本安装的软件和配置，包括 oh-my-zsh、NeoVim 和 LunarVim。
+8. 卸载功能:
+支持卸载脚本安装的软件和配置，包括 oh-my-zsh、oh-my-tmux。
 
 ## 注意事项
 
 - 该脚本需要 sudo 权限执行，以安装和卸载系统软件。
-- 默认安装的开发环境包括了 zsh, tmux, LunarVim 等工具，如果你不需要某些工具，可以自行修改脚本。
+- 默认安装的开发环境包括了 zsh, tmux 等工具，如果你不需要某些工具，可以自行修改脚本。
 - 在执行脚本前，请确保系统已更新并有足够的磁盘空间。
 
 ## 许可
