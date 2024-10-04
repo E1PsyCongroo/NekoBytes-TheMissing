@@ -22,16 +22,19 @@ tar xvf setup.tar.gz
 
 ### 2. 运行脚本
 
+> [!INFO]
+> WSL 请使用 common_wsl.sh
+
 默认情况下，脚本将以详细模式运行，输出到终端并记录在一个日志文件中（文件名为当前日期）。
 
 ```bash
-./script.sh
+bash common.sh
 ```
 
 你可以通过 --help 选项来查看可用的命令和参数。
 
 ```bash
-./script.sh --help
+bash common.sh --help
 ```
 
 ### 3. 可选参数
@@ -45,19 +48,19 @@ tar xvf setup.tar.gz
 详细模式执行初始化
 
 ```bash
-./script.sh
+bash common.sh
 ```
 
 静默模式执行初始化
 
 ```bash
-./script.sh --quiet
+bash common.sh --quiet
 ```
 
 卸载安装的软件和配置
 
 ```bash
-./script.sh --uninstall
+bash common.sh --uninstall
 ```
 
 ### 5. 日志记录
