@@ -3,8 +3,8 @@ author:
   url: https://github.com/hewo233
 
 departments:
-  - name: "HDU-计算机科学与技术协会"
-    url: https://wiki.xyxsw.site/
+  - name: "NekoBytes"
+    url: https://github.com/E1PsyCongroo/NekoBytes-TheMissing
     img: ./static/hdu-cs-wiki.svg
 +++++
 

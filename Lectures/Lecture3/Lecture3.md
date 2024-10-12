@@ -1,11 +1,11 @@
-  author:
-    name: M4yGem1ni
-    url: https://github.com/M4yGem1ni
+author:
+  name: M4yGem1ni
+  url: https://github.com/M4yGem1ni
 
-  departments:
-    - name: "  NekoBytes  "
-      url: https://github.com/E1PsyCongroo/NekoBytes-TheMissing,
-      img: ./Image/hdu-cs-wiki.svg
+departments:
+  - name: "NekoBytes"
+    url: https://github.com/E1PsyCongroo/NekoBytes-TheMissing
+    img: ./static/hdu-cs-wiki.svg
 +++++
 
 # C 语言基础语法
@@ -14,7 +14,7 @@
 
 ## Agenda Part 1
 
-<img class="float-right" src="./Image/BuugyCode.png" width="">
+<img class="float-right" src="./static/BuugyCode.png" width="">
 
 - 计算机科学抽象思维
 - C语言常量
@@ -30,9 +30,9 @@
 
 - 抽象好比是一个黑箱，我们不需要知道中间发生的过程，只需要知道我输入了什么，我能输出什么，最简单的例子就是 `printf`。
 
-<img class="float-center" src="./Image/Abstract1.png" width="">
-<img class="float-center" src="./Image/Abstract2.png" width="">
-<img class="float-center" src="./Image/Abstract3.png" width="">
+<img class="float-center" src="./static/Abstract1.png" width="">
+<img class="float-center" src="./static/Abstract2.png" width="">
+<img class="float-center" src="./static/Abstract3.png" width="">
 
 
 
@@ -42,10 +42,11 @@
 
 - 我们使用的编程语言，比如C语言和Python，都是抽象，因为计算机只懂二进制。
 
-<img class="float-center" src="./Image/Abstract4.png" width="250px">
-<img class="float-center" src="./Image/Abstract5.png" width="250px">
-<img class="float-center" src="./Image/Abstract6.png" width="250px">
-
+![抽象](./static/Abstract4.png)
+<center>
+<img class="inline" src="./static/Abstract5.png" width="45%">
+<img class="inline" src="./static/Abstract6.png" width="45%">
+</center>
 ----
 
 ## 抽象的力量
@@ -56,7 +57,7 @@
 - 游戏板: board[BOARD_SIZE][BOARD_SZIE]
 - 初始化: initialize_board
 - 随机生成: generator_number
-- 打印显示: print_board 
+- 打印显示: print_board
 - 读取移动指令: choose_direction
 - 合并并移动: move_and_merge
 - 判断游戏终止: is_finished
@@ -91,7 +92,13 @@ run_game() {
 typedef unsigned char uint8_t;
 ```
 
-<img class="float-center" src="./Image/param.png">
+| 类型         | 描述                                      | 例子                      |
+| ------------ | ----------------------------------------- | ------------------------- |
+| char         | 8位，ASCII                                | ‘a’, ‘A’, ‘\n’, 12        |
+| int          | 整数值（正、负、0），>= 16 位，一般为32位 | 0, 78, -217, 0x2E         |
+| unsigned int | 整数值（正、0）                           | 0, 6, 35102               |
+| short        | 整数值（正、负、0），>= 16 位，一般为16位 | 0, -8, 32767              |
+| long         | 整数值（正、负、0），>= 32 位，一般为32位 | 0, 78, -217, 301713123194 |
 
 ----
 
@@ -103,28 +110,41 @@ const double dob = 1.20;
 const char MyChar = 'c';
 ```
 
-- 常量一经分配，无法更改。可以尝试添加`integer = 120;`看看会发生什么。
+- 常量一经分配，无法更改。可以[尝试](https://godbolt.org/z/eMWfK6Edq)添加`integer = 120;`看看会发生什么。
 
-[https://godbolt.org/z/eMWfK6Edq](https://godbolt.org/z/eMWfK6Edq)
-
-![Image](./Image/const.png)
+```C
+#include <stdio.h>
+int main(int argc,char* argv[]) {
+  const int intager   = 100;
+  const double dob    = 1.20;
+  const char MyChar   = 'c';
+  // 你可以在此处添加代码
+  printf("intager:%d\ndob:%lf\nMyChar:%c\n",
+         intager,dob,MyChar);
+  return 0;
+}
+```
 
 ----
 
 ## C中的控制流
 
-- 语句可以是代码块 {} 或只是一个独立的语句 
-    - if-else 
-    if (expr) statement 
-    if (x == 0) y++; 
-    if (x == 0) {y++;} 
-    if (x == 0) {y++; j = j + y;} 
-    if (expr) statement1 else statement2 
+- 语句(statement)可以是代码块 {} 或只是一个独立的语句
+    - if-else
+
+    `if (expr) statement`
+
+    `if (x == 0) y++;`
+
+    `if (x == 0) {y++;}`
+
+    `if (x == 0) {y++; j = j + y;}`
+
+    `if (expr) statement1 else statement2`
+
     - switch case
-    - while 
-    while (expr) 
-    for 
-    for (initialize; check; update) statement
+    - while: `while (expr) statement`
+    - for: `for (initialize; check; update) statement`
 
 [https://godbolt.org/z/6o31z4zPW](https://godbolt.org/z/6o31z4zPW)
 
@@ -149,7 +169,18 @@ const char MyChar = 'c';
 - 使用：printf(“%02x ”,temp[0]);
 
 [https://godbolt.org/z/rzo6o1bsE](https://godbolt.org/z/rzo6o1bsE)
-![Image](./Image/array.png)
+
+```C
+#include <stdio.h>
+int main(){
+  unsigned char temp[10] = {0x11,0x15,0x22};
+  printf("temp address: %p\n",temp);
+  temp[3] = 0xa8;
+  for (size_t i=0;i<10;i++) printf("%02x ",temp[i]);
+  printf("\n");
+  return 0;
+}
+```
 
 ----
 
@@ -159,7 +190,7 @@ const char MyChar = 'c';
 - 使用 `<string.h>` 标准库进行更多操作。
 
 [https://godbolt.org/z/3jrrvchE1](https://godbolt.org/z/3jrrvchE1)
-![Image](./Image/string.png)
+![static](./static/string.png)
 
 ----
 
@@ -168,7 +199,7 @@ const char MyChar = 'c';
 - 使用 `<string.h>` 标准库进行更多操作。
 
 [https://godbolt.org/z/Yrj3dfxKx](https://godbolt.org/z/Yrj3dfxKx)
-![Image](./Image/string2.png)
+![static](./static/string2.png)
 
 ----
 
@@ -177,11 +208,11 @@ const char MyChar = 'c';
 - `#define` 是文本替换，比如 `#define MAX 1000`
 - C预处理器先处理源文件，替换宏并包含文件。
 
-![Image](./Image/macro.png)
+![static](./static/macro.png)
 
 [https://godbolt.org/z/aMPxbrMbs](https://godbolt.org/z/aMPxbrMbs)
 
-gcc -o test test.c -save-temps 
+gcc -o test test.c -save-temps
 
 关于这块，比较好玩的就是微软早期路径长度在编写时使用了宏定义
 `#define MAX_PATH 260`
@@ -190,28 +221,28 @@ gcc -o test test.c -save-temps
 ----
 
 ## 预处理
-C 源文件在编译器看到代码之前首先经过预处理器 CPP 
-CPP 用单个空格替换注释 
-CPP 命令以“#”开头 
-- #include "file.h" /* 将 file.h 插入到文件 */ 
-- #include <stdio.h> /* 在标准位置查找文件，但没有实际区别 */ 
-- #define PI (3.14159) /* 定义常量 */ 
-- #if/#endif /* 有条件地包含文本 */ 
+C 源文件在编译器看到代码之前首先经过预处理器 CPP
+CPP 用单个空格替换注释
+CPP 命令以“#”开头
+- #include "file.h" /* 将 file.h 插入到文件 */
+- #include <stdio.h> /* 在标准位置查找文件，但没有实际区别 */
+- #define PI (3.14159) /* 定义常量 */
+- #if/#endif /* 有条件地包含文本 */
 
-使用 gcc 的 –save-temps 选项查看预处理结果 
+使用 gcc 的 –save-temps 选项查看预处理结果
 完整文档位于：http:// /gcc.gnu.org/onlinedocs/cpp/
 
 ----
 
 ## Cat Break!
 
-![Image](./Image/neko.png)
+![static](./static/neko.png)
 
 ---
 
 ## Agenda Part 2
 
-<img class="float-right" src="./Image/pointer.png" width="">
+<img class="float-right" src="./static/pointer.png" width="">
 
 - 内存与变量
 - 多维数组
@@ -226,7 +257,7 @@ CPP 命令以“#”开头
 
 ## 内存
 
-![Image](./Image/memory.png)
+![static](./static/memory.png)
 
 ----
 
@@ -244,7 +275,7 @@ b   ：标识
 &b  ：地址
 
 [https://godbolt.org/z/ocbrj7s85](https://godbolt.org/z/ocbrj7s85)
-![Image](./Image/parammemory.png)
+![static](./static/parammemory.png)
 
 ----
 
@@ -254,7 +285,7 @@ int array[5] = { 1, 2, 3, 4, 5 };
 ```
 array 这个标识符是什么呢？
 
-![array2](./Image/array2.png)
+![array2](./static/array2.png)
 
 问：能不能访问array[5]呢？
 
@@ -270,7 +301,7 @@ sizeof matrix = sizeof(int) * 2 * 2
 
 [https://godbolt.org/z/Mbq513KnG](https://godbolt.org/z/Mbq513KnG)
 
-![2dmatrix](./Image/2dmatrix.png)
+![2dmatrix](./static/2dmatrix.png)
 
 问：下面哪种写法是正确的?
 ```c
@@ -289,7 +320,7 @@ p    : 标识符
 &a   : 指针的值（指针指向的地址）
 &p   : 存放指针的地址
 
-![Image](./Image/pointerp.png)
+![static](./static/pointerp.png)
 
 ----
 
@@ -405,7 +436,7 @@ void wav_player(const int *ptr);
 
 ----
 
-## void* 
+## void*
 使用void类型指针的时候无法进行解引用，也无法进行加减运算
 使用void*类型的指针的时候一定要对其进行强制类型转化
 
@@ -437,4 +468,4 @@ int a = f(i++)+f(i++)-f(i++);
 ----
 
 ## Ask Time
-![Image](./Image/BuugyCode.png)
+![static](./static/BuugyCode.png)
