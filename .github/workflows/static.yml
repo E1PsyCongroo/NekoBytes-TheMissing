@@ -36,15 +36,22 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           enablement: true
-      - name: Upload artifact
-        # uses: actions/upload-pages-artifact@v3
-        uses: actions/upload-artifact@v4
-        with:
-          name: github-pages
-          path: |
+      - name: generate static
+        run: |
+          mkdir $WORK_DIR/static -p
+          cp -r $SOURCE $WORK_DIR/static
+        env:
+          WORK_DIR: ${{ github.workspace }}
+          SOURCE: |
+            ${{ github.workspace }}/index.html
             ${{ github.workspace }}/Lectures
             ${{ github.workspace }}/Others/Codes
-            ${{ github.workspace }}/index.html
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path:
+            ${{ github.workspace }}/static
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
