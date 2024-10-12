@@ -1,8 +1,51 @@
 # Lab3_1 C语言基本语法
 - 完成lab3_1中的四个.c文件
-  - 本lab每个.c文件中都有相应的说明，足够完成填空没有相应solution，自行判断对错，请根据说明完成填空。
+  - 请根据每个ex_中的TODO完成内容。
 
-# Lab3_2 递归
+# Lab3_2 字符串和循环
+- 本实验使用了参数char *argv[]，请在使用gcc编译后尝试输入参数如:
+  ```
+  gcc str_and_cyc.c -o str_and_cyc
+  ./str_and_cyc California Oregon Washington Texas 
+  ```
+  会看到如下所示
+  ```
+  for:
+  arg 1: California
+  arg 2: Oregon
+  arg 3: Washington
+  arg 4: Texas
+
+  state 0: California
+  state 1: Oregon
+  state 2: Washington
+  state 3: Texas
+  
+  while:
+  arg 0: ./str_and_cyc
+  arg 1: California
+  arg 2: Oregon
+  arg 3: Washington
+  arg 4: Texas
+
+  state 0: California
+  state 1: Oregon
+  state 2: Washington
+  state 3: Texas
+  ```
+- 请对srt_and_cyc.c文件中的for和while循环尝试以下操作并查看结果。
+- for循环
+  - 将i初始化为0看看会发生什么。是否也需要改动argc，不改动的话它能正常工作吗？为什么下标从0开始可以正常工作？
+  - 将num_states改为错误的值使它变大，来看看会发生什么。
+  - 查询NULL是什么东西，尝试将它用做states的一个元素，看看它会打印出什么。
+  - 看看你是否能在打印之前将states的一个元素赋值给argv中的元素，再试试相反的操作。
+- while循环
+  - 使用while循环将argv中的值复制到states。
+  - 让这个复制循环不会执行失败，即使argv之中有很多元素也不会全部放进states。
+  - 研究你是否真正复制了这些字符串。答案可能会让你感到意外和困惑。
+
+
+# 可选 递归
 
 - 经典递归例子
 
