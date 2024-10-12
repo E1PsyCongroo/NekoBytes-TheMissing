@@ -30,7 +30,8 @@ NekoBytes-TheMissing
 ├── Others/               // 其他杂项，比如辅助阅读资源、课程示例代码
 ```
 
-## 项目说明
+## 项目任务说明
+对应模块的任务说明请**参考对应目录**下的 README 文档。
 ### Labs
 
 课程实验，包含Linux、tools、C语言，每个实验都有对应的README文档提供指引。目录下实验为Linux环境下的`tar.gz`压缩格式。

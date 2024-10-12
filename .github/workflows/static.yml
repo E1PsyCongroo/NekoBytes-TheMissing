@@ -37,7 +37,10 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: ${{ github.workspace }}/Lectures
+          path: |
+            ${{ github.workspace }}/Lectures
+            ${{ github.workspace }}/Others/Codes
+            index.html
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
