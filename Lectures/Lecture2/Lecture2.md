@@ -146,7 +146,7 @@ int main(int argc,char* argv[]) {
     - while: `while (expr) statement`
     - for: `for (initialize; check; update) statement`
 
-[https://godbolt.org/z/6o31z4zPW](https://godbolt.org/z/6o31z4zPW)
+[https://godbolt.org/z/j8s5TEb7a](https://godbolt.org/z/j8s5TEb7a)
 
 ----
 
@@ -190,7 +190,21 @@ int main(){
 - 使用 `<string.h>` 标准库进行更多操作。
 
 [https://godbolt.org/z/3jrrvchE1](https://godbolt.org/z/3jrrvchE1)
-![static](./static/string.png)
+```c
+#include <stdio.h>
+#include <string.h>
+
+//  字符串以\0结尾
+
+int main(){
+    char str1[] = "I Can Eat Glass";
+    char str2[20] = "I Can Eat Glass";
+
+    printf("str1:%s\nsize:%lu\nstr2:%s\nsize:%lu\n",\
+    str1,strlen(str1),str2,strlen(str2));
+}
+```
+使用`sizeof`和`strlen`都能获取字符串长度,它们有什么区别呢?
 
 ----
 
@@ -198,8 +212,8 @@ int main(){
 
 - 使用 `<string.h>` 标准库进行更多操作。
 
-[https://godbolt.org/z/Yrj3dfxKx](https://godbolt.org/z/Yrj3dfxKx)
-![static](./static/string2.png)
+[https://godbolt.org/z/sz8Ms1nTj](https://godbolt.org/z/sz8Ms1nTj)
+
 
 ----
 
@@ -291,7 +305,7 @@ array 这个标识符是什么呢？
 
 ----
 
-## 多维数组
+## 多维数组(目前了解即可)
 ```c
 int array[2][2] = {{1,2},{3,4}};
 ```
@@ -303,7 +317,7 @@ sizeof matrix = sizeof(int) * 2 * 2
 
 ![2dmatrix](./static/2dmatrix.png)
 
-问：下面哪种写法是正确的?
+(问：下面哪种写法是正确的?)
 ```c
 int matrix[][2] = {1,2,3,4};
 int matrix[2][] = {1,2,3,4};
@@ -350,34 +364,6 @@ printf("%d",*p);
 [https://godbolt.org/z/8MeTzaGjo](https://godbolt.org/z/8MeTzaGjo)
 
 看完这个例子后，想一想scanf("%d",&a);为什么需要取a的地址？
-
-----
-
-## 指针数组和数组指针
-```c
-int *p[10];
-int (*p)[10];
-// []运算符的优先级>*运算符的优先级
-```
-
-```c
-int *p[10];
-// 化为int* array[] -> 存放着 10个指向int类型的指针 的数组
-int (*p)[10];
-// 化为int pointer[] -> 指向 存放了10个int类型的数组 的指针
-```
-
-----
-## 加大难度
-```c
-int* (*p)[20][10];
-```
-问：p是什么？
-p是指针还是数组？
-p的类型是什么？
-
-想明白之后点击链接查看答案
-[https://godbolt.org/z/hv6rnTj5Y](https://godbolt.org/z/hv6rnTj5Y)
 
 ----
 
@@ -436,18 +422,6 @@ void wav_player(const int *ptr);
 
 ----
 
-## void*
-使用void类型指针的时候无法进行解引用，也无法进行加减运算
-使用void*类型的指针的时候一定要对其进行强制类型转化
-
-```c
-int a = 1;
-void *p = &a;
-printf("%d\n",*((int*)p));
-```
-
-----
-
 ## 警惕UB(未定义行为)
 
 我们很多时候需要警惕未定义行为，就比如说
@@ -455,14 +429,16 @@ printf("%d\n",*((int*)p));
 a[i] = ++i +1;
 ```
 i在这里多次使用且数值发生了改变，没人知道a[i]先执行还是++i先执行
-
-还有就是
 ```c
 // i=0
 int a = f(i++)+f(i++)-f(i++);
 ```
 虽然在最后的结果上编译器会将其翻译为int a = (f(i++)+f(i++))-f(i++);
 但没人知道哪个f(i++)最先执行，可能是第一个，也可能是第三个
+
+> 详情请参考
+> https://zh.cppreference.com/w/c/language/behavior
+> https://zh.cppreference.com/w/c/language/eval_order
 
 
 ----
