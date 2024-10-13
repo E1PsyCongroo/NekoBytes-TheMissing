@@ -146,7 +146,7 @@ int main(int argc,char* argv[]) {
     - while: `while (expr) statement`
     - for: `for (initialize; check; update) statement`
 
-[https://godbolt.org/z/6o31z4zPW](https://godbolt.org/z/6o31z4zPW)
+[https://godbolt.org/z/j8s5TEb7a](https://godbolt.org/z/j8s5TEb7a)
 
 ----
 
