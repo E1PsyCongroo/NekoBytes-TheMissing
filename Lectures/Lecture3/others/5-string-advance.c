@@ -5,7 +5,7 @@
 
 int main(){
     char str1[] = "I Can Eat Glass";
-    char str2[] = "我能吞下玻璃而不伤身体";
+    char str2[] = "Neko Bytes";
 
     printf("str1:%s\nsize:%lu\nstr2:%s\nsize:%lu\n",\
     str1,strlen(str1),str2,strlen(str2));
