@@ -11,10 +11,10 @@ int* int_on_stack() {
 
 int* int_on_heap() {
   // TODO：在堆上为整数分配内存
-  ______ ptr_to_12 ;
+  int* ptr_to_12 ;
 
   // TODO：将数字 12 存储在您刚刚分配的内存中
-  ______ = 12;
+  *ptr_to_12 = 12;
 
   // 返回一个指向数字 12 的指针
   return ptr_to_12;
