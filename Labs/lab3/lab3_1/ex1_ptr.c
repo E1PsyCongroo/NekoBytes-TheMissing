@@ -2,22 +2,22 @@
 #include <stdlib.h>
 
 int* int_on_stack() {
-  // Allocates memory on the stack for an integer
-  int x = 10;
+  // 在堆栈上为整数分配内存
+  int x = 12;
 
-  // Returns a pointer that points to the number 10
+  // 返回一个指向数字 12 的指针
   return &x;
 }
 
 int* int_on_heap() {
-  // TODO: allocate memory on the heap for an integer
-  ______ ptr_to_10 = ______;
+  // TODO：在堆上为整数分配内存
+  ______ ptr_to_12 = ______;
 
-  // TODO: store the number 10 in memory you just allocated
-  ______ = 10;
+  // TODO：将数字 12 存储在您刚刚分配的内存中
+  ______ = 12;
 
-  // Returns a pointer that points to the number 10
-  return ptr_to_10;
+  // 返回一个指向数字 12 的指针
+  return ptr_to_12;
 }
 
 int main() {

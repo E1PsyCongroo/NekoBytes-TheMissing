@@ -44,6 +44,7 @@ bool isSafe(int board[N][N], int row, int col, int num) {
 }
 
 // 递归解数独
+// Note: row表示行 col表示列
 bool solveSudoku(int board[N][N], int row, int col) {
     // 如果到达最后一行，数独已解完
     if (_____) {
@@ -57,6 +58,7 @@ bool solveSudoku(int board[N][N], int row, int col) {
     }
     
     // 如果当前单元格已填充，递归到下一个单元格
+    // Note: 0表示单元格未填充
     if (_____) {
         return solveSudoku(board, row, col + 1);
     }
