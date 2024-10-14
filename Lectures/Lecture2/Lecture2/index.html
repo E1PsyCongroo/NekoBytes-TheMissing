@@ -12,7 +12,7 @@
         type="text/css">
     <title> Lecture3 </title>
     <!-- browser favicon -->
-    <link rel="shortcut icon" href="./static/img/favicon.ico">
+    <link rel="shortcut icon" href="./static/img/favicon.png">
     <style>
         .font-sans {
             font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
@@ -22,9 +22,15 @@
             font-family: 'Source Serif Pro', 'Songti SC', 'SimSun', 'Serif', serif;
         }
     </style>
+    <!-- <link rel="stylesheet" href="https://jyywiki.cn/static/katex/katex.min.css">
+    <script defer src="https://jyywiki.cn/static/katex/katex.min.js"></script> -->
     <link rel="stylesheet" href="./static/katex/katex.min.css">
     <script defer src="./static/katex/katex.min.js"></script>
+    <!-- <script defer src="https://jyywiki.cn/static/katex/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script> -->
     <script defer src="./static/katex/auto-render.min.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             renderMathInElement(document.body, {
@@ -69,14 +75,14 @@
                     <p class="font-serif my-1">
                         NekoBytes
                     </p>
-                    <img class="inline-img h-24" src="./static/img/66763c573c4c496bb6f09e2846e59de6.svg" style="display: inline-block;"/>
+                    <img class="inline-img h-24" src="./static/img/505d39ab3d4a4f969b90552a6c5477cc.svg" style="display: inline-block;"/>
                 </a>
             </div>
             
         </div>
     </include>
 </p></div></div></div></section></section><section><section><div><h2 id="agenda-part-1" class="text-xl mt-2 pb-2 font-sans">Agenda Part 1</h2>
-<p class="font-serif my-1"><img class="float-right" src="./static/img/63614731af7e4930ac3b8f45cc6b2e44.png" width=""/></p>
+<p class="font-serif my-1"><img class="float-right" src="./static/img/f7640ea9a80d4963bfe259c5f15245f6.png" width=""/></p>
 <ul class="list-disc font-serif">
 <li class="ml-8">计算机科学抽象思维</li>
 <li class="ml-8">C语言常量</li>
@@ -89,16 +95,16 @@
 <ul class="list-disc font-serif">
 <li class="ml-8">抽象好比是一个黑箱，我们不需要知道中间发生的过程，只需要知道我输入了什么，我能输出什么，最简单的例子就是 <code>printf</code>。</li>
 </ul>
-<p class="font-serif my-1"><img class="float-center" src="./static/img/05b06177e02440f4957a387c50507e20.png" width=""/>
-<img class="float-center" src="./static/img/8a29491886574f1cb6af2da1f77bb829.png" width=""/>
-<img class="float-center" src="./static/img/60381f9c9e444d2cacd7458c6babd353.png" width=""/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">编程本身就是一种抽象</h2>
+<p class="font-serif my-1"><img class="float-center" src="./static/img/eb0c14e67ede4c6982f672d1f23f8347.png" width=""/>
+<img class="float-center" src="./static/img/04c55e39a9fa4c7aa2edca121fb4bc52.png" width=""/>
+<img class="float-center" src="./static/img/16a82e9965414299a076175865f6bea8.png" width=""/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">编程本身就是一种抽象</h2>
 <ul class="list-disc font-serif">
 <li class="ml-8">我们使用的编程语言，比如C语言和Python，都是抽象，因为计算机只懂二进制。</li>
 </ul>
-<p class="font-serif my-1"><img alt="抽象" src="./static/img/8fd69852d3f14e008b126f72aae93328.png"/>
+<p class="font-serif my-1"><img alt="抽象" src="./static/img/d48aeab415ac4fdea9b473afe3e429b7.png"/>
 </p><center>
-<img class="inline" src="./static/img/45025d0dd00b40458caeef05daef1884.png" width="45%"/>
-<img class="inline" src="./static/img/80a5b2eae1c046d3ae60ea5547588073.png" width="45%"/>
+<img class="inline" src="./static/img/baf1ff76a5814d75bf99e5b2725d95e3.png" width="45%"/>
+<img class="inline" src="./static/img/9697bafbcaf14e97872e3fe646a5af93.png" width="45%"/>
 </center></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">抽象的力量</h2>
 <p class="font-serif my-1"><a href="https://www.2048.org">https://www.2048.org</a>
 这是一个2048
@@ -204,7 +210,7 @@
 </ul>
 </li>
 </ul>
-<p class="font-serif my-1"><a href="https://godbolt.org/z/6o31z4zPW">https://godbolt.org/z/6o31z4zPW</a></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">函数</h2>
+<p class="font-serif my-1"><a href="https://godbolt.org/z/j8s5TEb7a">https://godbolt.org/z/j8s5TEb7a</a></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">函数</h2>
 <ul class="list-disc font-serif">
 <li class="ml-8">在编程中，函数是一段可重复使用的代码块，用于执行特定的任务或完成特定的操作。函数可以接受输入参数，并且可以返回一个值或执行一些操作</li>
 <li class="ml-8">代码重用</li>
@@ -233,18 +239,31 @@
 <li class="ml-8">字符串是一种特殊的数组，以<code>'\0'</code>结束。</li>
 <li class="ml-8">使用 <code>&lt;string.h&gt;</code> 标准库进行更多操作。</li>
 </ul>
-<p class="font-serif my-1"><a href="https://godbolt.org/z/3jrrvchE1">https://godbolt.org/z/3jrrvchE1</a>
-<img alt="static" src="./static/img/ace07efc8ff64ccfa8619a88f51b47d7.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">字符串</h2>
+<p class="font-serif my-1"><a href="https://godbolt.org/z/3jrrvchE1">https://godbolt.org/z/3jrrvchE1</a></p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+
+<span class="c1">//  字符串以\0结尾</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(){</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">str1</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"I Can Eat Glass"</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">str2</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"I Can Eat Glass"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"str1:%s</span><span class="se">\n</span><span class="s">size:%lu</span><span class="se">\n</span><span class="s">str2:%s</span><span class="se">\n</span><span class="s">size:%lu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>\
+<span class="w">    </span><span class="n">str1</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">str1</span><span class="p">),</span><span class="n">str2</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">str2</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">使用<code>sizeof</code>和<code>strlen</code>都能获取字符串长度,它们有什么区别呢?</p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">字符串</h2>
 <ul class="list-disc font-serif">
 <li class="ml-8">使用 <code>&lt;string.h&gt;</code> 标准库进行更多操作。</li>
 </ul>
-<p class="font-serif my-1"><a href="https://godbolt.org/z/Yrj3dfxKx">https://godbolt.org/z/Yrj3dfxKx</a>
-<img alt="static" src="./static/img/853203fa7f4948f18d30f0d4f2586165.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">宏定义</h2>
+<p class="font-serif my-1"><a href="https://godbolt.org/z/sz8Ms1nTj">https://godbolt.org/z/sz8Ms1nTj</a></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">宏定义</h2>
 <ul class="list-disc font-serif">
 <li class="ml-8"><code>#define</code> 是文本替换，比如 <code>#define MAX 1000</code></li>
 <li class="ml-8">C预处理器先处理源文件，替换宏并包含文件。</li>
 </ul>
-<p class="font-serif my-1"><img alt="static" src="./static/img/f9a01408398844e9b4a0538adaf6c7ca.png"/></p>
+<p class="font-serif my-1"><img alt="static" src="./static/img/3e722aa87b43462fa5629d7d5b542743.png"/></p>
 <p class="font-serif my-1"><a href="https://godbolt.org/z/aMPxbrMbs">https://godbolt.org/z/aMPxbrMbs</a></p>
 <p class="font-serif my-1">gcc -o test test.c -save-temps</p>
 <p class="font-serif my-1">关于这块，比较好玩的就是微软早期路径长度在编写时使用了宏定义
@@ -259,8 +278,8 @@ CPP 命令以“#”开头
 - #if/#endif /<em> 有条件地包含文本 </em>/</stdio.h></p>
 <p class="font-serif my-1">使用 gcc 的 –save-temps 选项查看预处理结果
 完整文档位于：http:// /gcc.gnu.org/onlinedocs/cpp/</p></div></section><section><div><h2 id="cat-break" class="text-xl mt-2 pb-2 font-sans">Cat Break!</h2>
-<p class="font-serif my-1"><img alt="static" src="./static/img/11693378e53e45449de8116f8ea226bf.png"/></p></div></section></section><section><section><div><h2 id="agenda-part-2" class="text-xl mt-2 pb-2 font-sans">Agenda Part 2</h2>
-<p class="font-serif my-1"><img class="float-right" src="./static/img/f5d9dbb8e76c4082b7e17bb8ac138338.png" width=""/></p>
+<p class="font-serif my-1"><img alt="static" src="./static/img/ff8bee4432db4457af8cb7accf38a3c8.png"/></p></div></section></section><section><section><div><h2 id="agenda-part-2" class="text-xl mt-2 pb-2 font-sans">Agenda Part 2</h2>
+<p class="font-serif my-1"><img class="float-right" src="./static/img/d77fc3c248284ce88073e56b5498914f.png" width=""/></p>
 <ul class="list-disc font-serif">
 <li class="ml-8">内存与变量</li>
 <li class="ml-8">多维数组</li>
@@ -271,7 +290,7 @@ CPP 命令以“#”开头
 <li class="ml-8">void指针</li>
 <li class="ml-8">警惕UB</li>
 </ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">内存</h2>
-<p class="font-serif my-1"><img alt="static" src="./static/img/8334e94e81644ed1a3bdb9a75ceed930.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">变量与垃圾值</h2>
+<p class="font-serif my-1"><img alt="static" src="./static/img/f9b5785898c74ccb93861c27c0dd6460.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">变量与垃圾值</h2>
 <div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
 <span class="kt">float</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.5f</span><span class="p">;</span>
@@ -283,21 +302,21 @@ b   ：标识
 -1  ：值
 &amp;b  ：地址</p>
 <p class="font-serif my-1"><a href="https://godbolt.org/z/ocbrj7s85">https://godbolt.org/z/ocbrj7s85</a>
-<img alt="static" src="./static/img/99aca2ebff314be7a91decceb33ec5c3.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">数组的越界行为</h2>
+<img alt="static" src="./static/img/aa1e8bce43c640a3bb4c63867e2f68a0.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">数组的越界行为</h2>
 <div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">array</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">};</span>
 </code></pre></div>
 
 <p class="font-serif my-1">array 这个标识符是什么呢？</p>
-<p class="font-serif my-1"><img alt="array2" src="./static/img/5f2242615f2b47218fcb51f6fca11a7c.png"/></p>
-<p class="font-serif my-1">问：能不能访问array[5]呢？</p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">多维数组</h2>
+<p class="font-serif my-1"><img alt="array2" src="./static/img/2325487fe87c4df293bbfbe7986d8fe9.png"/></p>
+<p class="font-serif my-1">问：能不能访问array[5]呢？</p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">多维数组(目前了解即可)</h2>
 <div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">array</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}};</span>
 </code></pre></div>
 
 <p class="font-serif my-1">matrix的类型: int[2][2]
 sizeof matrix = sizeof(int) * 2 * 2</p>
 <p class="font-serif my-1"><a href="https://godbolt.org/z/Mbq513KnG">https://godbolt.org/z/Mbq513KnG</a></p>
-<p class="font-serif my-1"><img alt="2dmatrix" src="./static/img/56425f4f2fc74c3bb8bd7dbb8f049212.png"/></p>
-<p class="font-serif my-1">问：下面哪种写法是正确的?</p>
+<p class="font-serif my-1"><img alt="2dmatrix" src="./static/img/12462e9d74c8489bb110338d748228c6.png"/></p>
+<p class="font-serif my-1">(问：下面哪种写法是正确的?)</p>
 <div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">matrix</span><span class="p">[][</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">};</span>
 <span class="kt">int</span><span class="w"> </span><span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">][]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">};</span>
 </code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针</h2>
@@ -310,7 +329,7 @@ sizeof matrix = sizeof(int) * 2 * 2</p>
 p    : 标识符
 &amp;a   : 指针的值（指针指向的地址）
 &amp;p   : 存放指针的地址</p>
-<p class="font-serif my-1"><img alt="static" src="./static/img/bf0df0ad37274bcda7c846a9574124f0.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针初始化与使用</h2>
+<p class="font-serif my-1"><img alt="static" src="./static/img/276ea65bb0824b8ab636b2eaea91d478.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针初始化与使用</h2>
 <div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
 <span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">//  危险，p是野指针</span>
 </code></pre></div>
@@ -327,25 +346,7 @@ p    : 标识符
 </code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针的作用</h2>
 <p class="font-serif my-1">指针是C语言的精髓，广泛运用于传参等方面</p>
 <p class="font-serif my-1"><a href="https://godbolt.org/z/8MeTzaGjo">https://godbolt.org/z/8MeTzaGjo</a></p>
-<p class="font-serif my-1">看完这个例子后，想一想scanf("%d",&amp;a);为什么需要取a的地址？</p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针数组和数组指针</h2>
-<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
-<span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">)[</span><span class="mi">10</span><span class="p">];</span>
-<span class="c1">// []运算符的优先级&gt;*运算符的优先级</span>
-</code></pre></div>
-
-<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
-<span class="c1">// 化为int* array[] -&gt; 存放着 10个指向int类型的指针 的数组</span>
-<span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">)[</span><span class="mi">10</span><span class="p">];</span>
-<span class="c1">// 化为int pointer[] -&gt; 指向 存放了10个int类型的数组 的指针</span>
-</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">加大难度</h2>
-<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">)[</span><span class="mi">20</span><span class="p">][</span><span class="mi">10</span><span class="p">];</span>
-</code></pre></div>
-
-<p class="font-serif my-1">问：p是什么？
-p是指针还是数组？
-p的类型是什么？</p>
-<p class="font-serif my-1">想明白之后点击链接查看答案
-<a href="https://godbolt.org/z/hv6rnTj5Y">https://godbolt.org/z/hv6rnTj5Y</a></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">数组和指针的关系</h2>
+<p class="font-serif my-1">看完这个例子后，想一想scanf("%d",&amp;a);为什么需要取a的地址？</p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">数组和指针的关系</h2>
 <div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="c1">// p1的类型是int* , array的类型是int[10]</span>
 <span class="kt">int</span><span class="w"> </span><span class="n">array</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
 <span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">array</span><span class="p">;</span>
@@ -380,26 +381,24 @@ p的类型是什么？</p>
 <p class="font-serif my-1">指针相减
 表示指针之间的偏移量</p>
 <p class="font-serif my-1">仅当原指针和结果指针都指向同一数组中的元素，或该数组的尾后一位置，行为才有定义。</p>
-<p class="font-serif my-1"><a href="https://godbolt.org/z/q9M6W81x3">https://godbolt.org/z/q9M6W81x3</a></p></div></section><section><div><h2 id="void" class="text-xl mt-2 pb-2 font-sans">void*</h2>
-<p class="font-serif my-1">使用void类型指针的时候无法进行解引用，也无法进行加减运算
-使用void*类型的指针的时候一定要对其进行强制类型转化</p>
-<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">;</span>
-<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="o">*</span><span class="p">((</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p</span><span class="p">));</span>
-</code></pre></div></div></section><section><div><h2 id="ub" class="text-xl mt-2 pb-2 font-sans">警惕UB(未定义行为)</h2>
+<p class="font-serif my-1"><a href="https://godbolt.org/z/q9M6W81x3">https://godbolt.org/z/q9M6W81x3</a></p></div></section><section><div><h2 id="ub" class="text-xl mt-2 pb-2 font-sans">警惕UB(未定义行为)</h2>
 <p class="font-serif my-1">我们很多时候需要警惕未定义行为，就比如说</p>
 <div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
 </code></pre></div>
 
 <p class="font-serif my-1">i在这里多次使用且数值发生了改变，没人知道a[i]先执行还是++i先执行</p>
-<p class="font-serif my-1">还有就是</p>
 <div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="c1">// i=0</span>
 <span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="o">+</span><span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="o">-</span><span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="o">++</span><span class="p">);</span>
 </code></pre></div>
 
 <p class="font-serif my-1">虽然在最后的结果上编译器会将其翻译为int a = (f(i++)+f(i++))-f(i++);
-但没人知道哪个f(i++)最先执行，可能是第一个，也可能是第三个</p></div></section><section><div><h2 id="ask-time" class="text-xl mt-2 pb-2 font-sans">Ask Time</h2>
-<p class="font-serif my-1"><img alt="static" src="./static/img/cdfa9e87117d4baf82ca4e2f5de0b837.png"/></p></div></section></section>
+但没人知道哪个f(i++)最先执行，可能是第一个，也可能是第三个</p>
+<blockquote>
+<p class="font-serif my-1">详情请参考
+https://zh.cppreference.com/w/c/language/behavior
+https://zh.cppreference.com/w/c/language/eval_order</p>
+</blockquote></div></section><section><div><h2 id="ask-time" class="text-xl mt-2 pb-2 font-sans">Ask Time</h2>
+<p class="font-serif my-1"><img alt="static" src="./static/img/d2218f607d3a4237973e1fbd7506fb67.png"/></p></div></section></section>
         </div>
     </div>
 
