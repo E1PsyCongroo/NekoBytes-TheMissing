@@ -2,9 +2,8 @@
 
 #define MAX 1000
 
-int main(int argc,char* argv[])
-{
-    printf("MAX: %d",MAX);
+int main(void) {
+  printf("MAX: %d", MAX);
 
-    return 0;
+  return 0;
 }

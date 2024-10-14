@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main(void) {
   // 创建一个值为 8 的整数
   // Note: int16_t 是一种数值数据类型，占用 2 个字节的内存
   int16_t x = 8;

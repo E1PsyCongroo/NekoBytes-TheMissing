@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main() {
+int main(void) {
   // TODO: 分配内存来存储字符串“hello”
   // Hint: 我们需要多少字节来存储这个字符串？
   ______ hello_str[______];
@@ -76,7 +76,7 @@ int main() {
   ______(______ + ______, ______);
 
   // Prints hello_world_str
-  aseert(!strcmp("hello world", hello_world_str));
+  assert(!strcmp("hello world", hello_world_str));
   printf("prints hello world: %s\n", hello_world_str);
 
   return EXIT_SUCCESS;

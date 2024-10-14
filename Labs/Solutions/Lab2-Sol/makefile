@@ -1,6 +1,6 @@
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror -g -std=c11
-TARGET := float hello-world
+CFLAGS := -Wall -Wextra -g -std=c11
+TARGET := ex1 ex2 ex3 ex4 ex5 sudoku
 
 all: $(TARGET)
 

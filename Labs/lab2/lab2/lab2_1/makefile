@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -Wall -Wpedantic -g -std=c11
+CFLAGS := -Wall -Wextra -g -std=c11
 TARGET := ex1_ptr ex2_arrays ex3_ptr_ari ex4_string ex5_ptr_and_fun
 
 all: $(TARGET)

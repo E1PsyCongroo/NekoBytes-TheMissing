@@ -14,7 +14,7 @@ void add_one_pointer(______ input) {
   ________ += 1;
 }
 
-int main() {
+int main(void) {
   // 将 x（整数）赋值为 5
   int x = 5;
 
