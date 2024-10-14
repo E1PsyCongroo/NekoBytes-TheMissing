@@ -1,6 +1,6 @@
-# C语言基础
+# c语言基础
 
-在了解完C语言环境的搭建以后，让我们开始进行编程吧，本节课将涉及到抽象思维，C语言基础操作，以及指针的入门。
+在了解完c语言环境的搭建以后，让我们开始进行编程吧，本节课将涉及到抽象思维，c语言基础操作，以及指针的入门。
 
 希望大家能够在这节课中学到一些有趣的知识。
 
@@ -11,7 +11,7 @@
 举个简单的例子
 
 你看得懂这是什么吗？
-```hex
+```txt
 0000: 11 41 e4 06 e0 22 00 00 00 00 07 b7 00 07 85 13
 0010: 00 00 00 97 00 07 85 13 00 00 00 97 00 00 80 e7
 0020: 47 81 85 3e 60 a2 64 02 01 41 80 82 00 00 00 00
@@ -20,15 +20,15 @@
 你看得懂这个吗
 
 ```asm
-.LC0:
-        .string "Hello World"
+.lc0:
+        .string "hello world"
 main:
         addi    sp,sp,-16
         sd      ra,8(sp)
         sd      s0,0(sp)
         addi    s0,sp,16
-        lui     a5,%hi(.LC0)
-        addi    a0,a5,%lo(.LC0)
+        lui     a5,%hi(.lc0)
+        addi    a0,a5,%lo(.lc0)
         call    printf
         li      a5,0
         mv      a0,a5
@@ -44,20 +44,20 @@ main:
 #include <stdio.h>
 
 int main(void) {
-    printf("Hello World");
+    printf("hello world");
     return 0;
 }
 ```
 
-这三段代码都能完成同一个功能，打印出"Hello World",编写代码时，你想选择哪种呢？想必不用我多说了吧
+这三段代码都能完成同一个功能，打印出"hello world",编写代码时，你想选择哪种呢？想必不用我多说了吧
 
 使用抽象，我们能够在更高层次上与计算机交互，而不是直接操作底层硬件或机器码。通过编程语言、编译器和操作系统等层次，我们可以更快速地开发和维护复杂的软件系统。
 
-当然,在我们使用C语言进行代码开发的时候,也会使用到抽象的思想,就比如说你想要实现一个贪吃蛇的功能,你一定不想在main函数里面完成所有功能,因为这样会大大增加开发的难度,没人想要把一长段的代码塞到一个函数里面去,这样不仅开发速度慢,而且出现bug还很难修!
+当然,在我们使用c语言进行代码开发的时候,也会使用到抽象的思想,就比如说你想要实现一个贪吃蛇的功能,你一定不想在main函数里面完成所有功能,因为这样会大大增加开发的难度,没人想要把一长段的代码塞到一个函数里面去,这样不仅开发速度慢,而且出现bug还很难修!
 
 ```c
 /**
- * @param 游戏板: board[BOARD_SIZE][BOARD_SIZE]
+ * @param 游戏板: board[board_size][board_size]
  * @param 初始化: initialize_board
  * @param 随机生成: generate_number
  * @param 打印显示: print_board
@@ -70,10 +70,10 @@ void run_game() {
     generate_number(); generate_number();
     while (true) {
         switch (choose_direction()) {
-            case UP: move_and_merge_up(); break;
-            case DOWN: move_and_merge_down(); break;
-            case LEFT: move_and_merge_left(); break;
-            case RIGHT: move_and_merge_right(); break;
+            case up: move_and_merge_up(); break;
+            case down: move_and_merge_down(); break;
+            case left: move_and_merge_left(); break;
+            case right: move_and_merge_right(); break;
         }
         if (is_finished()) break;
         generate_number();
@@ -85,33 +85,33 @@ void run_game() {
 > 抽象的设计使得我们将复杂的逻辑分解为若干简单的函数模块，各个模块之间相互独立并可以重复使用，这样可以使代码结构更加清晰、易于维护和扩展。
 > 虽然我还没有实现贪吃蛇的功能,但显然我已经把贪吃蛇的思路设计好了,有了思路,我们就能进行进一步的编程,逐个实现各个函数,最后拼在一起就是完整的程序了。这就是抽象，理解了吗。
 
-## C语言基础操作
-C语言其实是十分基础的一门编程语言，它与计算机底层连接的十分紧密，因此，作为一只计算机系的小猫猫，我们是十分有必要了解这些的。
+## c语言基础操作
+c语言其实是十分基础的一门编程语言，它与计算机底层连接的十分紧密，因此，作为一只计算机系的小猫猫，我们是十分有必要了解这些的。
 
-> [!TIP]
-> 假如你不是计算机系的学生，那也必须掌握这项技能。麻省理工学院开设了一个专业，那就是著名的EECS(Electrical Engineering and Computer Science)。电子工程和计算机的界限本身就很模糊。而且，近些年来兴起的物联网技术，无人车等，都离不开计算机和电子信息之间的协作。在交叉领域，我们更需要一些人才，来打破边界，取得突破。
+> [!tip]
+> 假如你不是计算机系的学生，那也必须掌握这项技能。麻省理工学院开设了一个专业，那就是著名的eecs(electrical engineering and computer science)。电子工程和计算机的界限本身就很模糊。而且，近些年来兴起的物联网技术，无人车等，都离不开计算机和电子信息之间的协作。在交叉领域，我们更需要一些人才，来打破边界，取得突破。
 
 ### 常量
 
-在C语言中，每个变量都有属于它的常量形式
+在c语言中，每个变量都有属于它的常量形式
 
 我们可以这样来定义常量:
 ```c
 const int a = -1;
 const float b = 1.2;
-const char c = 'C';
+const char c = 'c';
 ```
-> [!WARNING]
+> [!warning]
 > 常量一经定义,无法更改!
 > 但凡编译器发现你在程序中更改了这个变量,那会直接报编译失败
 
-> [!TIP]
+> [!tip]
 > 常量有什么用呢
 > 当你和你的好友一起写代码时,你想让你的好友写一段播放音频的代码,并且为你需要为你的好友提供一个程序接口,你一定不想让你的好友更改你传入的音频文件,因为这会导致一些不可预知的bug,这时候,你就能考虑使用`const`来保证你的朋友不会更改你的音频信息`void play_wav(const int* audio,size_t length);`
 
 ### 控制流
 
-顺序，分支，循环。这是C语言中最基本的操作，只要使用这三种操作，在理论上，你就能可以编写**任何**计算机程序
+顺序，分支，循环。这是c语言中最基本的操作，只要使用这三种操作，在理论上，你就能可以编写**任何**计算机程序
 
 - 顺序结构
     顺序结构就是一条一条执行指令
@@ -127,7 +127,7 @@ const char c = 'C';
     }else if(a == 0){
         printf("false");
     }else{
-        printf("Error");
+        printf("error");
     }
     ```
 
@@ -135,17 +135,17 @@ const char c = 'C';
 
     ```c
     switch(ch){
-    case 'A':
-        printf("you choose \'A\' as your answer!\n");
+    case 'a':
+        printf("you choose \'a\' as your answer!\n");
         break; // 千万别忘加
-    case 'B':
-        printf("you choose \'B\' as your answer!\n");
+    case 'b':
+        printf("you choose \'b\' as your answer!\n");
         break; // 千万别忘加
-    case 'C':
-        printf("you choose \'C\' as your answer!\n");
+    case 'c':
+        printf("you choose \'c\' as your answer!\n");
         break; // 千万别忘加
-    case 'D':
-        printf("you choose \'D\' as your answer!\n");
+    case 'd':
+        printf("you choose \'d\' as your answer!\n");
         break; // 千万别忘加
     default:
         printf("you don\'t choose any answer!\n");
@@ -176,7 +176,7 @@ const char c = 'C';
     ```
     当然不常见的还有`goto`,不过不利于维护,不建议使用
 
-> [!NOTE]
+> [!note]
 >
 > 在理论计算机科学中，图灵完备性表明，只要掌握了顺序、分支、循环这三种结构，就可以表达任何可计算的问题。这三种结构被称为编程中的基本控制结构，任何复杂的算法都可以通过这三者的组合来实现。
 >
@@ -228,7 +228,7 @@ int fact(int n){    // 这是函数的实现
 - 定义：unsigned char temp[10] = {0x11,0x12,0x13};
 - 使用：printf(“%02x ”,temp[0]);
 
-```C
+```c
 #include <stdio.h>
 int main(){
   // 初始化
@@ -245,9 +245,9 @@ int main(){
 }
 ```
 
-> [!TIP]
+> [!tip]
 >
-> 请注意数组是内存中的一块连续的空间,加入你定义了一个大小为3的数组`int tmp[3]`,千万不要访问第四个元素tmp[3],因为这会导致UB(未定义行为),会导致你的程序出现莫名其妙的bug
+> 请注意数组是内存中的一块连续的空间,加入你定义了一个大小为3的数组`int tmp[3]`,千万不要访问第四个元素tmp[3],因为这会导致ub(未定义行为),会导致你的程序出现莫名其妙的bug
 > 并且,你只能在初始化的时候这么豪爽地将好几个值赋值到数组中,当完成初始化后,就不能使用这种方法了,需要一个一个进行修改
 
 ### 字符串
@@ -271,11 +271,11 @@ int main(){
 ```
 
 ## 指针的快速入门
-**指针**,作为C语言的精髓,在广受赞誉的同时,有广受鄙夷,以至于`java`的创始人 James Gosling 评价指针是**一种容易导致程序出错的语言特性**
+**指针**,作为c语言的精髓,在广受赞誉的同时,有广受鄙夷,以至于`java`的创始人 james gosling 评价指针是**一种容易导致程序出错的语言特性**
 
-确实,指针的直接操作在 C 和 C++ 等语言中容易导致内存泄漏、缓冲区溢出、指针悬挂（悬空指针）等问题，使得程序不安全且难以调试。
+确实,指针的直接操作在 c 和 c++ 等语言中容易导致内存泄漏、缓冲区溢出、指针悬挂（悬空指针）等问题，使得程序不安全且难以调试。
 
-不过,也正是因为指针,C语言可以通过直接访问内存的方式,在函数间传递内存地址，而不是传递数据的副本。特别是在处理大数据结构（如数组、结构体）时，避免了不必要的数据拷贝。
+不过,也正是因为指针,c语言可以通过直接访问内存的方式,在函数间传递内存地址，而不是传递数据的副本。特别是在处理大数据结构（如数组、结构体）时，避免了不必要的数据拷贝。
 
 ### 内存
 
@@ -283,9 +283,9 @@ int main(){
 
 | 值(一个字节) | 地址(32位) |
 | :----------: | :--------: |
-|  0b00110011  | 0xFFFFFFFF |
-|      ?       | 0xFFFFFFFE |
-|     0xA8     | 0xFFFFFFFD |
+|  0b00110011  | 0xffffffff |
+|      ?       | 0xfffffffe |
+|     0xa8     | 0xfffffffd |
 |     ...      |    ...     |
 |      ?       | 0x00000000 |
 
@@ -308,17 +308,17 @@ char c = 'c';
 
 | 变量名 | 数值  |        内存        |
 | :----: | :---: | :----------------: |
-|   a    | 0x01  | 0x00007FFEE72F6B34 |
-|   a    | 0x00  | 0x00007FFEE72F6B35 |
-|   a    | 0x00  | 0x00007FFEE72F6B36 |
-|   a    | 0x00  | 0x00007FFEE72F6B37 |
-|   b    | 0x9a  | 0x00007FFEE72F6B30 |
-|   b    | 0x99  | 0x00007FFEE72F6B31 |
-|   b    | 0x99  | 0x00007FFEE72F6B32 |
-|   b    | 0x3F  | 0x00007FFEE72F6B33 |
-|   c    | 0x63  | 0x00007FFEE72F6B2F |
+|   a    | 0x01  | 0x00007ffee72f6b34 |
+|   a    | 0x00  | 0x00007ffee72f6b35 |
+|   a    | 0x00  | 0x00007ffee72f6b36 |
+|   a    | 0x00  | 0x00007ffee72f6b37 |
+|   b    | 0x9a  | 0x00007ffee72f6b30 |
+|   b    | 0x99  | 0x00007ffee72f6b31 |
+|   b    | 0x99  | 0x00007ffee72f6b32 |
+|   b    | 0x3f  | 0x00007ffee72f6b33 |
+|   c    | 0x63  | 0x00007ffee72f6b2f |
 
-> [!NOTE]
+> [!note]
 >
 > 每一个地址存储一个字节(8位),在64位机中,`int`类型占用4个字节,`float`类型也占用4个字节,`char`类型占用1个字节
 
@@ -340,13 +340,13 @@ array 这个标识符是什么呢？
 
 | 值（四个字节） | 地址（32位） |   访问   |
 | :------------: | :----------: | :------: |
-|   0x00000005   |  0xFFFFFFFF  | array[4] |
-|   0x00000004   |  0xFFFFFFFB  | array[3] |
-|   0x00000003   |  0xFFFFFFF7  | array[2] |
-|   0x00000002   |  0xFFFFFFF3  | array[1] |
-|   0x00000001   |  0xFFFFFFEF  | array[0] |
+|   0x00000005   |  0xffffffff  | array[4] |
+|   0x00000004   |  0xfffffffb  | array[3] |
+|   0x00000003   |  0xfffffff7  | array[2] |
+|   0x00000002   |  0xfffffff3  | array[1] |
+|   0x00000001   |  0xffffffef  | array[0] |
 
-> 上面提到array这个数组实际上是一片连续的内存空间,所以array存储的是第一个值的地址0xFFFFFFEF 通过访问这个地址,我们就能快速定位这个数组,并进行访问
+> 上面提到array这个数组实际上是一片连续的内存空间,所以array存储的是第一个值的地址0xffffffef 通过访问这个地址,我们就能快速定位这个数组,并进行访问
 >
 > 那么访问array[5]就会导致访问到不属于数组的空间,就会引发bug,这就是**数组越界**
 
@@ -356,14 +356,14 @@ int array[2][2] = {{1,2},{3,4}};
 ```
 |  值   |    地址     |     访问     |   访问    |  访问  |
 | :---: | :---------: | :----------: | :-------: | :----: |
-|   1   | 0xAFFFFFF0  | matrix[0][0] | matrix[0] | matrix |
-|   2   | 0xAFFFFFF4  | matrix[0][1] |           |        |
-|   3   | 0xAFFFFFF8  | matrix[1][0] | matrix[1] |        |
-|   4   | 0xAFFFFFF12 | matrix[1][1] |           |        |
+|   1   | 0xaffffff0  | matrix[0][0] | matrix[0] | matrix |
+|   2   | 0xaffffff4  | matrix[0][1] |           |        |
+|   3   | 0xaffffff8  | matrix[1][0] | matrix[1] |        |
+|   4   | 0xaffffff12 | matrix[1][1] |           |        |
 
 我们可以发现,不管是多维数组,还是一维数组,存储结构都是线性的,多维数组是按行进行展开的
 
-> [!WARNING]
+> [!warning]
 >
 >请先跳过这段,等到学完指针之后,再来看下面这个程序,你会发现什么呢?
 ```c
@@ -404,8 +404,8 @@ printf("%d",*p);
 
 | 值（四个字节） | 地址（32位） | 指针访问 | 标识符 |
 | :------------: | :----------: | :------: | :----: |
-|   0x00000001   |  0xAFFFFFFF  |    *p    |   a    |
-|   0xAFFFFFFF   |  0xAFFFFFFB  |          |   p    |
+|   0x00000001   |  0xafffffff  |    *p    |   a    |
+|   0xafffffff   |  0xaffffffb  |          |   p    |
 
 可以看到指针存放的是a的地址我们可以通过操作符`*`对指针进行**解引用**来提取出指针指向地址的值,然后使用指针提取a处的值
 
@@ -417,9 +417,9 @@ printf("%d",*p);
 int* p;
 *p = 1; //  危险，p是野指针
 //应该这么做
-int* p = NULL;
+int* p = null;
 ```
-> [!WARNING]
+> [!warning]
 >
 > 还记得之前讲过的垃圾值吗,正是因为有垃圾值的存在,我们对指针进行初始化的时候,假如不对指针进行赋空操作,那么**垃圾值**就会成为指针指向的位置,这非常危险,相当于有人把枪口对准你,即使不开枪,我们也**绝对不会**允许这种事情发生!
 >
@@ -427,7 +427,7 @@ int* p = NULL;
 
 ### 指针的作用
 
-指针是C语言的精髓，广泛运用于传参等方面
+指针是c语言的精髓，广泛运用于传参等方面
 ```c
 #include <stdio.h>
 
@@ -458,7 +458,7 @@ a = 1, b = 2
 a = 1, b = 2 after swap1
 a = 2, b = 1 after swap2
 ```
-在C语言中,函数的返回值只能是一个值,并且,假设你传a,b两个变量的话,无论在函数中进行了什么操作,都不会影响原来的变量
+在c语言中,函数的返回值只能是一个值,并且,假设你传a,b两个变量的话,无论在函数中进行了什么操作,都不会影响原来的变量
 
 但我们传入一个指针之后就完全不一样了,我们可以通过指针,直接修改a,b所在地址的值,这就能达到交换数据的效果
 
@@ -485,7 +485,7 @@ int* (*p)[20][10];
 > p的类型是什么？
 
 > 想明白之后点击链接查看答案
-> [https://godbolt.org/z/hv6rnTj5Y](https://godbolt.org/z/hv6rnTj5Y)
+> [https://godbolt.org/z/hv6rntj5y](https://godbolt.org/z/hv6rntj5y)
 
 ### 数组和指针的关系
 
@@ -509,8 +509,8 @@ int** ptr = array;
 
 > 恭喜你,喜提报错一个
 ```bash
-main.c: In function ‘main’:
-main.c:10:19: warning: initialization of ‘int **’ from incompatible pointer type ‘int (*)[2]’ [-Wincompatible-pointer-types]
+main.c: in function ‘main’:
+main.c:10:19: warning: initialization of ‘int **’ from incompatible pointer type ‘int (*)[2]’ [-wincompatible-pointer-types]
    10 |         int** ptr = matrix;
       |                   ^~~~~~
 ```
@@ -519,13 +519,13 @@ main.c:10:19: warning: initialization of ‘int **’ from incompatible pointer 
 
 他们都是数组的首地址,区别在于他们的类型,`matrix`得到的类型是`int(*)[2]`,而`*matrix`的类型是`int[2]`
 
-> [!CAUTIONS]
+> [!cautions]
 > 而对二维指针进行解引用,那么,它就会提取出matrix指向位置的**值**来作为一级指针\*ptr的指向位置,这等同于将垃圾值赋值给指针,会产生严重的后果
 
-> [!NOTE]
-> C语言对于指针比较"宽容",即使检查到你错误的使用了指针,编译器也只会报一个警告,而不是错误,所以,当出现关于指针的警告是,请将它看作报错,并想办法去解决它
+> [!note]
+> c语言对于指针比较"宽容",即使检查到你错误的使用了指针,编译器也只会报一个警告,而不是错误,所以,当出现关于指针的警告是,请将它看作报错,并想办法去解决它
 >
-> 或者你也可以在使用gcc进行编译时,加入`-Werror`将警告变为错误处理
+> 或者你也可以在使用gcc进行编译时,加入`-werror`将警告变为错误处理
 
 ### 指针的加减法
 
@@ -540,7 +540,7 @@ main.c:10:19: warning: initialization of ‘int **’ from incompatible pointer 
 - 指针相减
     表示指针之间的偏移量
     仅当原指针和结果指针都指向同一数组中的元素，或该数组的尾后一位置，行为才有定义。
-    > [!WARNING]
+    > [!warning]
     >
     > 警惕越界行为!!!
 
@@ -554,7 +554,7 @@ void *p = &a;
 printf("%d\n",*((int*)p));
 ```
 
-### 警惕UB(未定义行为)
+### 警惕ub(未定义行为)
 
 我们很多时候需要警惕未定义行为，就比如说
 ```c
@@ -571,7 +571,7 @@ int a = f(i++)+f(i++)-f(i++);
 但没人知道哪个f(i++)最先执行，可能是第一个，也可能是第三个
 
 ## 问题
-经过学习,我相信你也已经掌握了C语言的一些基本技能了,那下面几个问题可以去尝试一下哦
+经过学习,我相信你也已经掌握了c语言的一些基本技能了,那下面几个问题可以去尝试一下哦
 1. 定义一个常量`const int a=0;`能不能使用一个指针访问它来更改它的值?
 2. switch语句中,不使用break会发生什么?为什么有时候我们需要使用switch而不是一直使用if-else语句。
 
