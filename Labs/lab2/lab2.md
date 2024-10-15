@@ -96,7 +96,7 @@
   - 实现一个递归函数`bool solveSudoku(int board[N][N], int row, int col)`判断数独是否可解，有解则填充正确答案。
 
   - 题中数独采用二维数组，需解答填充的数字用0代替如：
-
+    ```txt
     0 6 0 0 0 0 0 7 1
     7 0 5 4 0 3 0 0 0
     0 0 0 6 7 0 3 0 0
@@ -106,6 +106,8 @@
     6 0 1 0 2 0 0 0 3
     0 7 9 0 0 0 5 0 2
     0 0 0 0 0 4 7 0 0
-    提供了`printBoard(int board[N][N])`函数打印数独和`isSafe(int board[N][N], int row, int col, int num)`函数检查数字是否可以放在board[row][col]位置。
-   - 运行judge.sh检测程序正确性。
+    ```
+  - 使用`printBoard(int board[N][N])`函数打印数独
+  - 使用`isSafe(int board[N][N], int row, int col, int num)`函数检查数字是否可以放在board[row][col]位置。
+  - 运行judge.sh检测程序正确性。
 - 完成文件`sudoku.c`中的`solveSudoku`函数编写。
