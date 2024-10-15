@@ -75,7 +75,7 @@
                     <p class="font-serif my-1">
                         NekoBytes
                     </p>
-                    <img class="inline-img h-24" src="./static/img/362acf4d703d4586b6cd867062f8b9c3.svg" style="display: inline-block;"/>
+                    <img class="inline-img h-24" src="./static/img/c3ae71a350e34f17ae8aac4cea7c375e.svg" style="display: inline-block;"/>
                 </a>
             </div>
             
@@ -204,7 +204,7 @@
 <blockquote>
 <p class="font-serif my-1"><code>addi x1, x0, 0xf</code> (<code>0x00f00093</code>)</p>
 </blockquote>
-<p class="font-serif my-1"><img class="center" src="./static/img/3fd6a9334a8e4fd08b8e9bfaf965afbb.svg" width="960px"/></p></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">冯诺依曼计算机系统</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/0cdbbaccab90465ba58c685485c2cd30.svg" width="960px"/></p></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">冯诺依曼计算机系统</h2>
 <ul class="list-disc font-serif">
 <li class="ml-8">
 <p class="font-serif my-1">运算器：ALU</p>
@@ -252,12 +252,32 @@
 <li class="ml-8">硬件视角的操作系统</li>
 <li class="ml-8">Three Easy Pieces</li>
 </ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">什么是操作系统？</h2>
-<p class="font-serif my-1"><img class="center" src="./static/img/a92163b6920d4d058a282bcdb5f3b577.jpg" width="768px"/></p>
-<div class="center">管理进程、服务进程、管理硬件</div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">内存模型</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/4f288e5a8a334bd8b4f74e798822dfd7.jpg" width="768px"/></p>
+<div class="center">管理进程、服务进程、管理硬件</div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">内存模型与规范</h2>
 <ul class="list-disc font-serif">
+<li class="ml-8">指令集、编译器、操作系统遵循同一规范<ul class="list-disc font-serif">
 <li class="ml-8">System V ABI</li>
 </ul>
-<p class="font-serif my-1"><img class="center" src="./static/img/6138b86f0fe744afb49e4a3b3e0e2e9e.svg" width="320px"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">硬件视角的操作系统</h2>
+</li>
+</ul>
+<p class="font-serif my-1"><img class="center" src="./static/img/730c1f2b36514d8ca1b5378bc4c615a1.svg" width="280px"/></p></div></section><section><div><h2 id="-" class="text-xl mt-2 pb-2 font-sans">实验 - 栈和堆的地址</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"stack: %p"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"heap : %p"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">可能的输出：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>stack: 0x7ffd27bb38dc
+heap : 0x59e598fe42a0
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">硬件视角的操作系统</h2>
 <ul class="list-disc font-serif">
 <li class="ml-8">只是一个简单的程序（裸机程序）</li>
 <li class="ml-8">但是直接操作硬件<ul class="list-disc font-serif">

@@ -199,11 +199,36 @@ while (1) {
 
 ----
 
-## 内存模型
+## 内存模型与规范
 
-+ System V ABI
++ 指令集、编译器、操作系统遵循同一规范
+    + System V ABI
 
-<img class="center" src="./static/mem.svg" width="320px">
+<img class="center" src="./static/mem.svg" width="280px">
+
+----
+
+## 实验 - 栈和堆的地址
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int x = 1;
+    void *y = malloc(sizeof(int));
+    printf("stack: %p", (void *)&x);
+    printf("heap : %p", y);
+    free(y);
+    return 0;
+}
+```
+可能的输出：
+
+```text
+stack: 0x7ffd27bb38dc
+heap : 0x59e598fe42a0
+```
 
 ----
 
