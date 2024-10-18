@@ -1,6 +1,6 @@
 {
     "author": {
-        "name": "自由",
+        "name": "自由，M4yGem1ni",
     },
     "departments": [
         {
@@ -181,6 +181,92 @@ while (1) {
 ## 程序是个状态机
 + 状态？
 + 激励：执行新的指令
+
+---
+
+## 硬件形式上的计算机
+
+<hr>
+定义如下规则：
+<hr>
++ 非门：一个输入，一个输出，输入输出相反。
++ 与门：两个输入，一个输出。两边全是1，则输出为1，否则为0
++ 或门：两个输入，一个输出。两边有一个是1，则输出为1，否则为0
++ 异或门：两个输入，一个输出。两边不同，则输出为1，否则为0
+
+[ComputationStructure](https://computationstructures.org/exercises/alu/lab.html)
+----
+
+## 加法
+
+使用两个异或门和两个与门和一个或门，实现了一个加法器
+
+<hr>
+
++ A,B：对应的两个加数
++ Cin：前一项的进位
++ S：计算结果（A,B,Cin有奇数个1则输出1）
++ Cout：进位(A,B,Cin有两个为1则输出1)
+
+<hr>
+
+<img class="center" src="./static/Adder.png" width="768px">
+
+----
+
+## 抽象
+
+将之前的电路抽象成一个icon
+这样便无需在意里面的具体细节
+<hr>
+
+<img class="center" src="./static/FA.png" width="768px">
+
+----
+## 加法器组合
+
+<hr>
+
+逐个拼接就能实现32位，乃至64位的加法
+
+<hr>
++ AFN为1代表是减法
++ 减法是以加法为基础来进行计算的
+
+<hr>
+
+<img class="center" src="./static/Airth.png" width="768px">
+
+----
+## 再次抽象
+<hr>
+
+将这个电路模型抽象为一个icon
+
+<hr>
+
+<img class="center" src="./static/AIRTH.png" width="768px">
+
+----
+## 按照这个思路构建alu
+
+<hr>
+
++ SHIFT：实现数据的移位
++ BOOL：进行布尔运算
++ AIRTH：进行加法减法运算
++ CMP：与AIRTH紧密结合，根据其输出判断A,B大小关系
+
+<hr>
+
+<img class="center" src="./static/alu.png" width="668px">
+
+----
+## 构建CPU
+按照这个思路继续抽象，便能得到一个cpu的模型
+<hr>
+
+<img class="center" src="./static/cpu.png" width="568px">
 
 ---
 
