@@ -12,7 +12,7 @@
         type="text/css">
     <title> lecture3 </title>
     <!-- browser favicon -->
-    <link rel="shortcut icon" href="./static/img/favicon.png">
+    <link rel="shortcut icon" href="./static/img/favicon.ico">
     <style>
         .font-sans {
             font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
@@ -22,15 +22,9 @@
             font-family: 'Source Serif Pro', 'Songti SC', 'SimSun', 'Serif', serif;
         }
     </style>
-    <!-- <link rel="stylesheet" href="https://jyywiki.cn/static/katex/katex.min.css">
-    <script defer src="https://jyywiki.cn/static/katex/katex.min.js"></script> -->
     <link rel="stylesheet" href="./static/katex/katex.min.css">
     <script defer src="./static/katex/katex.min.js"></script>
-    <!-- <script defer src="https://jyywiki.cn/static/katex/auto-render.min.js"
-        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
-        crossorigin="anonymous"></script> -->
     <script defer src="./static/katex/auto-render.min.js"></script>
-    <script src="plugin/markdown/markdown.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             renderMathInElement(document.body, {
@@ -63,7 +57,7 @@
         <div class="py-16">
             <p class="font-serif my-1">
                 <a href="" class=" text-amber-900">
-                    自由
+                    自由，M4yGem1ni
                 </a>
             </p>
         </div>
@@ -75,7 +69,7 @@
                     <p class="font-serif my-1">
                         NekoBytes
                     </p>
-                    <img class="inline-img h-24" src="./static/img/c3ae71a350e34f17ae8aac4cea7c375e.svg" style="display: inline-block;"/>
+                    <img class="inline-img h-24" src="./static/img/ce8b08f96ce3479da9b6596c9701c6e0.svg" style="display: inline-block;"/>
                 </a>
             </div>
             
@@ -204,7 +198,7 @@
 <blockquote>
 <p class="font-serif my-1"><code>addi x1, x0, 0xf</code> (<code>0x00f00093</code>)</p>
 </blockquote>
-<p class="font-serif my-1"><img class="center" src="./static/img/0cdbbaccab90465ba58c685485c2cd30.svg" width="960px"/></p></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">冯诺依曼计算机系统</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/28cab9315eb8415d91c72125ec5498f9.svg" width="960px"/></p></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">冯诺依曼计算机系统</h2>
 <ul class="list-disc font-serif">
 <li class="ml-8">
 <p class="font-serif my-1">运算器：ALU</p>
@@ -246,13 +240,72 @@
 <ul class="list-disc font-serif">
 <li class="ml-8">状态？</li>
 <li class="ml-8">激励：执行新的指令</li>
-</ul></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">操作系统</h2>
+</ul></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">硬件形式上的计算机</h2>
+<hr/>
+<p class="font-serif my-1">定义如下规则：</p>
+<hr/>
+<ul class="list-disc font-serif">
+<li class="ml-8">非门：一个输入，一个输出，输入输出相反。</li>
+<li class="ml-8">与门：两个输入，一个输出。两边全是1，则输出为1，否则为0</li>
+<li class="ml-8">或门：两个输入，一个输出。两边有一个是1，则输出为1，否则为0</li>
+<li class="ml-8">异或门：两个输入，一个输出。两边不同，则输出为1，否则为0</li>
+</ul>
+<p class="font-serif my-1"><a href="https://computationstructures.org/exercises/alu/lab.html">ComputationStructure</a></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">加法</h2>
+<p class="font-serif my-1">使用两个异或门和两个与门和一个或门，实现了一个加法器</p>
+<hr/>
+
+<ul class="list-disc font-serif">
+<li class="ml-8">A,B：对应的两个加数</li>
+<li class="ml-8">Cin：前一项的进位</li>
+<li class="ml-8">S：计算结果（A,B,Cin有奇数个1则输出1）</li>
+<li class="ml-8">Cout：进位(A,B,Cin有两个为1则输出1)</li>
+</ul>
+<hr/>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/7d095c82692149b6b75ae09e0110272e.png" width="768px"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">抽象</h2>
+<p class="font-serif my-1">将之前的电路抽象成一个icon
+这样便无需在意里面的具体细节</p>
+<hr/>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/3821eff8ab1042fa84d270292f8447d3.png" width="768px"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">加法器组合</h2>
+<hr/>
+
+<p class="font-serif my-1">逐个拼接就能实现32位，乃至64位的加法</p>
+<hr/>
+<ul class="list-disc font-serif">
+<li class="ml-8">AFN为1代表是减法</li>
+<li class="ml-8">减法是以加法为基础来进行计算的</li>
+</ul>
+<hr/>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/9f46b159c5e64324a64c99543e0f9597.png" width="768px"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">再次抽象</h2>
+<hr/>
+
+<p class="font-serif my-1">将这个电路模型抽象为一个icon</p>
+<hr/>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/39d64db107574af69f5a5751958a99d3.png" width="768px"/></p></div></section><section><div><h2 id="alu" class="text-xl mt-2 pb-2 font-sans">按照这个思路构建alu</h2>
+<hr/>
+
+<ul class="list-disc font-serif">
+<li class="ml-8">SHIFT：实现数据的移位</li>
+<li class="ml-8">BOOL：进行布尔运算</li>
+<li class="ml-8">AIRTH：进行加法减法运算</li>
+<li class="ml-8">CMP：与AIRTH紧密结合，根据其输出判断A,B大小关系</li>
+</ul>
+<hr/>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/91b46e2025084cf3b01832a9f80ea78a.png" width="668px"/></p></div></section><section><div><h2 id="cpu" class="text-xl mt-2 pb-2 font-sans">构建CPU</h2>
+<p class="font-serif my-1">按照这个思路继续抽象，便能得到一个cpu的模型</p>
+<hr/>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/428ab8cd97b0484cb9a4151044b96995.png" width="568px"/></p></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">操作系统</h2>
 <ul class="list-disc font-serif">
 <li class="ml-8">什么是操作系统？</li>
 <li class="ml-8">硬件视角的操作系统</li>
 <li class="ml-8">Three Easy Pieces</li>
 </ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">什么是操作系统？</h2>
-<p class="font-serif my-1"><img class="center" src="./static/img/4f288e5a8a334bd8b4f74e798822dfd7.jpg" width="768px"/></p>
+<p class="font-serif my-1"><img class="center" src="./static/img/659edf639b8b4773a821480ae131503e.jpg" width="768px"/></p>
 <div class="center">管理进程、服务进程、管理硬件</div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">内存模型与规范</h2>
 <ul class="list-disc font-serif">
 <li class="ml-8">指令集、编译器、操作系统遵循同一规范<ul class="list-disc font-serif">
@@ -260,7 +313,7 @@
 </ul>
 </li>
 </ul>
-<p class="font-serif my-1"><img class="center" src="./static/img/730c1f2b36514d8ca1b5378bc4c615a1.svg" width="280px"/></p></div></section><section><div><h2 id="-" class="text-xl mt-2 pb-2 font-sans">实验 - 栈和堆的地址</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/737c3e4cd73d45769f2ccbab4214edc2.svg" width="280px"/></p></div></section><section><div><h2 id="-" class="text-xl mt-2 pb-2 font-sans">实验 - 栈和堆的地址</h2>
 <div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
 
