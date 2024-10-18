@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="./static/css/base.css" rel="stylesheet">
+    <link href="./static/css/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.font.im/css?family=Source+Serif+Pro%7CLato%7CInconsolata" rel="stylesheet"
+        type="text/css">
+    <title> lecture3 </title>
+    <!-- browser favicon -->
+    <link rel="shortcut icon" href="./static/img/favicon.png">
+    <style>
+        .font-sans {
+            font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
+        }
+
+        .font-serif {
+            font-family: 'Source Serif Pro', 'Songti SC', 'SimSun', 'Serif', serif;
+        }
+    </style>
+    <!-- <link rel="stylesheet" href="https://jyywiki.cn/static/katex/katex.min.css">
+    <script defer src="https://jyywiki.cn/static/katex/katex.min.js"></script> -->
+    <link rel="stylesheet" href="./static/katex/katex.min.css">
+    <script defer src="./static/katex/katex.min.js"></script>
+    <!-- <script defer src="https://jyywiki.cn/static/katex/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script> -->
+    <script defer src="./static/katex/auto-render.min.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                // customised options
+                // &#8226; auto-render specific keys, e.g.:
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true }
+                ],
+                // &#8226; rendering keys, e.g.:
+                throwOnError: false
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" href="./static/reveal/reveal.css">
+    <link rel="stylesheet" href="./static/reveal/theme/simple.css" id="theme">
+    <link rel="stylesheet" href="./static/jyy/jyy.css">
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    <div class="reveal">
+        <div class="slides">
+            <section><section><div class="center middle"><div style="width:100%"><div><h1 id="_1" class="text-2xl mt-2 font-sans">从软件到硬件</h1><p class="font-serif my-1">
+    <include src="Slides_Author">
+        <div class="py-16">
+            <p class="font-serif my-1">
+                <a href="" class=" text-amber-900">
+                    自由
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="font-serif my-1"/>
+            
+            <div class="author-affiliation">
+                <a href="https://github.com/E1PsyCongroo/NekoBytes-TheMissing" class=" text-amber-900">
+                    <p class="font-serif my-1">
+                        NekoBytes
+                    </p>
+                    <img class="inline-img h-24" src="./static/img/c3ae71a350e34f17ae8aac4cea7c375e.svg" style="display: inline-block;"/>
+                </a>
+            </div>
+            
+        </div>
+    </include>
+</p></div></div></div></section></section><section><section><div><h2 id="cpu" class="text-xl mt-2 pb-2 font-sans">CPU</h2>
+<hr/>
+<hr/>
+<ul class="list-disc font-serif">
+<li class="ml-8">指令集</li>
+<li class="ml-8">汇编语言和机器语言</li>
+<li class="ml-8">图灵机</li>
+<li class="ml-8">CPU的组成</li>
+</ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指令集</h2>
+<hr/>
+<hr/>
+<ul class="list-disc font-serif">
+<li class="ml-8">输入的指令 -&gt; 要做什么操作</li>
+<li class="ml-8">程序员和CPU的一种约定</li>
+</ul>
+<hr/>
+<ul class="list-disc font-serif">
+<li class="ml-8">常见的指令集： <ul class="list-disc font-serif">
+<li class="ml-8">x86_64(amd64)</li>
+<li class="ml-8">ARM</li>
+<li class="ml-8">RISC-V</li>
+<li class="ml-8">LoongArch</li>
+</ul>
+</li>
+</ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">汇编语言和机器语言</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">机器语言</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>00000040: 4111 06e4 22e0 0008 1705 0000 1305 0500
+00000050: 9700 0000 e780 0000 8147 3e85 a260 0264
+00000060: 4101 8280
+</code></pre></div>
+
+<ul class="list-disc font-serif">
+<li class="ml-8">汇编语言</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="nl">main:</span>
+<span class="w">        </span><span class="nf">addi</span><span class="w">    </span><span class="no">sp</span><span class="p">,</span><span class="no">sp</span><span class="p">,-</span><span class="mi">16</span>
+<span class="w">        </span><span class="nf">sd</span><span class="w">      </span><span class="no">ra</span><span class="p">,</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>
+<span class="w">        </span><span class="nf">sd</span><span class="w">      </span><span class="no">s0</span><span class="p">,</span><span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>
+<span class="w">        </span><span class="nf">addi</span><span class="w">    </span><span class="no">s0</span><span class="p">,</span><span class="no">sp</span><span class="p">,</span><span class="mi">16</span>
+</code></pre></div>
+
+<hr/>
+
+<p class="font-serif my-1">几乎是简单的替换</p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">汇编语言和机器语言</h2>
+<p class="font-serif my-1">几乎是简单的替换</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>0000000000000000 &lt;main&gt;:
+   0:   1141        addi    sp,sp,-16
+   2:   e406        sd      ra,8(sp)
+   4:   e022        sd      s0,0(sp)
+   6:   0800        addi    s0,sp,16
+   8:   00000517    auipc   a0,0x0
+   c:   00050513    mv  a0,a0
+  10:   00000097    auipc   ra,0x0
+  14:   000080e7    jalr    ra #10 &lt;main+0x10&gt;
+  18:   4781        li  a5,0
+  1a:   853e        mv  a0,a5
+  1c:   60a2        ld  ra,8(sp)
+  1e:   6402        ld  s0,0(sp)
+  20:   0141        addi    sp,sp,16
+  22:   8082        ret
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">体会高级语言到机器语言</h2>
+<hr/>
+<ul class="list-disc font-serif">
+<li class="ml-8">C语言<code>main.c</code> -&gt; 汇编语言<code>main.S</code></li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>gcc<span class="w"> </span>./main.c<span class="w"> </span>-S<span class="w"> </span>./main.S
+</code></pre></div>
+
+<ul class="list-disc font-serif">
+<li class="ml-8">汇编语言<code>main.S</code> -&gt; 可执行文件<code>main.out</code></li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>gcc<span class="w"> </span>./main.S<span class="w"> </span>-o<span class="w"> </span>./main.out
+</code></pre></div>
+
+<hr/>
+<hr/>
+<blockquote>
+<p class="font-serif my-1"><code>main.out</code>并不只包含了机器语言，还包含了指示系统如何运行这个文件的信息。</p>
+</blockquote></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">图灵机</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">CPU如何自动计算？</li>
+<li class="ml-8">下一条指令在哪里？ —— 程序计数器PC</li>
+</ul>
+<hr/>
+
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">从PC指示的存储器位置取出指令</span><span class="p">;</span>
+<span class="w">  </span><span class="n">执行指令</span><span class="p">;</span>
+<span class="w">  </span><span class="n">更新PC</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ul class="list-disc font-serif">
+<li class="ml-8">图灵机<ul class="list-disc font-serif">
+<li class="ml-8">存储器、PC、加法器</li>
+<li class="ml-8">从PC指示的存储器位置取指 -&gt; 执行 -&gt; 更新PC</li>
+</ul>
+</li>
+</ul></div></section><section><div><h2 id="cpu" class="text-xl mt-2 pb-2 font-sans">CPU的组成</h2>
+<h3 id="register">寄存器 Register</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8">CPU的内部存储器</li>
+<li class="ml-8">快速存储和访问</li>
+</ul>
+<h3 id="alu">算数逻辑单元 ALU</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8">执行各种逻辑运算</li>
+<li class="ml-8">根据信号选择输出</li>
+</ul>
+<h3 id="_1">总线</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8">CPU与外部设备交互、各种协议</li>
+</ul>
+<h3 id="_2">缓存</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8">外设速度和CPU速度差异</li>
+<li class="ml-8">快速访问</li>
+</ul></div></section><section><div><h2 id="cpu" class="text-xl mt-2 pb-2 font-sans">CPU的执行过程</h2>
+<blockquote>
+<p class="font-serif my-1"><code>addi x1, x0, 0xf</code> (<code>0x00f00093</code>)</p>
+</blockquote>
+<p class="font-serif my-1"><img class="center" src="./static/img/0cdbbaccab90465ba58c685485c2cd30.svg" width="960px"/></p></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">冯诺依曼计算机系统</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">
+<p class="font-serif my-1">运算器：ALU</p>
+</li>
+<li class="ml-8">
+<p class="font-serif my-1">控制器：译码单元</p>
+</li>
+<li class="ml-8">
+<p class="font-serif my-1">存储器：内存、寄存器</p>
+</li>
+<li class="ml-8">
+<p class="font-serif my-1">输入设备：键盘、鼠标</p>
+</li>
+<li class="ml-8">
+<p class="font-serif my-1">输出设备：显示器</p>
+</li>
+</ul>
+<blockquote>
+<p class="font-serif my-1">冯诺依曼计算机系统的存储器和运算器是分离的。</p>
+</blockquote></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">状态机</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">有状态</li>
+<li class="ml-8">会根据输入改变自身的状态（激励）</li>
+<li class="ml-8">简单的状态机<ul class="list-disc font-serif">
+<li class="ml-8"><strong>安静状态</strong> → <em>看到人</em> → <strong>吠叫状态</strong></li>
+<li class="ml-8"><strong>吠叫状态</strong> → <em>人给香肠</em> → <strong>进食状态</strong></li>
+<li class="ml-8"><strong>进食状态</strong> → <em>吃完香肠</em> → <strong>安静状态</strong></li>
+</ul>
+</li>
+</ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">计算机是个状态机</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">状态：寄存器、内存的值</li>
+<li class="ml-8">激励：外部的输入、指令的变更</li>
+</ul>
+<hr/>
+<hr/>
+
+<h2 id="_2" class="text-xl mt-2 pb-2 font-sans">程序是个状态机</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">状态？</li>
+<li class="ml-8">激励：执行新的指令</li>
+</ul></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">操作系统</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">什么是操作系统？</li>
+<li class="ml-8">硬件视角的操作系统</li>
+<li class="ml-8">Three Easy Pieces</li>
+</ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">什么是操作系统？</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/4f288e5a8a334bd8b4f74e798822dfd7.jpg" width="768px"/></p>
+<div class="center">管理进程、服务进程、管理硬件</div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">内存模型与规范</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">指令集、编译器、操作系统遵循同一规范<ul class="list-disc font-serif">
+<li class="ml-8">System V ABI</li>
+</ul>
+</li>
+</ul>
+<p class="font-serif my-1"><img class="center" src="./static/img/730c1f2b36514d8ca1b5378bc4c615a1.svg" width="280px"/></p></div></section><section><div><h2 id="-" class="text-xl mt-2 pb-2 font-sans">实验 - 栈和堆的地址</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"stack: %p"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"heap : %p"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">可能的输出：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>stack: 0x7ffd27bb38dc
+heap : 0x59e598fe42a0
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">硬件视角的操作系统</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">只是一个简单的程序（裸机程序）</li>
+<li class="ml-8">但是直接操作硬件<ul class="list-disc font-serif">
+<li class="ml-8">直接发送指令给磁盘</li>
+<li class="ml-8">直接接受键盘的原始输入</li>
+<li class="ml-8">直接……</li>
+</ul>
+</li>
+<li class="ml-8">以特殊的方式启动其它程序，就像调用一个函数一样<ul class="list-disc font-serif">
+<li class="ml-8">将程序加载到内存中，并跳转到程序的入口处。</li>
+</ul>
+</li>
+</ul></div></section><section><div><h2 id="three-easy-pieces" class="text-xl mt-2 pb-2 font-sans">Three Easy Pieces</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">虚拟化<ul class="list-disc font-serif">
+<li class="ml-8">所有进程都以为自己有一整个苹果吃</li>
+<li class="ml-8">以为自己独占CPU、内存……</li>
+</ul>
+</li>
+<li class="ml-8">并行<ul class="list-disc font-serif">
+<li class="ml-8">浏览器、VSCode等程序一起运行，同时？</li>
+<li class="ml-8">在CPU上不断切换正在运行的程序</li>
+</ul>
+</li>
+<li class="ml-8">持久化<ul class="list-disc font-serif">
+<li class="ml-8">我的2048Game出现了16384！但是这游戏不能存档😭😭😭</li>
+<li class="ml-8">组织文件系统</li>
+</ul>
+</li>
+</ul></div></section><section><div><h2 id="-" class="text-xl mt-2 pb-2 font-sans">拓展 - 体验并发</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">SYS_EXIT</span><span class="p">,</span><span class="w">  </span><span class="c1">// Process exits</span>
+<span class="w">    </span><span class="n">SYS_WRITE</span><span class="p">,</span><span class="w"> </span><span class="c1">// Write to console with a character</span>
+<span class="p">};</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">syscall</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">arg</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Syscall</span><span class="p">;</span>
+</code></pre></div>
+
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">  </span><span class="n">remainingStep</span><span class="p">;</span><span class="w"> </span><span class="c1">// A process will run remainingStep steps</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">charToOutput</span><span class="p">;</span><span class="w">  </span><span class="c1">// A process will write this character </span>
+<span class="w">                        </span><span class="c1">// to console by doing a syscall</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Process</span><span class="p">;</span><span class="w"> </span><span class="c1">// Process's Context</span>
+</code></pre></div></div></section><section><div><h2 id="-" class="text-xl mt-2 pb-2 font-sans">拓展 - 体验并发</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Process</span><span class="w"> </span><span class="o">*</span><span class="n">current</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">process_count</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// The Operating System will randomly </span>
+<span class="w">        </span><span class="c1">// choose a process to run</span>
+<span class="w">        </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">process_schedule</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// Switch process context and run it until a syscall</span>
+<span class="w">        </span><span class="n">Syscall</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">process_step</span><span class="p">(</span><span class="n">current</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">syscall</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SYS_EXIT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Process exits</span>
+<span class="w">            </span><span class="n">process_exit</span><span class="p">(</span><span class="n">current</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">syscall</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SYS_WRITE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Write the character from syscall arg to the console</span>
+<span class="w">            </span><span class="n">putchar</span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">arg</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">putchar</span><span class="p">(</span><span class="sc">'\n'</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h2 id="-" class="text-xl mt-2 pb-2 font-sans">拓展 - 体验并发</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Initialize the Operating System</span>
+<span class="w">    </span><span class="n">init</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// spawn processes</span>
+<span class="w">    </span><span class="n">spawn_process</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="sc">'A'</span><span class="p">);</span>
+<span class="w">    </span><span class="n">spawn_process</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="sc">'B'</span><span class="p">);</span>
+<span class="w">    </span><span class="n">spawn_process</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="sc">'C'</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// start running</span>
+<span class="w">    </span><span class="n">run</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">可能的输出：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>AABCCCBBBCBCAAA
+BBAACCCABBACCAB
+CAAACBCCBBAACBB
+</code></pre></div></div></section></section>
+        </div>
+    </div>
+
+    <script src="./static/reveal/reveal.js"></script>
+
+    <script>
+        Reveal.initialize({
+
+            width: 1024, height: 768,
+
+            slideNumber: 'c/t',
+            controlsTutorial: false,
+            progress: false,
+            hash: true,
+            center: false,
+            autoAnimateUnmatched: true,
+            autoAnimateEasing: 'ease-out',
+            autoAnimateDuration: 0.3,
+            transitionSpeed: 'fast'
+        });
+    </script>
+</body>
+
+</html>
