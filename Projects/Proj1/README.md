@@ -7,10 +7,8 @@
 如果你还不清楚malloc是什么，如何使用malloc
 请阅读：https://en.cppreference.com/w/c/memory/mallochttps://en.cppreference.com/w/c/memory/malloc
 如果你还不清楚malloc是如何运作的
-请阅读同文件夹下的Basic_note.md
-如果你希望实现更优秀的malloc
-请阅读同文件夹下的Advanced_node.md
-本实验改编自CSAPP课程的lab，如果你想体验原汁原味的抓狂体验
+请阅读同目录下的basic_note.md
+本实验改编自CSAPP课程的lab，如果你想体验原汁原味的抓狂体验或者想要实现更接近底层更高效的内存分配器
 请使用CSAPP课程网站资源：http://csapp.cs.cmu.edu/3e/labs.html
 # 项目概述
 ## mm.c
@@ -91,3 +89,8 @@
 1. 释放的空间得到了正确的维护吗？废弃的空间会导致你的空间利用率下降，这或许不会引发错误但这是严重的问题
 2. 相邻的自由块得到了合并吗？没有合并的自由块不仅会降低你的空间利用率(明明能分配但是没分配)还会降低你的时间效率
 3. 每个区块都在你的链表中吗，区块之间是否存在重叠（提示：你可以通过检查相邻地址之差是否与块大小匹配）
+
+# 让我们开始吧
+如果你已经完成了对basic_note.md的阅读，请打开同目录下的guide.md，其中包含了对各个功能实现的思路阐述与单元测试
+如果你希望更富有挑战性的编程体验，直接开写，将通过mdriver作为唯一的目标
+如果你还没有阅读basic_note.md，请阅读同目录下的basic_note.md
