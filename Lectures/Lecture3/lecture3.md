@@ -16,37 +16,67 @@
 
 ---
 
-## CPU
-<hr>
-<hr>
+## 计算机的数学视角
+
+> 计算机系统是严格的数学对象：没有魔法；计算机系统的一切行为都是可观测、可理解的。
+
++ 状态机模型
++ 计算机的状态机视角
 + 指令集
 + 汇编语言和机器语言
-+ 图灵机
-+ CPU的组成
++ 冯·诺伊曼体系结构
+
+----
+
+## [状态机模型](https://zh.wikipedia.org/wiki/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA)
+状态机: 表示有限个状态以及在这些状态之间的转移和动作等行为的**数学计算模型**
+
++ 状态
++ 会根据输入（激励）改变自身的状态
++ 简单的状态机
+    + **安静状态** → *看到人* → **吠叫状态**
+    + **吠叫状态** → *人给香肠* → **进食状态**
+    + **进食状态** → *吃完香肠* → **安静状态**
+
+----
+
+## 计算机是个状态机
+
++ 状态：各个**设备**的电路状态
++ 激励：外部的输入（鼠标、键盘）
+
+## 程序是个状态机
+
++ 状态：**寄存器**、**内存**
++ 激励：执行新的**指令**
 
 ----
 
 ## 指令集
-<hr>
-<hr>
+
 + 输入的指令 -> 要做什么操作
 + 程序员和CPU的一种约定
-<hr>
-+ 常见的指令集： 
-    - x86_64(amd64)
-    - ARM
-    - RISC-V
-    - LoongArch
++ 常见的指令集:
+    + x86_64(amd64)
+    + ARM
+    + RISC-V
+    + MISP
+    + LoongArch
 
 ----
+
 ## 汇编语言和机器语言
+
 + 机器语言
-```text
+
+```txt
 00000040: 4111 06e4 22e0 0008 1705 0000 1305 0500
 00000050: 9700 0000 e780 0000 8147 3e85 a260 0264
 00000060: 4101 8280
 ```
+
 + 汇编语言
+
 ```asm
 main:
         addi    sp,sp,-16
@@ -55,53 +85,57 @@ main:
         addi    s0,sp,16
 ```
 
-<hr>
-
 几乎是简单的替换
 
-----
+++++
 
 ## 汇编语言和机器语言
+
 几乎是简单的替换
-```text
+
+```shell
 0000000000000000 <main>:
-   0:	1141        addi	sp,sp,-16
-   2:	e406        sd	    ra,8(sp)
-   4:	e022        sd	    s0,0(sp)
-   6:	0800        addi	s0,sp,16
-   8:	00000517    auipc	a0,0x0
-   c:	00050513    mv	a0,a0
-  10:	00000097    auipc	ra,0x0
-  14:	000080e7    jalr	ra #10 <main+0x10>
-  18:	4781        li	a5,0
-  1a:	853e        mv	a0,a5
-  1c:	60a2        ld	ra,8(sp)
-  1e:	6402        ld	s0,0(sp)
-  20:	0141        addi	sp,sp,16
-  22:	8082        ret
+   0: 1141        addi sp,sp,-16
+   2: e406        sd     ra,8(sp)
+   4: e022        sd     s0,0(sp)
+   6: 0800        addi s0,sp,16
+   8: 00000517    auipc a0,0x0
+   c: 00050513    mv a0,a0
+  10: 00000097    auipc ra,0x0
+  14: 000080e7    jalr ra #10 <main+0x10>
+  18: 4781        li a5,0
+  1a: 853e        mv a0,a5
+  1c: 60a2        ld ra,8(sp)
+  1e: 6402        ld s0,0(sp)
+  20: 0141        addi sp,sp,16
+  22: 8082        ret
 ```
 
 ----
 
 ## 体会高级语言到机器语言
-<hr>
+
 + C语言`main.c` -> 汇编语言`main.S`
+
 ```shell
 gcc ./main.c -S ./main.S
 ```
-+ 汇编语言`main.S` -> 可执行文件`main.out`
+
++ 汇编语言`main.S` -> 可执行文件`main`
+
 ```shell
-gcc ./main.S -o ./main.out
+gcc ./main.S -o ./main
 ```
-<hr>
-<hr>
-> `main.out`并不只包含了机器语言，还包含了指示系统如何运行这个文件的信息。
+
+> `main`并不只包含了机器语言，还包含了指示系统如何运行这个文件的信息。
 
 ----
-## 图灵机
+
+## [图灵机](https://zh.wikipedia.org/wiki/%E5%9B%BE%E7%81%B5%E6%9C%BA)
+
 + CPU如何自动计算？
 + 下一条指令在哪里？ —— 程序计数器PC
-<hr>
+
 ```c
 while (1) {
   从PC指示的存储器位置取出指令;
@@ -111,80 +145,51 @@ while (1) {
 ```
 
 + 图灵机
-    - 存储器、PC、加法器
-    - 从PC指示的存储器位置取指 -> 执行 -> 更新PC
+    + 存储器、PC、加法器
+    + 从PC指示的存储器位置取指 -> 执行 -> 更新PC
+
+---
+
+## 计算机的硬件视角
+
++ 冯·诺伊曼体系结构
++ 逻辑门电路
++ 运算器
++ 处理器
 
 ----
 
-## CPU的组成
+## [冯·诺伊曼体系结构](https://zh.wikipedia.org/wiki/%E5%86%AF%E8%AF%BA%E4%BC%8A%E6%9B%BC%E7%BB%93%E6%9E%84)
 
-### 寄存器 Register
-+ CPU的内部存储器
-+ 快速存储和访问
++ 运算器：ALU
 
-### 算数逻辑单元 ALU
-+ 执行各种逻辑运算
-+ 根据信号选择输出
++ 控制器：逻辑电路控制器
 
-### 总线
-+ CPU与外部设备交互、各种协议
++ 存储器：内存、寄存器
 
-### 缓存
-+ 外设速度和CPU速度差异
-+ 快速访问
++ 总线：
+    + 输入设备：键盘、鼠标
+    + 输出设备：显示器
+
+> 冯·诺伊曼体系结构的核心思想
+>
+> + 使用二进制表示数据
+> + 程序指令和数据并存
+> + 计算机的五个基本组成部分
 
 ----
 
 ## CPU的执行过程
-> `addi x1, x0, 0xf` (`0x00f00093`)
+
+```asm
+addi x1, x0, 0xf 0x00f00093
+```
 
 <img class="center" src="./static/CPU.svg" width="960px">
 
----
-
-## 冯诺依曼计算机系统
-
-+ 运算器：ALU
-  
-+ 控制器：译码单元
-
-+ 存储器：内存、寄存器
-  
-+ 输入设备：键盘、鼠标
-  
-+ 输出设备：显示器
-
-> 冯诺依曼计算机系统的存储器和运算器是分离的。
-
-
----
-
-## 状态机
-
-+ 有状态
-+ 会根据输入改变自身的状态（激励）
-+ 简单的状态机
-    - **安静状态** → *看到人* → **吠叫状态**
-    - **吠叫状态** → *人给香肠* → **进食状态**
-    - **进食状态** → *吃完香肠* → **安静状态**
-
 ----
 
-## 计算机是个状态机
-
-+ 状态：寄存器、内存的值
-+ 激励：外部的输入、指令的变更
-
-<hr>
-<hr>
-
-## 程序是个状态机
-+ 状态？
-+ 激励：执行新的指令
-
----
-
-## 硬件形式上的计算机
+## 逻辑电路
 
 <hr>
 定义如下规则：
@@ -194,7 +199,7 @@ while (1) {
 + 或门：两个输入，一个输出。两边有一个是1，则输出为1，否则为0
 + 异或门：两个输入，一个输出。两边不同，则输出为1，否则为0
 
-[ComputationStructure](https://computationstructures.org/exercises/alu/lab.html)
+[Computation Structure](https://computationstructures.org/exercises/ALU/lab.html)
 ----
 
 ## 加法
@@ -223,6 +228,7 @@ while (1) {
 <img class="center" src="./static/FA.png" width="768px">
 
 ----
+
 ## 加法器组合
 
 <hr>
@@ -238,7 +244,9 @@ while (1) {
 <img class="center" src="./static/Airth.png" width="768px">
 
 ----
+
 ## 再次抽象
+
 <hr>
 
 将这个电路模型抽象为一个icon
@@ -248,7 +256,8 @@ while (1) {
 <img class="center" src="./static/AIRTH.png" width="768px">
 
 ----
-## 按照这个思路构建alu
+
+## 按照这个思路构建ALUMNI
 
 <hr>
 
@@ -262,8 +271,10 @@ while (1) {
 <img class="center" src="./static/alu.png" width="668px">
 
 ----
+
 ## 构建CPU
-按照这个思路继续抽象，便能得到一个cpu的模型
+
+按照这个思路继续抽象，便能得到一个CPU的模型
 <hr>
 
 <img class="center" src="./static/cpu.png" width="568px">
@@ -271,9 +282,39 @@ while (1) {
 ---
 
 ## 操作系统
+
+> 可执行文件并不只包含了该程序的机器语言，还包含了指示系统如何运行这个文件的信息。
+
 + 什么是操作系统？
 + 硬件视角的操作系统
 + Three Easy Pieces
+
+----
+
+## 实验 - 验证可执行文件
+
+```shell
+wget -r -nH --cut-dirs=5 https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/os-exec
+```
+
+```c
+#include <sys/syscall.h>
+#include <unistd.h>
+const char str[] = "\033[01;31mHello, OS World\033[0m\n";
+const int str_size = sizeof str - 1;
+int main(void) {
+  asm volatile("movl %0, %%eax\n\t" // 系统调用号：SYS_write
+               "movl $1, %%edi\n\t" // 文件描述符：STDOUT_FILENO (标准输出)
+               "movq %2, %%rsi\n\t" // 字符串地址
+               "movl %3, %%edx\n\t" // 字符串长度
+               "syscall"            // 调用系统调用
+               :
+               : "r"(SYS_write), "r"(STDOUT_FILENO), "r"(str), "r"(str_size)
+               : "eax", "edi", "rsi", "edx");
+  return 0;
+}
+
+```
 
 ----
 
@@ -288,7 +329,7 @@ while (1) {
 ## 内存模型与规范
 
 + 指令集、编译器、操作系统遵循同一规范
-    + System V ABI
+  + System V ABI
 
 <img class="center" src="./static/mem.svg" width="280px">
 
@@ -296,22 +337,26 @@ while (1) {
 
 ## 实验 - 栈和堆的地址
 
+```shell
+wget https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/stack.c
+```
+
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-
-int main() {
+int main(void) {
     int x = 1;
     void *y = malloc(sizeof(int));
-    printf("stack: %p", (void *)&x);
-    printf("heap : %p", y);
+    printf("stack: %p\n", (void *)&x);
+    printf("heap : %p\n", y);
     free(y);
     return 0;
 }
 ```
+
 可能的输出：
 
-```text
+```txt
 stack: 0x7ffd27bb38dc
 heap : 0x59e598fe42a0
 ```
@@ -322,15 +367,16 @@ heap : 0x59e598fe42a0
 
 + 只是一个简单的程序（裸机程序）
 + 但是直接操作硬件
-    + 直接发送指令给磁盘
-    + 直接接受键盘的原始输入
-    + 直接……
+  + 直接发送指令给磁盘
+  + 直接接受键盘的原始输入
+  + 直接……
 + 以特殊的方式启动其它程序，就像调用一个函数一样
-    + 将程序加载到内存中，并跳转到程序的入口处。
+  + 将程序加载到内存中，并跳转到程序的入口处。
 
 ----
 
 ## Three Easy Pieces
+
 + 虚拟化
     + 所有进程都以为自己有一整个苹果吃
     + 以为自己独占CPU、内存……
@@ -343,7 +389,11 @@ heap : 0x59e598fe42a0
 
 ----
 
-## 拓展 - 体验并发
+## 拓展 - 操作系统仿真
+
+```shell
+wget -r -nH --cut-dirs=5 https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/os-model
+```
 
 ```c
 enum {
@@ -360,19 +410,20 @@ typedef struct {
 ```c
 typedef struct {
     int  remainingStep; // A process will run remainingStep steps
-    char charToOutput;  // A process will write this character 
+    char charToOutput;  // A process will write this character
                         // to console by doing a syscall
 } Process; // Process's Context
 ```
 
-----
+++++
 
-## 拓展 - 体验并发
+## 拓展 - 操作系统仿真
+
 ```c
 void run() {
     Process *current;
     while (process_count()) {
-        // The Operating System will randomly 
+        // The Operating System will randomly
         // choose a process to run
         current = process_schedule();
         // Switch process context and run it until a syscall
@@ -389,9 +440,9 @@ void run() {
 }
 ```
 
-----
+++++
 
-## 拓展 - 体验并发
+## 拓展 - 操作系统仿真
 
 ```c
 int main() {
