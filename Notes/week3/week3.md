@@ -375,7 +375,7 @@ A,B各由32根数据线输入到器件中,输出32位结果
 ### 操作系统仿真（拓展）
 
 > [!TIP]
-> 获取代码:`wget -r -nH --cut-dirs=5 https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/os-model`
+> 获取代码: https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/os-model
 
 下面我们来通过一个简单的模型来体验并发。
 

@@ -293,9 +293,7 @@ addi x1, x0, 0xf 0x00f00093
 
 ## 实验 - 验证可执行文件
 
-```shell
-wget -r -nH --cut-dirs=5 https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/os-exec
-```
+> 获取代码: https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/os-exec
 
 ```c
 #include <sys/syscall.h>
@@ -337,9 +335,7 @@ int main(void) {
 
 ## 实验 - 栈和堆的地址
 
-```shell
-wget https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/stack.c
-```
+> 获取代码: https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/stack.c
 
 ```c
 #include <stdio.h>
@@ -391,9 +387,7 @@ heap : 0x59e598fe42a0
 
 ## 拓展 - 操作系统仿真
 
-```shell
-wget -r -nH --cut-dirs=5 https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/os-model
-```
+> 获取代码： https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture3/Codes/os-model
 
 ```c
 enum {
