@@ -19,13 +19,13 @@
 - C 实验提供简单的代码填空，GCC 编译练习
 
 ## Week2
-- MayGe 有想法，待定
-
-## Week3
-- 参考[去年的2048](https://github.com/E1PsyCongroo/Basic-Ideals-of-Programming-fa23/blob/main/Labs/Lab2/lab2-2048.md)
-- 可以提供一个 SDL2 的可选绘图任务
+- C 语言基础
 - 添加注释，文档说明
 - 提供标准 Solution
+
+## Week3
+- 体验嵌入式编程
+
 
 ## Week4
 - 经典的递归与分治算法问题
@@ -47,7 +47,8 @@
 - 读取数据集的线性回归预测
 
 ## Week9
-- PA 计算器
+- 待定
 
 ## Week10
-- 待定
+- 简易计算器
+

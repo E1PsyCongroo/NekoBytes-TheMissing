@@ -11,10 +11,9 @@
 
 ## Proj2
 - 贪吃蛇，参考[CS61C](https://cs61c.org/su24/projects/proj1/)
-- SDL2 图形化绘图显示(选做)
 
 ## Proj3
 - 简易神经网络实现分类任务
 
 ## Proj4
-- LSIP 解释器 / 文本编辑器
+- LSIP 解释器
