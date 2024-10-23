@@ -52,10 +52,12 @@ matrix SMM(matrix A, matrix B) {
 int main() {
   freopen("my.out", "w", stdout);
   init();
-  int len = A.r;
+  int len = A.r, fin_r = A.r, fin_c = B.c;
   len = len > A.c ? len : A.c;
   len = len > B.c ? len : B.c;
   len = next_power_of_two(len);
-  matrix_output(shrink(SMM(extend(A, len), extend(B, len)), A.r, B.c));
+  A = extend(A, len);
+  B = extend(B, len);
+  matrix_output(shrink(SMM(A, B), fin_r, fin_c));
   return 0;
 }
