@@ -1,10 +1,11 @@
 #!/bin/bash
+make all
 
 # 设置栈大小为无限制
 ulimit -s unlimited
 
 # 清理之前的输出文件
-rm -f native.out my.out
+rm -f naive.out my.out
 
 # 定义颜色
 GREEN='\033[0;32m'  # 绿色
@@ -20,22 +21,22 @@ for input_file in testcases/*.in; do
     fi
 
     # 记录开始时间
-    start_time_native=$(date +%s.%N)
+    start_time_naive=$(date +%s.%N)
 
-    # 运行 native 程序
-    ./native < "$input_file" 
+    # 运行 naive 程序
+    ./build/naive < "$input_file" > naive.out
 
     # 记录结束时间
-    end_time_native=$(date +%s.%N)
+    end_time_naive=$(date +%s.%N)
 
-    # 计算 native 程序的运行时间
-    runtime_native=$(echo "$end_time_native - $start_time_native" | bc)
+    # 计算 naive 程序的运行时间
+    runtime_naive=$(echo "$end_time_naive - $start_time_naive" | bc)
 
     # 记录开始时间
     start_time_my=$(date +%s.%N)
 
     # 运行 matrix_multiply 程序
-    ./matrix_multiply < "$input_file"
+    ./build/matrix_multiply < "$input_file" > my.out
 
     # 记录结束时间
     end_time_my=$(date +%s.%N)
@@ -44,15 +45,15 @@ for input_file in testcases/*.in; do
     runtime_my=$(echo "$end_time_my - $start_time_my" | bc)
 
     # 比较输出文件
-    if diff -q native.out my.out > /dev/null; then
+    if diff -q naive.out my.out > /dev/null; then
         echo -e "${GREEN}ACCEPT: $input_file${NC}"
     else
         echo -e "${RED}WRONG: $input_file${NC}"
         echo "Differences:"
-        diff native.out my.out
+        diff naive.out my.out
     fi
 
     # 输出两个程序的运行时间差异
-    echo "Time taken - native: $runtime_native seconds, matrix_multiply: $runtime_my seconds"
+    echo "Time taken - naive: $runtime_naive seconds, matrix_multiply: $runtime_my seconds"
     echo "---------------------------------------------"
 done

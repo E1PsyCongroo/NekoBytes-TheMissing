@@ -24,7 +24,7 @@ void init() {
   }
 }
 
-matrix mart_mutiply_native(matrix A, matrix B) {
+matrix mart_mutiply_naive(matrix A, matrix B) {
   matrix C;
   C.r = A.r;
   C.c = B.c;
@@ -52,11 +52,7 @@ void mart_output(matrix A) {
 }
 
 int main() {
-  freopen("native.out", "w", stdout);
   init();
-  mart_output(mart_mutiply_native(A, B));
+  mart_output(mart_mutiply_naive(A, B));
   return 0;
 }
-/*
-
-*/

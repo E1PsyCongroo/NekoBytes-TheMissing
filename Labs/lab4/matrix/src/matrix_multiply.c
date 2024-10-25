@@ -19,7 +19,7 @@ void init() {
 
 matrix SMM(matrix A, matrix B) {
   if (A.r == 1) {
-    return matrix_mutiply_native(A, B);
+    return matrix_mutiply_naive(A, B);
   }
   int mid = A.r / 2;
   matrix A11, A12, A21, A22, B11, B12, B21, B22;
@@ -50,7 +50,6 @@ matrix SMM(matrix A, matrix B) {
 }
 
 int main() {
-  freopen("my.out", "w", stdout);
   init();
   int len = A.r, fin_r = A.r, fin_c = B.c;
   len = len > A.c ? len : A.c;
