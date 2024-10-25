@@ -46,11 +46,10 @@ hanoi函数需要调用tower_move对汉诺塔进行操作，打开tower.h浏览�
 
 ## 注意事项
 
-1. 在本实验中你只需要修改hanoi.c下hanoi函数的主体内容
-2. 请不要在代码的任何地方使用任何形式的递归
+在本实验中你只需要修改hanoi.c下hanoi函数的主体内容
 
 ## 提示
 
-使用主流浏览器打开./static/Tower_of_Hanoi_recursion_SMIL.svg
+参考[维基百科上的图解](https://upload.wikimedia.org/wikipedia/commons/2/20/Tower_of_Hanoi_recursion_SMIL.svg)
 
 观察在n=4的情况下，问题是如何被分解的？
