@@ -1,6 +1,7 @@
 # Lab3-体验嵌入式
 
 ## 快速安装
+
 part1基础配置的相关配置我已经写好了插件,不过还是建议一步一步配置下去,这样才能快速了解环境,下次换台电脑也能很快的配置好环境
 
 > 安装文件放在./install文件夹中
@@ -45,6 +46,7 @@ $ls /dev/ttyUSB*
 ## 任务
 
 ### 任务1
+
 请移步到`./tasks`文件夹
 将三个.ihx文件放置到emu8051文件夹中
 即可执行文件emu的同目录下
@@ -144,6 +146,7 @@ tips:
     SDCC : mcs51/z80/z180/r2k/r2ka/r3ka/sm83/tlcs90/ez80_z80/z80n/r800/ds390/TININative/ds400/hc08/s08/stm8/pdk13/pdk14/pdk15/mos6502/mos65c02 TD- 4.4.0 #14620 (Linux)
     published under GNU General Public License (GPL)
     ```
+
     那进行下一步吧
 
 5. 尝试编译
@@ -302,7 +305,3 @@ tips:
     ```
 
     这样我们就能看到单片机的现象啦
-
-
-
-

@@ -1,8 +1,11 @@
 # Lab2 C 语言基本语法
+
 ## Lab2_1 C 语言基本语法
+
 - 完成lab2_1中的四个.c文件
   - 请根据每个ex_中的TODO完成内容。
   - 你可以使用 make 自动编译可执行文件
+
     ```bash
     make # 编译所有可执行文件
     make ex1_ptr # 仅编译 ex1_ptr.c
@@ -11,12 +14,16 @@
     ```
 
 ## Lab2_2 字符串和循环
+
 - 本实验使用了参数char *argv[]，请在编译后尝试向程序输入命令行参数，如:
+
   ```bash
   make
   ./str_and_cyc California Oregon Washington Texas
   ```
+
   输出内容，如下所示:
+
   ```bash
   for:
   arg 1: California
@@ -41,6 +48,7 @@
   state 2: Washington
   state 3: Texas
   ```
+
 - 请对srt_and_cyc.c文件中的for和while循环尝试以下操作并查看结果。
 - for循环
   - 将i初始化为0看看会发生什么。是否也需要改动argc，不改动的话它能正常工作吗？为什么下标从0开始可以正常工作？
@@ -51,7 +59,6 @@
   - 使用while循环将argv中的值复制到states。
   - 让这个复制循环不会执行失败，即使argv之中有很多元素也不会全部放进states。
   - 研究你是否真正复制了这些字符串。答案可能会让你感到意外和困惑。
-
 
 ## 递归(可选，难度较大)
 
@@ -96,6 +103,7 @@
   - 实现一个递归函数`bool solveSudoku(int board[N][N], int row, int col)`判断数独是否可解，有解则填充正确答案。
 
   - 题中数独采用二维数组，需解答填充的数字用0代替如：
+
     ```txt
     0 6 0 0 0 0 0 7 1
     7 0 5 4 0 3 0 0 0
@@ -107,6 +115,7 @@
     0 7 9 0 0 0 5 0 2
     0 0 0 0 0 4 7 0 0
     ```
+
   - 使用`printBoard(int board[N][N])`函数打印数独
   - 使用`isSafe(int board[N][N], int row, int col, int num)`函数检查数字是否可以放在board[row][col]位置。
   - 运行judge.sh检测程序正确性。
