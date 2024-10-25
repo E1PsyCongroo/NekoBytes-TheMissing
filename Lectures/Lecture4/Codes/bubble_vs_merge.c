@@ -2,13 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+
 #define N 10000
 int arr[N];
+
 double get_time() {
   struct timeval tv;
   gettimeofday(&tv, NULL);
   return tv.tv_sec + tv.tv_usec / 1000000.0;
 }
+
 void bubble_sort(int *arr, int n) {
   int i, j, tmp;
   for (i = 0; i < n; i++) {
@@ -21,6 +24,7 @@ void bubble_sort(int *arr, int n) {
     }
   }
 }
+
 void merge_sort(int *arr, int l, int r) {
   if (l >= r)
     return;
@@ -42,6 +46,7 @@ void merge_sort(int *arr, int l, int r) {
   free(buffer); // REMEMBER!!!
   return;
 }
+
 void init() {
   srand(114514);
   int i;
@@ -53,15 +58,19 @@ void init() {
   }
   return;
 }
+
 int main() {
   double start_time = 0, end_time = 0;
   init();
+
   start_time = get_time();
   merge_sort(arr, 0, N - 1);
   end_time = get_time();
   printf("merge_sort cost : %.6lf second on datasize:[%d]\n",
          end_time - start_time, N);
+
   init();
+
   start_time = get_time();
   bubble_sort(arr, N);
   end_time = get_time();
