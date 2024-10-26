@@ -10,7 +10,6 @@
 int board[BOARD_SIZE][BOARD_SIZE];
 
 void run_game(void) {
-  srand(time(0));
   initialize_board();
   generate_number();
   print_board();
@@ -59,6 +58,7 @@ bool is_finished(void) {
 }
 
 void initialize_board(void) {
+  srand(time(0));
   for (int i = 0; i < BOARD_SIZE; i++) {
     for (int j = 0; j < BOARD_SIZE; j++) {
       board[i][j] = 0;

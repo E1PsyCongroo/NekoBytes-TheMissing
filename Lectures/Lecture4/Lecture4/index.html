@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="./static/css/base.css" rel="stylesheet">
+    <link href="./static/css/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.font.im/css?family=Source+Serif+Pro%7CLato%7CInconsolata" rel="stylesheet"
+        type="text/css">
+    <title> lecture4 </title>
+    <!-- browser favicon -->
+    <link rel="shortcut icon" href="./static/img/favicon.ico">
+    <style>
+        .font-sans {
+            font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
+        }
+
+        .font-serif {
+            font-family: 'Source Serif Pro', 'Songti SC', 'SimSun', 'Serif', serif;
+        }
+    </style>
+    <link rel="stylesheet" href="./static/katex/katex.min.css">
+    <script defer src="./static/katex/katex.min.js"></script>
+    <script defer src="./static/katex/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                // customised options
+                // &#8226; auto-render specific keys, e.g.:
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true }
+                ],
+                // &#8226; rendering keys, e.g.:
+                throwOnError: false
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" href="./static/reveal/reveal.css">
+    <link rel="stylesheet" href="./static/reveal/theme/simple.css" id="theme">
+    <link rel="stylesheet" href="./static/jyy/jyy.css">
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    <div class="reveal">
+        <div class="slides">
+            <section><section><div class="center middle"><div style="width:100%"><div><h1 id="_1" class="text-2xl mt-2 font-sans">算法导论</h1><p class="font-serif my-1">
+    <include src="Slides_Author">
+        <div class="py-16">
+            <p class="font-serif my-1">
+                <a href="" class=" text-amber-900">
+                    晓阳，wenjing233
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="font-serif my-1"/>
+            
+            <div class="author-affiliation">
+                <a href="https://github.com/E1PsyCongroo/NekoBytes-TheMissing" class=" text-amber-900">
+                    <p class="font-serif my-1">
+                        NekoBytes
+                    </p>
+                    <img class="inline-img h-24" src="./static/img/af3276a037ab4fbe920f9b91fa8f8dfb.svg" style="display: inline-block;"/>
+                </a>
+            </div>
+            
+        </div>
+    </include>
+</p></div></div></div></section></section><section><section><div><h2 id="2048" class="text-xl mt-2 pb-2 font-sans">基本语法回顾——2048 为例</h2>
+<blockquote>
+<p class="font-serif my-1">获取本讲代码: <a href="https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture4/Codes/">https://e1psycongroo.github.io/NekoBytes-TheMissing/_site/resources/Lecture4/Codes/</a></p>
+<p class="font-serif my-1">高效学习: 一个<a href="https://pythontutor.com/c.html#mode=edit">可视化 C 语言语句的小工具</a></p>
+</blockquote>
+<p class="font-serif my-1"><img class="center" src="./static/img/e073bd9656034c76a2f2a5e27de395b9.png" width="60%"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">回顾抽象</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* Direction 为自定义 enum 类型, 用于表示方向</span>
+<span class="cm"> * 你可以简单将其理解为</span>
+<span class="cm"> * Direction dir; &lt;=&gt; int dir;</span>
+<span class="cm"> * #define UP 0</span>
+<span class="cm"> * #define DOWN 1</span>
+<span class="cm"> * #define LEFT 2</span>
+<span class="cm"> * #define RIGHT 3</span>
+<span class="cm"> * #define NONE 4</span>
+<span class="cm"> */</span>
+<span class="k">enum</span><span class="w"> </span><span class="n">Direction</span><span class="p">{</span><span class="n">UP</span><span class="p">,</span><span class="w"> </span><span class="n">DOWN</span><span class="p">,</span><span class="w"> </span><span class="n">LEFT</span><span class="p">,</span><span class="w"> </span><span class="n">RIGHT</span><span class="p">,</span><span class="w"> </span><span class="n">NONE</span><span class="p">};</span>
+<span class="c1">// board 用于结构化存储 2048 的数据</span>
+<span class="cp">#define BOARD_SIZE 4</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">board</span><span class="p">[</span><span class="n">BOARD_SIZE</span><span class="p">][</span><span class="n">BOARD_SIZE</span><span class="p">];</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="enum" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/enum">enum 枚举类型</a></h2>
+<p class="font-serif my-1">枚举类型是独立的类型，其值为包含所有其显示命名的常量（枚举常量）的底层类型（例如默认的int）的值。</p>
+<p class="font-serif my-1">需要注意，枚举类型与一般的基本类型不同，枚举类型程序员通过 enum 关键字<strong>自定义</strong>的一种类型。</p>
+<p class="font-serif my-1">你可以通过下面这种方式使用枚举类型:</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 定义枚举类型 color_t 该类型有三种取值:</span>
+<span class="cm"> * RED(0), GREEN(1), BLUE(2)</span>
+<span class="cm"> * 枚举常量是自动递增的</span>
+<span class="cm"> */</span>
+<span class="k">enum</span><span class="w"> </span><span class="n">color_t</span><span class="w"> </span><span class="p">{</span><span class="n">RED</span><span class="p">,</span><span class="w"> </span><span class="n">GREEN</span><span class="p">,</span><span class="w"> </span><span class="n">BLUE</span><span class="p">};</span>
+<span class="c1">// 定义 color_t 类型的变量 color, 初始化为 RED(0)</span>
+<span class="k">enum</span><span class="w"> </span><span class="n">color_t</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RED</span><span class="p">;</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="enum" class="text-xl mt-2 pb-2 font-sans">enum 枚举类型</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// 你可以通过'='在枚举常量后面指定枚举值对应的底层类型的值</span>
+<span class="w">  </span><span class="k">enum</span><span class="w"> </span><span class="n">TV</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">FOX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="n">HBO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w"> </span><span class="n">MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="n">NBC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"List of cable stations:</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">" FOX: </span><span class="se">\t</span><span class="s">%2d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">FOX</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">" HBO: </span><span class="se">\t</span><span class="s">%2d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">HBO</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">" MAX: </span><span class="se">\t</span><span class="s">%2d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">MAX</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>List<span class="w"> </span>of<span class="w"> </span>cable<span class="w"> </span>stations:
+<span class="w">  </span>FOX:<span class="w">   </span><span class="m">11</span>
+<span class="w">  </span>HBO:<span class="w">   </span><span class="m">22</span>
+<span class="w">  </span>MAX:<span class="w">   </span><span class="m">30</span>
+</code></pre></div>
+
+<p class="font-serif my-1">一般枚举可以作为常量定义的一种方式，可以愉快的与<code>switch</code>搭配使用，提升代码可读性。</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">回顾抽象</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 核心组件 */</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">run_game</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">initialize_board</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">generate_number</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="k">enum</span><span class="w"> </span><span class="n">Direction</span><span class="w"> </span><span class="nf">choose_direction</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">print_board</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">is_finished</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="cm">/* move and merge logic */</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">move_and_merge_left</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">move_and_merge_right</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">move_and_merge_up</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">move_and_merge_down</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">回顾抽象</h2>
+<p class="font-serif my-1">通过抽象，我们在没有实现具体功能函数的情况下，率先实现了游戏的整体逻辑代码:</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">run_game</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">enum</span><span class="w"> </span><span class="n">Direction</span><span class="w"> </span><span class="n">direction</span><span class="p">;</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">generate_flag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="n">initialize_board</span><span class="p">();</span><span class="w"> </span><span class="n">generate_number</span><span class="p">();</span><span class="w"> </span><span class="n">print_board</span><span class="p">();</span>
+<span class="w">  </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">generate_flag</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">generate_number</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="n">print_board</span><span class="p">();</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">choose_direction</span><span class="p">())</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">NONE</span><span class="p">);</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">direction</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">UP</span><span class="p">:</span><span class="w"> </span><span class="n">generate_flag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">move_and_merge_up</span><span class="p">();</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">DOWN</span><span class="p">:</span><span class="w"> </span><span class="n">generate_flag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">move_and_merge_down</span><span class="p">();</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">LEFT</span><span class="p">:</span><span class="w"> </span><span class="n">generate_flag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">move_and_merge_left</span><span class="p">();</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">RIGHT</span><span class="p">:</span><span class="w"> </span><span class="n">generate_flag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">move_and_merge_right</span><span class="p">();</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">is_finished</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">语法回顾: 循环</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* for 循环</span>
+<span class="cm"> * for (init; condition; update) { statements; }</span>
+<span class="cm"> * for (1*, 2, 4) { 3 }, *表示只允许一次</span>
+<span class="cm"> * 当 2 不满足条件时, 循环终止</span>
+<span class="cm"> * 通过循环, 用 i 表示行, j 表示列</span>
+<span class="cm"> * 我们可以很轻松实现 initialize_borad 的逻辑</span>
+<span class="cm"> */</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">initialize_board</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">语法回顾: 循环</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* is_finished: 判断游戏结束</span>
+<span class="cm"> * 出于简化实现的目的, 我们简单化了终止条件的判断:</span>
+<span class="cm"> *  1. 出现 2048</span>
+<span class="cm"> *  2. 只要游戏板被填满</span>
+<span class="cm"> */</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">is_finished</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">flag_no_space</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2048</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">flag_no_space</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">flag_no_space</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">语法回顾: 标准库</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="c1">// 使用 stdlib.h 提供的 rand 函数生成随机数, RTFM: man 3 rand</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">generate_number</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">empty_space</span><span class="p">[</span><span class="n">BOARD_SIZE</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">][</span><span class="mi">2</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">empty_space</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="n">empty_space</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
+<span class="w">        </span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">()</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">count</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empty_space</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empty_space</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">    </span><span class="n">board</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">rand</span><span class="p">()</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="switch" class="text-xl mt-2 pb-2 font-sans">语法回顾: switch</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* switch (expr) {</span>
+<span class="cm"> * case const_val1: statement1; break;</span>
+<span class="cm"> * case const_val2: statement2; break;</span>
+<span class="cm"> * case default: statement0; break;</span>
+<span class="cm"> * }</span>
+<span class="cm"> * switch 匹配与 expr 相等的常量表达式并跳转继续执行语句</span>
+<span class="cm"> * 直到遇到 `break;` 或遇到 switch 语句结束 `}`</span>
+<span class="cm"> */</span>
+<span class="k">enum</span><span class="w"> </span><span class="n">Direction</span><span class="w"> </span><span class="nf">choose_direction</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getchar</span><span class="p">();</span>
+<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">dir</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="sc">'A'</span><span class="p">:</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="sc">'a'</span><span class="p">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">LEFT</span><span class="p">;</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="sc">'W'</span><span class="p">:</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="sc">'w'</span><span class="p">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">UP</span><span class="p">;</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="sc">'S'</span><span class="p">:</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="sc">'s'</span><span class="p">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">DOWN</span><span class="p">;</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="sc">'D'</span><span class="p">:</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="sc">'d'</span><span class="p">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">RIGHT</span><span class="p">;</span>
+<span class="w">  </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">NONE</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="printf" class="text-xl mt-2 pb-2 font-sans">语法回顾: printf</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 打印游戏板画面 RTFM: mam system, man clear</span>
+<span class="cm"> * system: 用于在 C 语言程序中执行终端命令</span>
+<span class="cm"> * clear 用于终端清屏</span>
+<span class="cm"> */</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">print_board</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">system</span><span class="p">(</span><span class="s">"clear"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"-------------------------</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">putchar</span><span class="p">(</span><span class="sc">'|'</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">"%5d|"</span><span class="p">,</span><span class="w"> </span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"     |"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">putchar</span><span class="p">(</span><span class="sc">'\n'</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"-------------------------</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">语法回顾: 指针</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 指针: 存储内存地址的值的变量, 指针类型记录被指对象的类型</span>
+<span class="cm"> * C 语言函数参数遵循 `按值传递` 的规则</span>
+<span class="cm"> * 函数仅持有传入参数的值和类型, 不包含传入对象的名称和地址信息</span>
+<span class="cm"> * 通过将变量的地址的值 `按值传递` 给 swap 函数</span>
+<span class="cm"> * 使得 int 指针 a, b 能够访问调用方的对象</span>
+<span class="cm"> * 借助中间变量 int tmp; 实现对象值交换</span>
+<span class="cm"> */</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">swap</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">;</span>
+<span class="w">  </span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">;</span>
+<span class="w">  </span><span class="o">*</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">核心算法</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 函数将操作拆分为两步, 向左移动与向左合并</span>
+<span class="cm"> * moved_flag: 用于判断是否进行移动, 返回给调用方</span>
+<span class="cm"> * 2048 的合并逻辑注释事项:</span>
+<span class="cm"> * | 4 | 4 | 4 | 4 | 左合并的结果应该为 | 8 | 8 | 0 | 0 |</span>
+<span class="cm"> */</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">move_and_merge_left</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">moved_flag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="w"> </span><span class="n">row</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">col</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 移动逻辑: for 循环检测空白就将右边的数交换过来</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">search_col</span><span class="o">=</span><span class="n">col</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">search_col</span><span class="o">&lt;</span><span class="n">BOARD_SIZE</span><span class="p">;</span><span class="o">++</span><span class="n">search_col</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">search_col</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">search_col</span><span class="p">]);</span>
+<span class="w">            </span><span class="n">moved_flag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">核心算法</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="w">      </span><span class="c1">// 合并逻辑: 循环检测两个相邻(无视空格)的数, 如果相等就合并</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">next_not_zero_col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">next_not_zero_col</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">             </span><span class="n">next_not_zero_col</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="p">)</span>
+<span class="w">        </span><span class="n">next_not_zero_col</span><span class="o">++</span><span class="p">;</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">next_not_zero_col</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">BOARD_SIZE</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">          </span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">next_not_zero_col</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">moved_flag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"> </span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">        </span><span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">next_not_zero_col</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">moved_flag</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="cm">/* 其余移动处理函数类似, 不再在此展示 */</span>
+</code></pre></div>
+
+<blockquote>
+<p class="font-serif my-1">程序 = 数据结构 + 算法。事实上这个最简单的应用程序: 2048，已经包含了数据结构(数组)和基本的算法(循环迭代)。</p>
+</blockquote></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">数据结构</h2>
+<p class="font-serif my-1">数据结构是程序组织结构化数据的一种方式，数组作为一种基础的数据结构被广泛应用。</p>
+<p class="font-serif my-1">想象一下 C 语言如果没有数组，这意味着: 如果你需要表示一连串的数值，那么你需要对所有的数值变量进行声明<code>int a1, a2, a3...;</code>。</p>
+<p class="font-serif my-1">常见的数据结构还有:</p>
+<ol>
+<li class="ml-8">栈</li>
+<li class="ml-8">队列</li>
+<li class="ml-8">链表</li>
+<li class="ml-8">树</li>
+</ol>
+<p class="font-serif my-1">目前你掌握到的数据结构只有数组，但这就足够了，让我们先把数据结构放到一边，让我们先来探讨一下算法。</p></div></section></section><section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">认识算法</h2>
+<blockquote>
+<p class="font-serif my-1">“无论硬件给了你多少性能，软件都会把它拿走！”</p>
+<p class="font-serif my-1">比如 Android 的内存永远不够用，明明大家都是 Unix</p>
+</blockquote>
+<p class="font-serif my-1">随着硬件的不断提升，计算机的效率得到了显著的提高。</p>
+<p class="font-serif my-1">然而，这不能改变我们对更优秀的算法的渴求，因为计算机的资源终究是有限的。</p>
+<p class="font-serif my-1">一味的追求硬件上的提升，而放弃算法上的精进，首先会遇到严重的边际效应</p>
+<p class="font-serif my-1">其次，硬件和算法实际上是相辅相成的，算法的演化往往会带动硬件厂商去制作更适配该算法的硬件</p>
+<p class="font-serif my-1">例如针对深度学习等算法对矢量计算的高度依赖，现代CPU引入了向量化指令集，也有GPU架构为了支持高效的矢量计算而设计（例如CUDA）</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">什么是<a href="https://zh.wikipedia.org/zh-sg/%E7%AE%97%E6%B3%95">算法</a></h2>
+<blockquote>
+<p class="font-serif my-1">把大象塞进冰箱需要几步？</p>
+</blockquote>
+<ol>
+<li class="ml-8">算法是将<strong>输入</strong>变为<strong>输出</strong>的<strong>有限</strong>操作序列。</li>
+<li class="ml-8">算法要解决的问题不是特定的实例，而是广泛的抽象存在。</li>
+<li class="ml-8">算法的行为能够进行<strong>精确的描述</strong>，并可以通过数学方法<strong>证明</strong>。</li>
+</ol></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">描述算法</h2>
+<p class="font-serif my-1">算法是对如何解决问题的描述,描述算法就是描述如何去解决一个问题。</p>
+<p class="font-serif my-1">例如有人问你,如何从文泽路地铁站走到杭电生活区。</p>
+<p class="font-serif my-1">你回答道：“向北走,到达弗雷德广场后,向西走。”</p>
+<p class="font-serif my-1">可以说这也是一种算法,当然在实际生产活动中,我们遇到的问题往往更加抽象。</p>
+<p class="font-serif my-1">比如: 如何从地理位置上的 x 点走到 y 点？</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">描述算法</h2>
+<p class="font-serif my-1">问题背景：给定一张网格图,向右为x轴正方向,向上为y轴正方向,在格点处可以上下左右移动至临近格点</p>
+<p class="font-serif my-1">问题输入：起点坐标(a,b)终点坐标(c,d)</p>
+<p class="font-serif my-1">问题输出：一种从起点前往终点的方案,以字符串表示操作序列(0:上 1:下 2:左 3:右)</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">文字描述</h2>
+<p class="font-serif my-1">当前坐标与终点坐标重合时,算法结束</p>
+<p class="font-serif my-1">当前坐标位于终点坐标下方时,向上走</p>
+<p class="font-serif my-1">当前坐标位于终点坐标上方时,向下走</p>
+<p class="font-serif my-1">当前坐标位于终点坐标右侧时,向左走</p>
+<p class="font-serif my-1">当前坐标位于终点坐标左侧时,向右走</p>
+<p class="font-serif my-1">可以发现这样的描述相当冗长且不严谨,在实践中,除了向别人解释某种算法,我们不会使用这种方式。</p>
+<blockquote>
+<p class="font-serif my-1">例如经典的程序员笑话: 女朋友说,下班回来带一个西瓜。如果看到番茄,就买两个。于是程序员买回来的是两个西瓜。</p>
+</blockquote></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">数学描述</h2>
+<p class="font-serif my-1">设$f(x,y)$为从坐标$(x,y)$出发,到终点的合法操作序列</p>
+<p class="font-serif my-1"><img class="center" src="./static/img/b759f6b4eca84c70a664539d865c2d03.svg" width="100%"/></p>
+<p class="font-serif my-1">这是较为常见的描述方式,实际的描述会比上文更加严谨,当算法描述到这一步时,离实现基本不远了</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">伪代码描述</h2>
+<p class="font-serif my-1">通过类似代码的文字语言描述算法执行的过程</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>findPath(a, b, c, d):
+    如果 (a, b) == (c, d):
+        返回 ""  // 到达终点,返回空字符串
+    操作序列 = ""
+    如果 a &gt; c:
+        操作序列 += "0"  // 向上走
+        返回 操作序列 + findPath(a - 1, b, c, d)
+    如果 a &lt; c:
+        操作序列 += "1"  // 向下走
+        返回 操作序列 + findPath(a + 1, b, c, d)
+    如果 b &gt; d:
+        操作序列 += "2"  // 向左走
+        返回 操作序列 + findPath(a, b - 1, c, d)
+    如果 b &lt; d:
+        操作序列 += "3"  // 向右走
+        返回 操作序列 + findPath(a, b + 1, c, d)
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">正整数的高精度乘法</h2>
+<p class="font-serif my-1">众所周知，C语言中的整数类型能存储的类型是有限制的</p>
+<p class="font-serif my-1">假设我现在希望得到1000位的正整数与1000位的正整数相乘的结果</p>
+<p class="font-serif my-1">我们能否设计一个相应的算法呢</p>
+<p class="font-serif my-1">简单的，我们联想到小学生都会的竖式乘法</p>
+<p class="font-serif my-1">发现这个算法对数字的位数不存在限制</p>
+<p class="font-serif my-1">考虑在计算机中设计算法来模拟这一过程</p>
+<h2 id="_2" class="text-xl mt-2 pb-2 font-sans">拆解问题</h2>
+<ol>
+<li class="ml-8">输入</li>
+<li class="ml-8">拆分数字到各位</li>
+<li class="ml-8">竖式乘法</li>
+<li class="ml-8">输出</li>
+</ol></div></section><section data-auto-animate><div><h2 id="a" class="text-xl mt-2 pb-2 font-sans">子问题A——拆分数字</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>split_number(整数 x) 返回 数字序列:
+    如果 x 等于 0:
+        返回 {0}
+
+    创建数字序列 arr
+
+    // 将 x 的每一位数字存入数字序列 arr
+    循环 当 x 不等于 0:
+        将 x取余10 的值存入数字序列 arr
+        将 x 设为 x整除10 的值
+
+    返回 数字序列 arr
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="b" class="text-xl mt-2 pb-2 font-sans">子问题B——竖式乘法</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="n">multiply</span><span class="p">(</span><span class="n">数字序列</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">数字序列</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="n">返回</span><span class="w"> </span><span class="nl">数字序列</span><span class="p">:</span>
+<span class="w">    </span><span class="n">创建数字序列</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">长度为</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">的长度</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="n">的长度</span>
+<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="n">初始化数字序列</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">的所有元素为</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">循环</span><span class="w"> </span><span class="n">对于每个元素</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="n">从</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">到</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">的长度</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span>
+<span class="w">        </span><span class="n">设置</span><span class="w"> </span><span class="n">z</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="n">为</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="n">进行乘法运算</span>
+<span class="w">    </span><span class="n">循环</span><span class="w"> </span><span class="n">对于每个元素</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="n">从</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">到</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">的长度</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span>
+<span class="w">        </span><span class="n">循环</span><span class="w"> </span><span class="n">对于每个元素</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="n">从</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">到</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="n">的长度</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span>
+<span class="w">            </span><span class="n">z</span><span class="o">[</span><span class="n">i + j</span><span class="o">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">x</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="o">[</span><span class="n">j</span><span class="o">]</span>
+<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="n">处理进位</span>
+<span class="w">    </span><span class="n">循环</span><span class="w"> </span><span class="n">对于每个元素</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="n">从</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">到</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">的长度</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="err">:</span>
+<span class="w">        </span><span class="n">z</span><span class="o">[</span><span class="n">i + 1</span><span class="o">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">z</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="n">整除</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">        </span><span class="n">z</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="n">取余</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="n">去除前导零</span>
+<span class="w">    </span><span class="n">循环</span><span class="w"> </span><span class="n">当</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">的最后一个元素为</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">且</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">的长度大于</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span>
+<span class="w">        </span><span class="n">数字序列z的长度</span><span class="w"> </span><span class="n">减少</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="n">返回数字序列</span><span class="w"> </span><span class="n">z</span>
+</code></pre></div></div></section></section><section><section><div><h2 id="cat-break" class="text-xl mt-2 pb-2 font-sans">CAT BREAK</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/a8a1fa849b394f088a9ac94fcd424510.gif" width="50%"/></p></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/functions">函数</a>详解</h2>
+<p class="font-serif my-1">函数是将一个标识符（函数名）关联到一条复合语句（函数体）的 C 语言构造。每个 C 程序都从 main 函数开始执行，也从它或者调用其他用户定义函数或库函数终止。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="c1">// main 函数的定义</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">);</span><span class="w"> </span><span class="c1">// 函数声明（可以出现于任何作用域）</span>
+<span class="w">    </span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// 函数调用</span>
+<span class="p">}</span>
+<span class="c1">// 函数定义</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">函数由函数声明或函数定义引入。</p>
+<p class="font-serif my-1">函数可以拥有零或更多个形参，它们由函数调用运算符的实参所初始化，并且以通过其 return 语句向其调用者返回一个值。</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">函数的定义</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="o">&lt;</span><span class="k">return</span><span class="w"> </span><span class="n">type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">function_name</span><span class="p">(</span><span class="o">&lt;</span><span class="n">type_1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">parament_1</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">statements</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">something</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">nothing</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">任何时候，当你在当前函数的作用域中调用return，都代表程序的结束。return的类型需要与函数声明一致。（如果函数类型为void，可省略/调用return;）</p>
+<p class="font-serif my-1">对于有返回值的函数，如果在函数结束时仍没有执行return，<strong>可能会引发UB行为</strong>。</p></div></section><section data-auto-animate><div><h2 id="main" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/main_function">main 函数</a></h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="p">}</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="p">}</span>
+<span class="cm">/* 其他由实现定义的签名 (C99 起) */</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[],</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">envp</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">每个要在宿主环境运行的编码 C 程序都含有名为 main 的函数定义（非原型），它是程序中所指定的起始点。</p>
+<p class="font-serif my-1">使用参数的main函数编译生成的可执行文件在执行时可以接受命令行参数</p></div></section><section data-auto-animate><div><h2 id="main" class="text-xl mt-2 pb-2 font-sans">main 函数</h2>
+<p class="font-serif my-1">让我们来实践一下：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* example.c */</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"Number of arguments: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">argc</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">argc</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">"Argument %d: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ol>
+<li class="ml-8">目录下命令行输入编译指令：gcc -o example example.c</li>
+<li class="ml-8">目录下命令行输入运行指令：./example arg1 arg2 arg3</li>
+</ol></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">函数的作用</h2>
+<p class="font-serif my-1">在实际的编程中，你的函数可能有以下作用：</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">对经常复用的代码的封装，使你的程序主体更加简洁。</li>
+<li class="ml-8">依旧是对代码的封装，但是传入参数与传出参数之间存在关联性，作为一种问题解决方案的抽象。</li>
+<li class="ml-8">作为解决问题的一种不可代替的手段，例如递归函数。</li>
+</ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">函数的抽象意义</h2>
+<p class="font-serif my-1">对于函数的使用者，函数的抽象含义为：</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">在调用该函数后，便会给出符合函数功能的结果</li>
+<li class="ml-8">函数的使用者不需要清楚函数内部发生了什么，而是将其当作黑盒使用</li>
+<li class="ml-8">例如printf是C标准库的一个函数，当我们使用它时，不需要了解它是如何实现的</li>
+</ul>
+<p class="font-serif my-1">对于函数的维护者，函数的抽象含义为：</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">在维护该函数时，其不需要了解使用者是在什么环境下调用该函数，只需要关注参数即可</li>
+<li class="ml-8">函数的工作区域仅在函数内部，与外部作用域无关，互不干扰</li>
+</ul>
+<p class="font-serif my-1">可以说，计算机科学中的抽象是一种信息分层，对象主体只需要在所在的信息层面工作，这保证了信息的安全性和有效性</p></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">递归</h2>
+<p class="font-serif my-1"><img alt="" src="./static/img/aea906f129834f569cbdc009081bfe4b.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">什么是递归</h2>
+<p class="font-serif my-1">我们常在主函数中调用各种函数（当然，你不能调用主函数，主函数只有在程序开始被执行时才会被调用）</p>
+<p class="font-serif my-1">显然，我们也可以在函数中调用函数——包括自己</p>
+<p class="font-serif my-1">函数调用自己的行为被泛称为递归，例如：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"人类的本质是{"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">f</span><span class="p">();</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"}"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="fragment" data-fragment-index="1"><p class="font-serif my-1">这是一个无限递归的函数，它将迅速地耗尽栈空间，并引发stack overflow的错误</p></div></div></section><section><div><h2 id="extra" class="text-xl mt-2 pb-2 font-sans">Extra：递归与栈</h2>
+<p class="font-serif my-1">众所周知，函数保有其自身的局部变量，当函数被调用时，内存会为函数调用开辟一片空间用于存储函数的局部数据，并在函数返回后将空间清除。</p>
+<p class="font-serif my-1">考虑一个函数调用情况: main -&gt; f -&gt; g -&gt; h</p>
+<p class="font-serif my-1">那么对应的返回情况为: exit &lt;- main &lt;- f &lt;- g &lt;- h</p>
+<p class="font-serif my-1">可以看到，对函数的处理具有<code>先进后出</code>的性质: 最先调用的函数在最后返回。</p>
+<p class="font-serif my-1">我们一般将拥有<code>先进后出</code>性质的数据结构称为，<strong>栈</strong>。</p>
+<p class="font-serif my-1">内存中用于程序执行存储函数局部数据的内存部分也就被我们称为<strong>栈内存</strong>（简称<strong>栈</strong>）。</p>
+<p class="font-serif my-1">显而易见，无限递归的函数将迅速消耗你的栈空间并被操作系统检测引发错误。</p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">斐波那契数列</h2>
+<p class="font-serif my-1">以斐波那契为例，考虑到斐波那契数列的每一项都等于前两项之和，我们得到以下代码：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">考虑函数的抽象含义，我们认为f(n-2)与f(n-1)就是前两项</p><div class="fragment" data-fragment-index="1"><p class="font-serif my-1">但考虑到n=1与n=2时，项数的值是已知的，于是我们修改代码:</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">设计递归算法</h2>
+<p class="font-serif my-1">在算法导论中，作者将设计递归算法的过程总结为三步：</p>
+<ol>
+<li class="ml-8">拆解：将原问题拆解为多个子问题，子问题与原问题为同类型的问题且规模更小<ul class="list-disc font-serif">
+<li class="ml-8">当n&gt;2时，求解f(n)即求解f(n-2)与f(n-1)</li>
+</ul>
+</li>
+<li class="ml-8">求解：将子问题视作新的原问题并重复上一步，若无法重复则说明子问题是不可拆解的原子问题，直接尝试求解<ul class="list-disc font-serif">
+<li class="ml-8">当n&lt;=2时，直接求解</li>
+<li class="ml-8">当n&gt;2时，继续拆解问题</li>
+</ul>
+</li>
+<li class="ml-8">合并：将子问题的解对原问题的解的贡献进行合并，得到原问题的解<ul class="list-disc font-serif">
+<li class="ml-8">原问题的解等于子问题的解的和</li>
+</ul>
+</li>
+</ol></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">递归的作用</h2>
+<p class="font-serif my-1">事实上，递归算法并非不可替代: 所有的递归算法，都可以通过循环实现。</p>
+<p class="font-serif my-1">然而，递归有着以下优点：</p>
+<ol>
+<li class="ml-8">简洁优雅：参数通过系统隐式传递，无需程序员考虑空间分配，无需大量临时变量存储数据，用抽象壁垒守护程序员的心智。</li>
+<li class="ml-8">舒适自然：许多问题天然的具有可递归的性质，例如树的遍历问题等。</li>
+<li class="ml-8">赏心悦目：递归代码普遍较短，让人感受人类的智慧。</li>
+</ol>
+<blockquote>
+<p class="font-serif my-1">理解抽象，学会递归，才算真正的编程入门</p>
+</blockquote></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">递归典范——归并排序</h2>
+<p class="font-serif my-1">排序作为计算机科学的基本问题，对于不同的应用场景都有不同的适用算法，下文将介绍一种对递归进行典型利用的算法——归并排序</p>
+<h3 id="_2">问题描述</h3>
+<p class="font-serif my-1">输入：n个数字的序列(a1,a2...,an)</p>
+<p class="font-serif my-1">输出：输入序列的重排(a1',a2'...an')，满足a1'&lt;=a2'&lt;=...&lt;=an'</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">合并</h2>
+<p class="font-serif my-1">对于这个问题，我们反过来思考，对于怎样的子问题，我们可以通过子问题得到的解得到原问题的解</p>
+<p class="font-serif my-1">假设我们现在有两段已经排序好的序列[l...r] [p..q]，我们能否在较短的时间内将两段序列中的所有数字排序成一个新序列呢？</p>
+<p class="font-serif my-1">考虑算法：</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">在两段序列非空时，比较开头元素，将较小的元素放到新序列尾部</li>
+<li class="ml-8">有一段序列为空时，将非空序列的所有元素依序放到新序列尾部</li>
+<li class="ml-8">当两段序列皆空时，算法结束</li>
+</ul></div></section><section data-auto-animate><div><p class="font-serif my-1"><img class="center" src="./static/img/29df77569ce94b9abee9b011cac678ba.png" width="75%"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">拆解</h2>
+<p class="font-serif my-1">在知道什么样的子问题可以求解原问题后，将原问题拆成子问题便简单了，只要将原序列拆成恰好连续的两部分即可</p>
+<p class="font-serif my-1">考虑到复杂度问题，我们将序列对半分</p>
+<p class="font-serif my-1">称当前需要排序的序列为[l...r]</p>
+<p class="font-serif my-1">则取l,r中点mid，将序列拆为：[l...mid] [mid+1...r]</p>
+<h2 id="_2" class="text-xl mt-2 pb-2 font-sans">求解</h2>
+<p class="font-serif my-1">当前序列为空或只有一个元素时，则当前序列无需排序，直接回溯</p>
+<p class="font-serif my-1">反之，将当前问题进行分解</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">伪代码</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>merge_sort(数组 arr):
+    如果 arr 的长度小于等于 1:
+        返回 arr
+
+    // 找到中间索引
+    mid = arr.length / 2
+
+    // 递归地对左右子数组进行归并排序
+    左半部分 = merge_sort(arr[0:mid])
+    右半部分 = merge_sort(arr[mid:arr.length])
+
+    // 合并已排序的子数组
+    返回 merge(左半部分，右半部分)
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">伪代码</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">merge</span><span class="p">(</span><span class="n">数组</span><span class="w"> </span><span class="nf">left</span><span class="p">,</span><span class="w"> </span><span class="n">数组</span><span class="w"> </span><span class="nf">right</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="n">创建一个空数组</span><span class="w"> </span><span class="k">result</span>
+<span class="w">    </span><span class="n">初始化指针</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="n">和</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="n">为</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="n">合并两个已排序的数组</span>
+<span class="w">    </span><span class="n">循环</span><span class="w"> </span><span class="n">当</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nf">left</span><span class="p">.</span><span class="n">length</span><span class="w"> </span><span class="n">且</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nf">right</span><span class="p">.</span><span class="nl">length</span><span class="p">:</span>
+<span class="w">        </span><span class="n">如果</span><span class="w"> </span><span class="nf">left</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="n">小于等于</span><span class="w"> </span><span class="nf">right</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="err">:</span>
+<span class="w">            </span><span class="n">将</span><span class="w"> </span><span class="nf">left</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="n">添加到</span><span class="w"> </span><span class="k">result</span>
+<span class="w">            </span><span class="n">i</span><span class="w"> </span><span class="n">增加</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="nl">否则</span><span class="p">:</span>
+<span class="w">            </span><span class="n">将</span><span class="w"> </span><span class="nf">right</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="w"> </span><span class="n">添加到</span><span class="w"> </span><span class="k">result</span>
+<span class="w">            </span><span class="n">j</span><span class="w"> </span><span class="n">增加</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="n">添加剩余的元素</span>
+<span class="w">    </span><span class="n">循环</span><span class="w"> </span><span class="n">当</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nf">left</span><span class="p">.</span><span class="nl">length</span><span class="p">:</span>
+<span class="w">        </span><span class="n">将</span><span class="w"> </span><span class="nf">left</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="n">添加到</span><span class="w"> </span><span class="k">result</span>
+<span class="w">        </span><span class="n">i</span><span class="w"> </span><span class="n">增加</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="n">循环</span><span class="w"> </span><span class="n">当</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nf">right</span><span class="p">.</span><span class="nl">length</span><span class="p">:</span>
+<span class="w">        </span><span class="n">将</span><span class="w"> </span><span class="nf">right</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="w"> </span><span class="n">添加到</span><span class="w"> </span><span class="k">result</span>
+<span class="w">        </span><span class="n">j</span><span class="w"> </span><span class="n">增加</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="n">返回</span><span class="w"> </span><span class="k">result</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">图示</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/41befa1f09af4cdb90144af1d0f6e198.png" width="40%"/></p></div></section></section><section><section><div><h2 id="extra" class="text-xl mt-2 pb-2 font-sans">Extra: 复杂度分析</h2>
+<p class="font-serif my-1">我们常说算法的效率很重要, 算法的效率可以分为时间效率和空间效率</p>
+<p class="font-serif my-1">在描述问题时, 我们常用字母n描述问题的规模</p>
+<p class="font-serif my-1">算法的时间复杂度是指算法运行时间随着输入规模增长而变化的趋势.</p>
+<p class="font-serif my-1">我们通常用大O符号（Big O notation）来表示时间复杂度.</p>
+<p class="font-serif my-1">大O符号表示的是算法运行时间的上界, 也就是最坏情况下的时间复杂度.</p>
+<p class="font-serif my-1">它忽略常数因子和低阶项, 只关注最高阶项.</p>
+<p class="font-serif my-1">例如:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">$O(1)$是指该算法与输入规模无关, 为常数复杂度</li>
+<li class="ml-8">$O(n)$指该算法时间复杂度与输入规模成正比</li>
+</ul></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">归并排序与冒泡排序的算法复杂度比较</h2>
+<p class="font-serif my-1">对于初学者而言, 第一个接触的排序算法通常是冒泡排序, 它的代码如下:</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">bubble_sort</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">arr</span><span class="p">,</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">){</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">tmp</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="n">n</span><span class="mi">-1</span><span class="p">;</span><span class="n">j</span><span class="o">&gt;</span><span class="n">i</span><span class="p">;</span><span class="n">j</span><span class="o">--</span><span class="p">){</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&lt;</span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="mi">-1</span><span class="p">]){</span>
+<span class="w">                </span><span class="n">tmp</span><span class="o">=</span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="mi">-1</span><span class="p">];</span>
+<span class="w">                </span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="mi">-1</span><span class="p">]</span><span class="o">=</span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+<span class="w">                </span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">tmp</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">显然, 这个算法有一个由两个循环组成的嵌套循环, 每个循环的时间复杂度都与n相关, 所以该算法是$O(n^2)$的存在的</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">归并排序与冒泡排序的算法复杂度比较</h2>
+<p class="font-serif my-1">反观归并排序, 他的代码可能为：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">merge_sort</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">arr</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">l</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">r</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">l</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="n">merge_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">mid</span><span class="p">);</span><span class="w"> </span><span class="n">merge_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="n">r</span><span class="o">-</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">buffer</span><span class="p">[</span><span class="n">len</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">mid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="n">len</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="n">len</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="n">memcpy</span><span class="p">(</span><span class="n">arr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><p class="font-serif my-1">函数主体有三个循环, 皆与n相关, 而且函数自己还会调用自己, 复杂度看起来比冒泡排序还高</p>
+<p class="font-serif my-1">然而通过分析，我们其实可以知道归并排序的时间复杂度为$O(nlog(n))$</p>
+<p class="font-serif my-1">让我们以n=10000的数据进行一次测试：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>mergesort<span class="w"> </span>cost<span class="w"> </span><span class="m">0</span>.002185<span class="w"> </span>second<span class="w"> </span>on<span class="w"> </span>datasize<span class="o">[</span><span class="m">10000</span><span class="o">]</span>
+bubblesort<span class="w"> </span>cost<span class="w"> </span><span class="m">0</span>.290680<span class="w"> </span>second<span class="w"> </span>on<span class="w"> </span>datasize<span class="o">[</span><span class="m">10000</span><span class="o">]</span>
+</code></pre></div></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">我想学算法</h2>
+<ol>
+<li class="ml-8">经典书籍: <a href="https://zh.wikipedia.org/wiki/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA">算法导论</a></li>
+<li class="ml-8">Stanford的算法入门(C++实现): <a href="https://web.stanford.edu/class/cs106b/">CS 106B</a>，宝宝巴士</li>
+<li class="ml-8">UCB的算法入门(Java实现): <a href="https://fa24.datastructur.es/">CS 61B</a>，偏工程</li>
+<li class="ml-8">MIT的典中典: <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">MIT 6.006</a>, <a href="https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/">MIT 6.046</a>，偏理论</li>
+<li class="ml-8">Coursera: <a href="https://www.coursera.org/learn/algorithms-part1">Algorithm I</a>, <a href="https://www.coursera.org/learn/algorithms-part2">Algorithm II</a>，高质量网课</li>
+</ol></div></section></section>
+        </div>
+    </div>
+
+    <script src="./static/reveal/reveal.js"></script>
+
+    <script>
+        Reveal.initialize({
+
+            width: 1024, height: 768,
+
+            slideNumber: 'c/t',
+            controlsTutorial: false,
+            progress: false,
+            hash: true,
+            center: false,
+            autoAnimateUnmatched: true,
+            autoAnimateEasing: 'ease-out',
+            autoAnimateDuration: 0.3,
+            transitionSpeed: 'fast'
+        });
+    </script>
+</body>
+
+</html>
