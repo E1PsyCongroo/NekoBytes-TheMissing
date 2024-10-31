@@ -1,4 +1,4 @@
-![GitHub License](https://img.shields.io/github/license/datawhalechina/cstart)![GitHub Release](https://img.shields.io/github/v/release/datawhalechina/cstart)![GitHub Issues](https://img.shields.io/github/issues/datawhalechina/cstart?color=lightgreen)![GitHub Pr](https://img.shields.io/github/issues-pr/datawhalechina/cstart?color=lightgreen)![GitHub Starts](https://img.shields.io/github/stars/datawhalechina/cstart)
+![GitHub License](https://img.shields.io/badge/license-CC%20BY--NC--SA%204.0-lightgrey)![GitHub Release](https://img.shields.io/github/v/release/datawhalechina/cstart)![GitHub Issues](https://img.shields.io/github/issues/datawhalechina/cstart?color=lightgreen)![GitHub Pr](https://img.shields.io/github/issues-pr/datawhalechina/cstart?color=lightgreen)![GitHub Starts](https://img.shields.io/github/stars/datawhalechina/cstart)
 
 ---
 
@@ -80,6 +80,7 @@ Linux系统统一配置管理工具
 | 颜文字 |    JXDYJS    |         第8章贡献         |
 |  宇航  |  M4yGem1ni   |    第2章、第3章贡献者     |
 | 王暄杰 |    SbF6-l    |        第1章贡献者        |
+| f（x） |   f-x-here   |        第8章贡献者        |
 
 ## 关注我们
 
