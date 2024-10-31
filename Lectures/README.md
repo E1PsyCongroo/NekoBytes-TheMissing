@@ -1,6 +1,9 @@
 # Lectures 编写任务书
+
 课程幻灯片，最终格式确保导出为 **PDF , 开发分支需要上传可供编辑修改的版本**。
+
 ## Week1
+
 - 如何科学的提问，引导仔细阅读[提问的智慧](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md)和[别像弱智一样提问](https://github.com/tangx/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md)，提供提问模板，例: [yxys提问模板](https://ysyx.oscc.cc/docs/2205/misc/ask.html)
 - C 语言基础语法介绍(变量, 指针, 数组, 控制流, 函数, printf)
 - 提供一些 C 语言自学指引材料
@@ -13,6 +16,7 @@
   - [Learn C the hard way](https://wizardforcel.gitbooks.io/lcthw/content/)
 
 ## Week2
+
 - 介绍计算机的核心部件(CPU, MEMORY, I/O)
 - 从硬件视角理解程序，由此引入**抽象**概念
 - 了解操作系统
@@ -23,6 +27,7 @@
   - [JYY OS概述](https://jyywiki.cn/OS/2024/)
 
 ## Week3
+
 - 展开介绍 C 语言基础语法:
   - 变量, 数组, 字符串
   - 控制流(for, while, do-while)
@@ -39,6 +44,7 @@
   - C Primer Plus
 
 ## Week4
+
 - 回顾上周的 C 语言基本语法
 - 程序=算法+数据结构
 - 算法概论
@@ -46,11 +52,13 @@
 - 经典的递归与分治算法问题
 
 ## Week5
+
 - C 语言核心语法详解: 指针、结构体、动态分配
 - C 语言的内存分配与动态管理
 - 数据结构——链表，链表的 C 语言实现
 
 ## Week6
+
 - git 简要介绍
 - C 语言复习回顾
 - 介绍 C 语言必学开发工具: `GNU Make, Valgrind, GDB, GCC`
@@ -62,6 +70,7 @@
   - C Primer Plus
 
 ## Week7
+
 - C 语言其他语法:
   - 字符串库
   - 联合体
@@ -75,6 +84,7 @@
   - C Primer Plus
 
 ## Week8
+
 - C 语言 I/O 操作
   - I/O 标准库
   - 输入/输出重定向
@@ -84,15 +94,17 @@
 - 深度学习与神经网络
 
 ## Week9
+
 - C 语言与嵌入式编程
 - C 语言与系统编程
 - C 语言总结
 
 ## Week10
+
 - 编程语言
 - 函数式编程思想
 - 解释器
 
 ## WEEK11
-- 总结
 
+- 总结
