@@ -1,23 +1,21 @@
-[submodule "ohmytmux"]
-path = Tools/setup/config/.tmux
-url = https://github.com/gpakosz/.tmux.git
-
-[submodule "ohmyzsh"]
-path = Tools/setup/pkg/ohmyzsh
-url = https://github.com/ohmyzsh/ohmyzsh.git
-
-[submodule "zsh-autosuggestions"]
-path = Tools/setup/pkg/ohmyzsh/custom/plugins/zsh-autosuggestions
-url = https://github.com/zsh-users/zsh-autosuggestions.git
-
-[submodule "zsh-completions"]
-path = Tools/setup/pkg/ohmyzsh/custom/plugins/zsh-completions
-url = https://github.com/zsh-users/zsh-completions.git
-
-[submodule "zsh-syntax-highlighting"]
-path = Tools/setup/pkg/ohmyzsh/custom/plugins/zsh-syntax-highlighting
-url = https://github.com/zsh-users/zsh-syntax-highlighting.git
-
-[submodule "zsh-you-should-use"]
-path = Tools/setup/pkg/ohmyzsh/custom/plugins/zsh-you-should-use
-url = https://github.com/MichaelAquilina/zsh-you-should-use.git
+[submodule "Tools/setup/config/.tmux"]
+	path = Tools/setup/config/.tmux
+	url = https://github.com/gpakosz/.tmux.git
+[submodule "Tools/setup/pkg/ohmyzsh"]
+	path = Tools/setup/pkg/ohmyzsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git
+[submodule "Tools/setup/pkg/zsh-plugins/zsh-autosuggestions"]
+	path = Tools/setup/pkg/zsh-plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule "Tools/setup/pkg/zsh-plugins/zsh-completions"]
+	path = Tools/setup/pkg/zsh-plugins/zsh-completions
+	url = https://github.com/zsh-users/zsh-completions.git
+[submodule "Tools/setup/pkg/zsh-plugins/zsh-syntax-highlighting"]
+	path = Tools/setup/pkg/zsh-plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "Tools/setup/pkg/zsh-plugins/zsh-you-should-use"]
+	path = Tools/setup/pkg/zsh-plugins/zsh-you-should-use
+	url = https://github.com/MichaelAquilina/zsh-you-should-use.git
+[submodule "Tools/setup/pkg/zsh-themes/powerlevel10k"]
+	path = Tools/setup/pkg/zsh-themes/powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k
