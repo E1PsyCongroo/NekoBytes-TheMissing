@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="./static/css/base.css" rel="stylesheet">
+    <link href="./static/css/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.font.im/css?family=Source+Serif+Pro%7CLato%7CInconsolata" rel="stylesheet"
+        type="text/css">
+    <title> lecture5 </title>
+    <!-- browser favicon -->
+    <link rel="shortcut icon" href="./static/img/favicon.ico">
+    <style>
+        .font-sans {
+            font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
+        }
+
+        .font-serif {
+            font-family: 'Source Serif Pro', 'Songti SC', 'SimSun', 'Serif', serif;
+        }
+    </style>
+    <link rel="stylesheet" href="./static/katex/katex.min.css">
+    <script defer src="./static/katex/katex.min.js"></script>
+    <script defer src="./static/katex/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                // customised options
+                // &#8226; auto-render specific keys, e.g.:
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true }
+                ],
+                // &#8226; rendering keys, e.g.:
+                throwOnError: false
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" href="./static/reveal/reveal.css">
+    <link rel="stylesheet" href="./static/reveal/theme/simple.css" id="theme">
+    <link rel="stylesheet" href="./static/jyy/jyy.css">
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    <div class="reveal">
+        <div class="slides">
+            <section><section><div class="center middle"><div style="width:100%"><div><h1 id="_1" class="text-2xl mt-2 font-sans">指针与动态分配</h1><p class="font-serif my-1">
+    <include src="Slides_Author">
+        <div class="py-16">
+            <p class="font-serif my-1">
+                <a href="" class=" text-amber-900">
+                    晓阳，wenjing233
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="font-serif my-1"/>
+            
+            <div class="author-affiliation">
+                <a href="https://github.com/datawhalechina/cstart" class=" text-amber-900">
+                    <p class="font-serif my-1">
+                        NekoBytes
+                    </p>
+                    <img class="inline-img h-24" src="./static/img/06c62d128a88435db8a5421cf32dd083.svg" style="display: inline-block;"/>
+                </a>
+            </div>
+            
+        </div>
+    </include>
+</p></div></div></div></section></section><section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/object">对象</a>的四要素</h2>
+<p class="font-serif my-1">我们可以将 C 语言对象简化为四个要素:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">标识符</th>
+<th style="text-align: center;">值</th>
+<th style="text-align: center;">地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">name</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">&amp;name(int*: 0xffebab38)</td>
+</tr>
+<tr>
+<td style="text-align: center;">int(int)</td>
+<td style="text-align: center;">fun</td>
+<td style="text-align: center;">内存中的一段指令</td>
+<td style="text-align: center;">&amp;fun(int(*)(int): 0x6346317d)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/types">类型</a></h2>
+<p class="font-serif my-1">简单来说，类型决定了对象(变量、函数和表达式临时对象)在内存中存储的<strong>字节大小</strong>与二进制值的<strong>判读方式</strong>。</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/types">类型</a></h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">int_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">float_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="cm">/* sizeof 作为一个运算符，可以用于获取对象类型的内存存储大小</span>
+<span class="cm"> * printf %#x 将数字按照16进制打印并且包含前缀</span>
+<span class="cm"> * 通过打印16进制的方式，直接打印出数据在内存中存储的数值</span>
+<span class="cm"> * 直接打印出 -1 在内存中存储的二进制数值</span>
+<span class="cm"> * 通过 *(int*)&amp; ，对数值重新进行解释</span>
+<span class="cm"> * 从而打印出 1.0 在内存中存储的二进制数值</span>
+<span class="cm"> * 你将在本节学习 *(int*)&amp; 的语法细节</span>
+<span class="cm"> */</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"sizeof int_num: %zu, value: %#x</span><span class="se">\n</span><span class="s">"</span>
+<span class="w">       </span><span class="s">"sizeof float_num: %zu, value: %#x</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">        </span><span class="k">sizeof</span><span class="w"> </span><span class="n">int_num</span><span class="p">,</span><span class="w"> </span><span class="n">int_num</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">float_num</span><span class="p">,</span>
+<span class="w">        </span><span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">float_num</span><span class="p">);</span>
+</code></pre></div>
+
+<p class="font-serif my-1">对于 Linux x86_64 平台按照 <code>C23</code> 标准编译的输出结果应为:</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>sizeof<span class="w"> </span>int_num:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span>value:<span class="w"> </span>0xffffffff
+sizeof<span class="w"> </span>float_num:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span>value:<span class="w"> </span>0x3f800000
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">标识符</h2>
+<p class="font-serif my-1">标识符是数字、下划线、小写及大写拉丁字母(和以 \u 及 \U 转义记号)指定的。</p>
+<p class="font-serif my-1">程序员通过标识符访问标识符代表的内存对象（变量、函数）。</p>
+<h2 id="_2" class="text-xl mt-2 pb-2 font-sans">地址</h2>
+<p class="font-serif my-1">C 语言对象按照语言标准和 ABI 存储在内存中，我们可以通过<code>&amp;</code>运算符获取对象的内存存储地址。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="n">printf</span><span class="p">(</span><span class="s">"addr of int_num: %p, addr of float_num: %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">int_num</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">float_num</span><span class="p">);</span>
+</code></pre></div>
+
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>addr<span class="w"> </span>of<span class="w"> </span>int_num:<span class="w"> </span>0x7fff017eb4d0,<span class="w"> </span>addr<span class="w"> </span>of<span class="w"> </span>float_num:<span class="w"> </span>0x7fff017eb4d4
+</code></pre></div></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/pointer">指针</a></h2>
+<blockquote>
+<p class="font-serif my-1">当我们谈论指针时，一般都指代 Pointer，即指针对象（变量）。</p>
+<p class="font-serif my-1">当我们需要谈论类型时，我们一般使用指针类型进行区分。</p>
+<p class="font-serif my-1">中文的二义性一定程度上加大了理解指针的难度。</p>
+</blockquote>
+<p class="font-serif my-1"><img class="center" src="./static/img/4a4e93a67adb41b4aaaa5f165c27693d.png"/></p></div></section><section data-auto-animate><div><h2 id="pointer-as-object" class="text-xl mt-2 pb-2 font-sans">指针作为对象 (Pointer AS Object)</h2>
+<p class="font-serif my-1">与所有变量一样，指针也可以简化为四个要素:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">标识符</th>
+<th style="text-align: center;">值</th>
+<th style="text-align: center;">地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">int*</td>
+<td style="text-align: center;">i_ptr</td>
+<td style="text-align: center;">0xffebab38</td>
+<td style="text-align: center;">&amp;f_ptr(int**: 0xffebab34)</td>
+</tr>
+<tr>
+<td style="text-align: center;">float*</td>
+<td style="text-align: center;">f_ptr</td>
+<td style="text-align: center;">NULL</td>
+<td style="text-align: center;">&amp;f_ptr(float**: 0xffebab30)</td>
+</tr>
+<tr>
+<td style="text-align: center;">int(*)(int)</td>
+<td style="text-align: center;">fun_ptr</td>
+<td style="text-align: center;">0x6346317d</td>
+<td style="text-align: center;">&amp;fun_ptr(int(**)(int): 0xffebab2c)</td>
+</tr>
+</tbody>
+</table>
+<p class="font-serif my-1"><img class="center" src="./static/img/2466bd29a9fa44dfb4e596d9eeb5c0f9.png"/></p></div></section><section data-auto-animate><div><h2 id="pointer-as-object" class="text-xl mt-2 pb-2 font-sans">指针作为对象 (Pointer AS Object)</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/274256571c584f0eade5ebc26931d0e9.png"/></p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">为何需要指针</h2>
+<p class="font-serif my-1">作为C语言初学者的小P写下了如下一段代码。希望能够实现交换变量值的功能。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">swap</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">114</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">514</span><span class="p">;</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Before swap: x=%d, y=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="w">  </span><span class="n">swap</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"After swap: x=%d, y=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">然而在运行后我们却得到结果</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>Before<span class="w"> </span>swap:<span class="w"> </span><span class="nv">x</span><span class="o">=</span><span class="m">114</span>,y<span class="o">=</span><span class="m">514</span>
+After<span class="w"> </span>swap:<span class="w"> </span><span class="nv">x</span><span class="o">=</span><span class="m">114</span>,y<span class="o">=</span><span class="m">514</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">为何需要指针</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">C 语言的函数是<strong>按值传递</strong>的，这意味着:<ul class="list-disc font-serif">
+<li class="ml-8">函数<strong>参数变量</strong>并不是函数调用时<strong>传入的内存对象</strong></li>
+<li class="ml-8">而只是<strong>传入对象的数值拷贝</strong></li>
+</ul>
+</li>
+<li class="ml-8">函数所做的只是将两个参数变量的值进行交换</li>
+</ul>
+<p class="font-serif my-1"><img class="center" src="./static/img/96fa7be8b7014a0ba1d5ade06f5ff18d.png" width="75%"/></p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针的使用</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">
+<p class="font-serif my-1">取址运算符<code>&amp;</code></p>
+<ul class="list-disc font-serif">
+<li class="ml-8">指针存储的是地址，如果想要指针指向某个变量，则需要获取那个变量的<strong>地址</strong>，在变量名称前面加<code>&amp;</code>即获取其<strong>地址</strong>。</li>
+<li class="ml-8">这个<strong>地址数值</strong>也有其数值类型，什么类型的变量取地址就会获得对应的<strong>指针类型</strong>。</li>
+</ul>
+</li>
+<li class="ml-8">
+<p class="font-serif my-1">解引用运算符<code>*</code></p>
+<ul class="list-disc font-serif">
+<li class="ml-8">解引用指针以访问其所指向的对象。</li>
+<li class="ml-8"><code>&amp;</code> 与 <code>*</code> 能够彼此抵消，均不求值。</li>
+<li class="ml-8">通过解引用指针可以访问(读取或修改)指向的对象。</li>
+</ul>
+</li>
+<li class="ml-8">
+<p class="font-serif my-1">下标运算符<code>[]</code></p>
+<ul class="list-disc font-serif">
+<li class="ml-8">按照定义，下标运算符 <code>E1[E2]</code> 严格等同于 <code>*((E1)+(E2))</code>。</li>
+</ul>
+</li>
+</ul></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针的使用</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">114514</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"x:[%d] *ptr:[%d]</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">);</span>
+<span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1919810</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"x:[%d] *ptr:[%d]</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">ptr</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</code></pre></div>
+
+<p class="font-serif my-1">运行后得到</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>x:<span class="o">[</span><span class="m">114514</span><span class="o">]</span><span class="w"> </span>*ptr:<span class="o">[</span><span class="m">114514</span><span class="o">]</span>
+x:<span class="o">[</span><span class="m">1919810</span><span class="o">]</span><span class="w"> </span>*ptr:<span class="o">[</span><span class="m">1919810</span><span class="o">]</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针算术运算</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">
+<p class="font-serif my-1">若指针 P 指向下标为 I 的数组元素，则</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">P+N 与 N+P 是指向同一数组中下标为 I+N 的元素的指针</li>
+<li class="ml-8">P-N 是指向同一数组中下标为 I-N 的元素的指针</li>
+</ul>
+</li>
+<li class="ml-8">
+<p class="font-serif my-1">若指针 P1 指向下标为 I 的数组元素（或尾后一位置）而 P2 是指向同一数组的下标为 J 的元素（或尾后一位置），则</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">P1-P2 拥有等于 I-J 的值和 ptrdiff_t 类型（有符号整数类型，最大大小典型地为能声明的最大对象的一半）</li>
+</ul>
+</li>
+<li class="ml-8">为指针算术的目的，把指向非数组元素的对象的指针当做指向大小为 1 的数组首元素的指针。</li>
+</ul></div></section><section data-auto-animate><div><div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%x %x</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<span class="c1">// 可能的结果： ffffd7f0 ffffd7fc</span>
+<span class="c1">// ffffd7f0 + 3 * sizeof(int) -&gt; ffffd7fc</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="o">*</span><span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">p2</span><span class="p">,</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">p1</span><span class="p">);</span>
+<span class="c1">// 输出： -4 4</span>
+</code></pre></div>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/9de649007f704f4da2bf698ee3cb7145.png" width="50%"/></p></div></section><section><div><h2 id="void" class="text-xl mt-2 pb-2 font-sans">void*</h2>
+<p class="font-serif my-1"><code>void*</code> 被认为是一种通用指针类型(泛型)。</p>
+<blockquote>
+<p class="font-serif my-1"><code>void*</code> 类型的指针用于传递未知类型的对象，这在泛型接口中常用：malloc 返回 void*。</p>
+</blockquote>
+<p class="font-serif my-1"/><center>
+<img class="inline" src="./static/img/06b41ddb7bed4c6aaca66eacab59ba10.png" width="40%"/>
+<img class="inline" src="./static/img/3f79cb86a81442128395b8e7905214b1.png" width="40%"/>
+</center></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针的隐式转换</h2>
+<p class="font-serif my-1">与数值运算不同，指针中极少出现隐式类型转换。</p>
+<p class="font-serif my-1">仅有指向任意类型对象的指针能隐式转换成<code>void*</code>类型的指针，反之亦然。</p>
+<p class="font-serif my-1">尽管如此，显式指明 <code>void*</code> 指针的转换有时可以提升代码的可读性。</p>
+<blockquote>
+<p class="font-serif my-1">如果你尝试将不同<strong>指针类型</strong>的数值赋值给不同<strong>指针类型</strong>的指针，编译器可能会提示警告或拒绝编译。</p>
+<p class="font-serif my-1">如果你确定要这么做，请进行显式转换</p>
+</blockquote></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针的显式转换</h2>
+<p class="font-serif my-1">所有类型的指针对象的<strong>空间存储</strong>是相同的。</p>
+<p class="font-serif my-1">可以认为指针之间的类型转换意味着对指向对象的<strong>数值判读方式转换</strong>。</p>
+<p class="font-serif my-1">回顾之前代码出现的<code>*(int*)&amp;float_num</code>，使用转型运算符<code>(int*)</code>对<code>&amp;float_num</code>返回的<strong>地址数值</strong>的类型进行转换，通过<code>*</code>解引用的方式访问数据，并根据<strong>指针类型</strong><code>int*</code>实现了<strong>按int进行数值判读</strong>。</p>
+<p class="font-serif my-1"><img class="center" src="./static/img/a0af3173c7ad401cbf1684bb01d0c803.png" width="40%"/></p></div></section></section><section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针与数组</h2>
+<p class="font-serif my-1">数组与指向其首元素指针之间存在隐式转换。即<code>int[2]</code>与<code>int*</code>之间可以隐式转换，且后者指针指向前者数组的首元素。</p>
+<blockquote>
+<p class="font-serif my-1">需要注意的是，即使存在隐式转换, <code>int[]</code> 与 <code>int*</code> 也依然是完全不同的类型。</p>
+<p class="font-serif my-1">数组类型<code>int[]</code>还保有数组大小这一隐藏信息。</p>
+</blockquote>
+<p class="font-serif my-1">当数组类型用于函数形参列表时，它会转换成对应的指针类型： int f(int a[2]) 和 int f(int* a) 声明同一个函数。</p>
+<p class="font-serif my-1">因为函数实际参数类型为指针类型，使用数组实参的函数调用会进行一个数组到指针转换；被调用函数无法获得实参数组的大小，必须显式传递。</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针与数组</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%zu %zu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">ptr</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="n">ptr</span><span class="o">+</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</code></pre></div>
+
+<blockquote>
+<p class="font-serif my-1">字符串</p>
+<p class="font-serif my-1">在学习字符串的输入时，初学者大概会迷惑，为什么字符串是一个字符数组，而且输入时不需要取地址符<code>&amp;</code>，而且可以直接用数组名。</p>
+<p class="font-serif my-1">现在我们知道字符数组名在此处被解释为字符指针。</p>
+</blockquote>
+<p class="font-serif my-1"><img class="center" src="./static/img/8366b8b829f547f299de0e686025fc06.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指向数组的指针</h2>
+<p class="font-serif my-1">对数组对象进行取值会得到<strong>指向数组的指针类型</strong>，你可以通过<code>int (*ptr)[N]</code>的方式定义指向<code>int[N]</code>数组对象的指针。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">ptr</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%zu %zu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">ptr</span><span class="p">);</span>
+<span class="c1">//输出：12 8</span>
+</code></pre></div>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/422ca2ac582b4c1e8d768602594bb3e1.png" width="70%"/></p></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/struct">结构体</a></h2>
+<p class="font-serif my-1">结构体是一种由一序列的成员组成的类型，成员的存储以顺序分配于内存中。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 结构体定义：引入一个新类型 struct 名字 并定义其含义 */</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IntVector</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="cm">/* 结构体成员 */</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">capacity</span><span class="p">;</span>
+<span class="p">};</span><span class="w">  </span><span class="c1">// 记得末尾的 `;`</span>
+<span class="cm">/* 结构体变量 */</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IntVector</span><span class="w"> </span><span class="n">vector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">capacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="cm">/* 通过成员运算符`.`访问结构体成员 */</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%p, %zu, %zu"</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="p">.</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="p">.</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="p">.</span><span class="n">capacity</span><span class="p">);</span>
+<span class="cm">/* 结构体指针 */</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">IntVector</span><span class="w"> </span><span class="o">*</span><span class="n">v_p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vector</span><span class="p">;</span>
+<span class="cm">/* 结构体指针通过成员运算符`-&gt;`访问对象成员 */</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%p, %zu, %zu"</span><span class="p">,</span><span class="w"> </span><span class="n">v_p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">v_p</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">v_p</span><span class="o">-&gt;</span><span class="n">capacity</span><span class="p">);</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="typedef" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/typedef">typedef</a></h2>
+<p class="font-serif my-1"><code>typedef</code> 声明提供一种声明标识符为类型别名的方式，以用于替换可能复杂的类型名。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 声明 int_t 为类型 int 的别名 */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">int_t</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">char_t</span><span class="p">,</span><span class="w"> </span><span class="n">str_t</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="o">*</span><span class="n">char_p</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">fp</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span>
+<span class="n">char_t</span><span class="w"> </span><span class="n">ch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'a'</span><span class="p">;</span><span class="w"> </span><span class="c1">// 声明 char_t 为类型 char 的别名</span>
+<span class="n">str_t</span><span class="w"> </span><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"abcdefg"</span><span class="p">;</span><span class="w"> </span><span class="c1">// str_t 为 char[10] 的别名</span>
+<span class="n">char_p</span><span class="w"> </span><span class="n">ch_p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ch</span><span class="p">;</span><span class="w"> </span><span class="c1">// char_p 为 char* 的别名</span>
+<span class="kt">char</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="sc">'a'</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="n">fp</span><span class="w"> </span><span class="n">ch_fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">function</span><span class="p">;</span><span class="w"> </span><span class="c1">// fp 为 char(*)(void) 的别名</span>
+<span class="cm">/* 声明 IntVector 为匿名结构体的别名 */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">capacity</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">IntVector</span><span class="p">;</span>
+<span class="n">IntVector</span><span class="w"> </span><span class="n">vector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">size</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">capacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="typedef" class="text-xl mt-2 pb-2 font-sans">typedef</h2>
+<p class="font-serif my-1">typedef 名可以是不完整类型，它会照常变得完整：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">typedef</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">str_t</span><span class="p">[];</span>
+<span class="cm">/* 此时 s 的类型为 char[13] */</span>
+<span class="n">str_t</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"hello world</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+</code></pre></div>
+
+<p class="font-serif my-1">C 标准库利用typedef实现变量的可移植性</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;inttype.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%zu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int64_t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">PRId64</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%+"</span><span class="w"> </span><span class="n">PRId64</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">INT64_MIN</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%+"</span><span class="w"> </span><span class="n">PRId64</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">INT64_MAX</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%+"</span><span class="w"> </span><span class="n">PRId64</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div></section></section><section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/memory">动态内存管理</a></h2>
+<blockquote>
+<p class="font-serif my-1">对于常见的内存模型，一般将<strong>堆内存</strong>作为动态内存供程序员动态管理。</p>
+</blockquote>
+<ul class="list-disc font-serif">
+<li class="ml-8">
+<p class="font-serif my-1">分配内存: <a href="https://zh.cppreference.com/w/c/memory/malloc">malloc</a>, <a href="https://zh.cppreference.com/w/c/memory/calloc">calloc</a>, <a href="https://zh.cppreference.com/w/c/memory/realloc">realloc</a></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">函数</th>
+<th style="text-align: center;">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">void* malloc(size_t size);</td>
+<td style="text-align: center;">分配内存</td>
+</tr>
+<tr>
+<td style="text-align: center;">void* calloc(size_t num, size_t size);</td>
+<td style="text-align: center;">分配并清零内存</td>
+</tr>
+<tr>
+<td style="text-align: center;">void *realloc(void *ptr, size_t new_size)</td>
+<td style="text-align: center;">扩充之前分配的内存块</td>
+</tr>
+</tbody>
+</table>
+<p class="font-serif my-1">可以将计算机中一片连续的空间看成一个大数组，分配内存函数的事情就是找到一段空白并将其标记为已使用，并将这段空白的起始位置返回。</p>
+</li>
+<li class="ml-8">
+<p class="font-serif my-1">释放空间: <a href="归还之前分配的内存">free</a></p>
+</li>
+</ul></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">动态内存管理</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/e10b346d2a044329a67c884363b8db1e.png" width="50%"/>
+<img class="center" src="./static/img/7d51c137a4c84ad58a3d0766b1ad13ae.png" width="50%"/></p>
+<p class="font-serif my-1">上面的图展示了分配空间的一种可能性，在实际使用中，你<strong>不应</strong>假设内存的分配方式。</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">动态内存管理</h2>
+<p class="font-serif my-1">在动态内存管理中，指针作为管理内存的工具存在。也就是说，如果一片已分配的内存空间没有指向它的指针，那么它将变成程序无法访问的空间，也就是<strong>内存泄漏</strong>。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">1000000</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">test</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">内存泄露</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">定义：无法释放分配的内存</li>
+<li class="ml-8">初始症状：无任何症状</li>
+<li class="ml-8">在达到临界点之前，内存泄漏实际上并不是问题</li>
+<li class="ml-8">后来的症状：程序性能表现急剧下降......</li>
+<li class="ml-8">然后你的程序就被杀死了！</li>
+<li class="ml-8">因为当你请求更多内存时，操作系统会说“不，不能这样做”</li>
+</ul>
+<blockquote>
+<p class="font-serif my-1">Linux 默认情况不对程序可拥有的内存地址空间做出限制，这意味着单个进程可以一直申请的堆内存空间，从而挤压其他进程的内存资源，造成系统卡顿。</p>
+<p class="font-serif my-1">或者在进程耗尽地址空间后错误终止。</p>
+<p class="font-serif my-1">对于需要长时间运行的程序，一定要避免内存泄漏的发生！</p>
+</blockquote></div></section></section><section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">危险的指针</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">
+<p class="font-serif my-1">野指针</p>
+<p class="font-serif my-1">C中的指针可以任意赋值，当一个指针未初始化或错误地初始化时便成为了野指针:</p>
+</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">ptr1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">ptr2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="mh">0x11451400</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">ptr1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">ptr2</span><span class="p">);</span><span class="w"> </span><span class="c1">// ERROR</span>
+</code></pre></div>
+
+<ul class="list-disc font-serif">
+<li class="ml-8">
+<p class="font-serif my-1">悬空指针</p>
+<p class="font-serif my-1">当一片空间被释放时，所有指向这片空间的指针都成为了悬空指针。此时这个地址已经成为无效地址，可能被分配给其他程序或者当前程序的其他指针:</p>
+</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<span class="n">free</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">);</span><span class="w"> </span><span class="c1">// ERROR</span>
+</code></pre></div></div></section><section data-auto-animate><div><ul class="list-disc font-serif">
+<li class="ml-8">
+<p class="font-serif my-1">越界指针</p>
+<p class="font-serif my-1">对指针做算数运算是很常见的，但是当我们使用指针去访问数组元素时，如果运算后的结果超过了数组的空间区域，便会引发错误:</p>
+</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<span class="n">ptr</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">);</span><span class="w"> </span><span class="c1">//ERROR</span>
+</code></pre></div>
+
+<blockquote>
+<p class="font-serif my-1">在解引用指针前一定要确保指针有效</p>
+<p class="font-serif my-1">错误的假设是调试的痛苦之源😭</p>
+</blockquote></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">空指针</h2>
+<p class="font-serif my-1">与前面几个指针不同，空指针的存在是合理的，尽管解引用空指针会引发错误。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="cm">/* 在理论上指针不应该为空的地方使用assert保证指针非空 */</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="cm">/* 在正常情况下指针可能为空的地方，在解引用指针前对指针特判 */</span>
+<span class="k">if</span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="cm">/* 也可以利用逻辑运算符的[短路特性](https://zh.cppreference.com/w/c/language/operator_logical) */</span>
+<span class="k">if</span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">sum</span><span class="o">+=*</span><span class="n">ptr</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div></div></section></section><section><section><div><h2 id="vector" class="text-xl mt-2 pb-2 font-sans">向量: Vector</h2>
+<p class="font-serif my-1"><code>Vector</code> 是一种动态数组，<code>Vector</code> 中的元素在内存中是连续存储的，因此可以通过索引快速访问。</p>
+<p class="font-serif my-1"><code>Vector</code> 是一种灵活且高效的数据结构，适合需要频繁访问和动态调整大小的场景。<code>Vector</code> 在内存访问和索引方面更具优势，但在插入和删除操作时，可能会导致大量元素的移动。</p>
+<p class="font-serif my-1"><code>Vector</code> 的基本结构体定义如下：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">;</span><span class="w">       </span><span class="c1">// 指向整数数组的指针</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w">     </span><span class="c1">// 当前元素数量</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">capacity</span><span class="p">;</span><span class="w"> </span><span class="c1">// 数组的当前容量（已分配的内存大小）</span>
+<span class="p">}</span><span class="w"> </span><span class="n">IntVector</span><span class="p">;</span>
+</code></pre></div></div></section><section><div><h2 id="vector" class="text-xl mt-2 pb-2 font-sans">初始化 Vector</h2>
+<p class="font-serif my-1">创建一个空的 <code>IntVector</code>，初始容量设置为 4：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">initVector</span><span class="p">(</span><span class="n">IntVector</span><span class="w"> </span><span class="o">*</span><span class="n">vec</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">capacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">capacity</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">添加元素</h2>
+<p class="font-serif my-1">在 <code>IntVector</code> 中添加元素时，需要检查当前元素数量是否已达到容量。如果达到，则进行扩容：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">pushBack</span><span class="p">(</span><span class="n">IntVector</span><span class="w"> </span><span class="o">*</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// 检查是否需要扩容</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">size</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">capacity</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">capacity</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// 将容量翻倍</span>
+<span class="w">    </span><span class="c1">// 重新分配内存</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">new_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">realloc</span><span class="p">(</span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span>
+<span class="w">                            </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">capacity</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<span class="w">    </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new_data</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w"> </span><span class="c1">// 添加新元素</span>
+<span class="w">  </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">size</span><span class="o">++</span><span class="p">;</span><span class="w">                  </span><span class="c1">// 更新当前元素数量</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">访问元素</h2>
+<p class="font-serif my-1">可以通过索引获取 <code>IntVector</code> 中的元素，确保索引在有效范围内：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">IntVector</span><span class="w"> </span><span class="o">*</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">);</span><span class="w"> </span><span class="c1">// 检查索引是否越界</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">];</span><span class="w">   </span><span class="c1">// 返回指定索引的元素</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">释放内存</h2>
+<p class="font-serif my-1">当不再需要 <code>IntVector</code> 时，应释放其分配的内存：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">freeVector</span><span class="p">(</span><span class="n">IntVector</span><span class="w"> </span><span class="o">*</span><span class="n">vec</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">free</span><span class="p">(</span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span><span class="w">  </span><span class="c1">// 释放动态分配的数组</span>
+<span class="w">  </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="c1">// 避免悬空指针</span>
+<span class="w">  </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">capacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">打印内容</h2>
+<p class="font-serif my-1">为了调试和查看 <code>IntVector</code> 的内容，可以实现打印函数：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">printVector</span><span class="p">(</span><span class="n">IntVector</span><span class="w"> </span><span class="o">*</span><span class="n">vec</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"IntVector (size = %zu, capacity = %zu):"</span><span class="p">,</span>
+<span class="w">         </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">capacity</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">" %d"</span><span class="p">,</span><span class="w"> </span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">示例</h2>
+<p class="font-serif my-1">以下是一个简单的示例，展示如何使用 <code>IntVector</code>：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">IntVector</span><span class="w"> </span><span class="n">vec</span><span class="p">;</span>
+<span class="w">  </span><span class="n">initVector</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vec</span><span class="p">);</span><span class="w">     </span><span class="c1">// 初始化向量</span>
+<span class="w">  </span><span class="c1">// 添加元素到向量</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">pushBack</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">printVector</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vec</span><span class="p">);</span><span class="w">    </span><span class="c1">// 打印向量内容</span>
+<span class="w">  </span><span class="c1">// 获取和打印特定索引的元素</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">vec</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"Element at index %zu: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// 释放向量的内存</span>
+<span class="w">  </span><span class="n">freeVector</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vec</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链表（单链表）</h2>
+<p class="font-serif my-1">链表又称单链表、链式存储结构，使用链表存储数据，不强制要求数据在内存中集中存储，各个元素可以分散存储在内存中。例如，使用链表存储 {1,2,3}，各个元素在内存中的存储状态可能是：</p>
+<p class="font-serif my-1"><img class="center" src="./static/img/3c0fbfcf724c4e26aa7b7f3f45c4944d.png"/></p>
+<p class="font-serif my-1">链表存储数据间逻辑关系的实现方案是：为每一个元素配置一个指针，每个元素的指针都指向自己的直接后继元素，如下图所示：</p>
+<p class="font-serif my-1"><img class="center" src="./static/img/4250a1e90ba141febe61fe875f8a0f70.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">结点（节点）</h2>
+<p class="font-serif my-1">在链表中，每个数据元素都配有一个指针，这意味着，链表上的每个“元素”都长下图这个样子：</p>
+<p class="font-serif my-1"><img class="center" src="./static/img/e363ea3bb4314335a1b8448409bf42a4.png"/></p>
+<p class="font-serif my-1">数据域用来存储元素的值，指针域用来存放指针。数据结构中，通常将这样的整体称为结点。</p>
+<p class="font-serif my-1">也就是说，链表中实际存放的是一个一个的结点，数据元素存放在各个结点的数据域中。举个简单的例子，图 3 中 {1,2,3} 的存储状态用链表表示，如下图所示：</p>
+<p class="font-serif my-1"><img class="center" src="./static/img/b99934569dc342488610f0b461bdda69.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">头指针、头结点和首元结点</h2>
+<p class="font-serif my-1">头指针：是指向链表中一个结点所在存储位置的指针。</p>
+<p class="font-serif my-1">头结点：位于链表的表头，即链表中第一个结点，其一般不存储任何数据，特殊情况可存储表示链表信息（表的长度等）的数据。</p>
+<p class="font-serif my-1">首元结点：指的是链表开头第一个存有数据的结点。</p>
+<p class="font-serif my-1">例如，创建一个包含头结点的链表存储 {1,2,3}，如下图所示：</p>
+<p class="font-serif my-1"><img class="center" src="./static/img/8c8069540d4d4fc8bdc96ac33008a259.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链表的创建</h2>
+<p class="font-serif my-1">创建一个带头结点的链表，实现步骤如下：</p>
+<ol>
+<li class="ml-8">定义一个头指针；</li>
+<li class="ml-8">创建一个头结点，让头指针指向它；</li>
+<li class="ml-8">每创建一个结点，都令其直接前驱结点的指针指向它（尾插法/头插法）。</li>
+</ol>
+<p class="font-serif my-1">在 C 语言中，可以用结构体表示链表中的结点，例如：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">elem</span><span class="p">;</span><span class="w">                   </span><span class="c1">//代表数据域</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w">         </span><span class="c1">//代表指针域，指向直接后继元素</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Node</span><span class="p">;</span>
+<span class="c1">// 头指针指向 malloc 分配的头结点/首元结点</span>
+<span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Node</span><span class="p">));</span>
+<span class="n">head</span><span class="o">-&gt;</span><span class="n">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">     </span><span class="c1">// 头结点数据域存储链表元素个数。</span>
+<span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w">  </span><span class="c1">// 初始头结点/首元结点的后继元素为空</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">创建结点——头插法</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Node</span><span class="p">));</span>
+<span class="w">  </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element</span><span class="p">;</span>
+<span class="w">  </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+<span class="w">  </span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="w">  </span><span class="n">head</span><span class="o">-&gt;</span><span class="n">elem</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/76079aaa35a14d83aa984ffed7a474f5.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">创建结点——尾插法</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span><span class="w">     </span><span class="c1">// r 在尾插法中始终指向最后一个结点</span>
+<span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Node</span><span class="p">));</span>
+<span class="w">  </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element</span><span class="p">;</span>
+<span class="w">  </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">  </span><span class="n">r</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="w">  </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="w">  </span><span class="n">head</span><span class="o">-&gt;</span><span class="n">elem</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1"><img class="center" src="./static/img/1f5452a90f294685bd1ab813903ce46c.png"/></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链表读取元素</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 用 e 返回 list 中第 i 个(从0开始计数)数据元素的值 */</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">GetElem</span><span class="p">(</span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">list</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">;</span>
+<span class="w">  </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w">           </span><span class="c1">//p 指向首元结点</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">      </span><span class="c1">//p 不为空或者计数器 j 还没有等于 i 时，循环继续</span>
+<span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w">            </span><span class="c1">//p 指向下一个结点</span>
+<span class="w">    </span><span class="n">j</span><span class="o">++</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">                 </span><span class="c1">//第 i 个元素不存在</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="o">*</span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">elem</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">了解了链表如何读取元素，同理我们可以实现更新和查找链表元素。</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链表插入元素</h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/506ed08c03de4f06872073f20b50b6a2.png" width="80%"/></p>
+<p class="font-serif my-1">注意：链表插入元素的操作必须是先步骤 1，再步骤 2；反之，会导致插入位置后的这部分链表丢失，无法再实现步骤 1。</p>
+<p class="font-serif my-1">对于没有头结点的链表，在头部插入结点比较特殊，需要单独实现。</p>
+<p class="font-serif my-1"><img class="center" src="./static/img/91dea5cc230d4398954ce6bdd61e1f74.png" width="80%"/></p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链表插入元素</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 在 list 中第 i 个位置之前插入新的数据元素 e */</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">ListInsert</span><span class="p">(</span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">list</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w">       </span><span class="c1">// p 指向头结点</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// 寻找第 i - 1 个结点，</span>
+<span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="n">j</span><span class="o">++</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Node</span><span class="p">));</span>
+<span class="w">  </span><span class="n">r</span><span class="o">-&gt;</span><span class="n">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">;</span>
+<span class="w">  </span><span class="n">r</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+<span class="w">  </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">  </span><span class="n">list</span><span class="o">-&gt;</span><span class="n">elem</span><span class="o">++</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链表删除元素</h2>
+<p class="font-serif my-1"><img alt="" src="./static/img/908b9eb168cb4de28ccb83e45ed74dd3.png"/></p>
+<p class="font-serif my-1">对于不带头结点的链表，需要单独考虑删除首元结点的情况，删除其它结点的方式和图 3 完全相同，如下图所示：</p>
+<p class="font-serif my-1"><img alt="" src="./static/img/354bfd22ca234e3bb2f3aec0aa369fd4.png"/></p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链表删除元素</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 删除 list 中的第 i 个数据元素，并用 e 返回其值 */</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">ListDelete</span><span class="p">(</span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">list</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">              </span><span class="c1">// 寻找删除节点的前驱节点</span>
+<span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="n">j</span><span class="o">++</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w">                         </span><span class="c1">// L 中不存在第 i 个元素</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w">                      </span><span class="c1">// 标记要删除的结点</span>
+<span class="w">  </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w">                      </span><span class="c1">// 移除结点</span>
+<span class="w">  </span><span class="o">*</span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">-&gt;</span><span class="n">elem</span><span class="p">;</span><span class="w">                           </span><span class="c1">// 返回结点所存数据</span>
+<span class="w">  </span><span class="n">free</span><span class="p">(</span><span class="n">r</span><span class="p">);</span><span class="w">                                </span><span class="c1">// 释放结点</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链表查找元素</h2>
+<p class="font-serif my-1">在链表中查找指定数据元素，最常用的方法是：从首元结点开始依次遍历所有节点，直至找到存储目标元素的结点。</p>
+<p class="font-serif my-1">如果遍历至最后一个结点仍未找到，表明链表中没有存储该元素。</p>
+<h2 id="_2" class="text-xl mt-2 pb-2 font-sans">链表更新元素</h2>
+<p class="font-serif my-1">更新链表中的元素，只需通过遍历找到存储此元素的节点，对节点中的数据域做更改操作即可。</p>
+<h2 id="_3" class="text-xl mt-2 pb-2 font-sans">链表销毁</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">void</span><span class="w"> </span><span class="nf">ListDestructs</span><span class="p">(</span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w"> </span><span class="n">free</span><span class="p">(</span><span class="n">p</span><span class="p">);</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链表总结</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">
+<p class="font-serif my-1"><strong>优点</strong>：</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">动态大小：可以灵活扩展，方便插入和删除操作。</li>
+<li class="ml-8">节省内存：不需要预先分配固定大小的内存。</li>
+</ul>
+</li>
+<li class="ml-8">
+<p class="font-serif my-1"><strong>缺点</strong>：</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">随机访问效率低：必须从头开始遍历，无法直接通过索引访问。</li>
+<li class="ml-8">内存开销：每个结点需要额外的存储空间来存储指针。</li>
+</ul>
+</li>
+</ul>
+<p class="font-serif my-1">链表是一种灵活且功能强大的数据结构，适用于频繁插入和删除操作的场景。尽管随机访问性能较差，但其动态特性和高效的插入、删除操作使其在许多应用中得到广泛使用。</p></div></section></section>
+        </div>
+    </div>
+
+    <script src="./static/reveal/reveal.js"></script>
+
+    <script>
+        Reveal.initialize({
+
+            width: 1024, height: 768,
+
+            slideNumber: 'c/t',
+            controlsTutorial: false,
+            progress: false,
+            hash: true,
+            center: false,
+            autoAnimateUnmatched: true,
+            autoAnimateEasing: 'ease-out',
+            autoAnimateDuration: 0.3,
+            transitionSpeed: 'fast'
+        });
+    </script>
+</body>
+
+</html>
