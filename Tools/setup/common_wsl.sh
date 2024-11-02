@@ -112,8 +112,8 @@ init() {
     # 安装 oh-my-zsh
     log_info "正在安装 oh-my-zsh"
     run_command cp -r "$(pwd)/pkg/ohmyzsh" "$HOME/.ohmyzsh"
-    run_command cp -r "$(pwd)/pkg/zsh-plugins/*" "$HOME/.ohmyzsh/custom/plugins"
-    run_command cp -r "$(pwd)/pkg/zsh-themes/*" "$HOME/.ohmyzsh/custom/themes"
+    run_command cp -r "$(pwd)"/pkg/zsh-plugins/* "$HOME/.ohmyzsh/custom/plugins"
+    run_command cp -r "$(pwd)"/pkg/zsh-themes/* "$HOME/.ohmyzsh/custom/themes"
     run_command cp "$(pwd)/config/.zshrc" "$HOME/.zshrc"
 
     # 切换用户默认 Shell
