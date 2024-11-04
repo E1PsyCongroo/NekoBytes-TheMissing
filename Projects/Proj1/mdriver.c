@@ -26,6 +26,7 @@
  **********************/
 
 /* Misc */
+<<<<<<< HEAD
 #define MAXLINE 1024 /* max string size */
 #define HDRLINES 4   /* number of header lines in a trace file */
 #define LINENUM(i)                                                             \
@@ -34,13 +35,23 @@
 
 /* Returns true if p is ALIGNMENT-byte aligned */
 #define IS_ALIGNED(p) ((((uintptr_t)(p)) % ALIGNMENT) == 0)
+=======
+#define MAXLINE 1024 /* max string size */
+#define HDRLINES 4   /* number of header lines in a trace file */
+#define LINENUM(i)                                                             \
+  (i + 5) /* cnvt trace request nums to linenums (origin 1)                    \
+           */
 
-/******************************
- * The key compound data types
- *****************************/
+/* Returns true if p is ALIGNMENT-byte aligned */
+#define IS_ALIGNED(p) ((((unsigned int)(p)) % ALIGNMENT) == 0)
+    >>>>>>> upstream/proj1
 
-/* Records the extent of each block's payload */
-typedef struct range_t {
+    /******************************
+     * The key compound data types
+     *****************************/
+
+    /* Records the extent of each block's payload */
+    typedef struct range_t {
   char *lo;             /* low payload address */
   char *hi;             /* high payload address */
   struct range_t *next; /* next list element */
@@ -90,9 +101,15 @@ typedef struct {
 /********************
  * Global variables
  *******************/
+<<<<<<< HEAD
 int verbose = 0;        /* global flag for verbose output */
 static int errors = 0;  /* number of errs found when running student malloc */
 char msg[MAXLINE + 30]; /* for whenever we need to compose an error message */
+=======
+int verbose = 0;       /* global flag for verbose output */
+static int errors = 0; /* number of errs found when running student malloc */
+char msg[MAXLINE];     /* for whenever we need to compose an error message */
+>>>>>>> upstream/proj1
 
 /* Directory where default tracefiles are found */
 static char tracedir[MAXLINE] = TRACEDIR;
@@ -405,10 +422,18 @@ static int add_range(range_t **ranges, char *lo, int size, int tracenum,
 static void remove_range(range_t **ranges, char *lo) {
   range_t *p;
   range_t **prevpp = ranges;
+<<<<<<< HEAD
+=======
+  int size;
+>>>>>>> upstream/proj1
 
   for (p = *ranges; p != NULL; p = p->next) {
     if (p->lo == lo) {
       *prevpp = p->next;
+<<<<<<< HEAD
+=======
+      size = p->hi - p->lo + 1;
+>>>>>>> upstream/proj1
       free(p);
       break;
     }
