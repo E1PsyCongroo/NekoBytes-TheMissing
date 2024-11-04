@@ -26,13 +26,14 @@
  **********************/
 
 /* Misc */
-#define MAXLINE 1024       /* max string size */
-#define HDRLINES 4         /* number of header lines in a trace file */
-#define LINENUM(i) (i + 5) /* cnvt trace request nums to linenums (origin 1)   \
-                            */
+#define MAXLINE 1024 /* max string size */
+#define HDRLINES 4   /* number of header lines in a trace file */
+#define LINENUM(i)                                                             \
+  (i + 5) /* cnvt trace request nums to linenums (origin 1)                    \
+           */
 
 /* Returns true if p is ALIGNMENT-byte aligned */
-#define IS_ALIGNED(p) ((((unsigned int)(p)) % ALIGNMENT) == 0)
+#define IS_ALIGNED(p) ((((uintptr_t)(p)) % ALIGNMENT) == 0)
 
 /******************************
  * The key compound data types
@@ -89,9 +90,9 @@ typedef struct {
 /********************
  * Global variables
  *******************/
-int verbose = 0;       /* global flag for verbose output */
-static int errors = 0; /* number of errs found when running student malloc */
-char msg[MAXLINE];     /* for whenever we need to compose an error message */
+int verbose = 0;        /* global flag for verbose output */
+static int errors = 0;  /* number of errs found when running student malloc */
+char msg[MAXLINE + 30]; /* for whenever we need to compose an error message */
 
 /* Directory where default tracefiles are found */
 static char tracedir[MAXLINE] = TRACEDIR;
@@ -200,26 +201,7 @@ int main(int argc, char **argv) {
    * Check and print team info
    */
   if (team_check) {
-    /* Students must fill in their team information */
-    if (!strcmp(team.teamname, "")) {
-      printf(
-          "ERROR: Please provide the information about your team in mm.c.\n");
-      exit(1);
-    } else
-      printf("Team Name:%s\n", team.teamname);
-    if ((*team.name1 == '\0') || (*team.id1 == '\0')) {
-      printf("ERROR.  You must fill in all team member 1 fields!\n");
-      exit(1);
-    } else
-      printf("Member 1 :%s:%s\n", team.name1, team.id1);
-
-    if (((*team.name2 != '\0') && (*team.id2 == '\0')) ||
-        ((*team.name2 == '\0') && (*team.id2 != '\0'))) {
-      printf("ERROR.  You must fill in all or none of the team member 2 ID "
-             "fields!\n");
-      exit(1);
-    } else if (*team.name2 != '\0')
-      printf("Member 2 :%s:%s\n", team.name2, team.id2);
+    printf("你是怎么做到的？\n");
   }
 
   /*
@@ -423,12 +405,10 @@ static int add_range(range_t **ranges, char *lo, int size, int tracenum,
 static void remove_range(range_t **ranges, char *lo) {
   range_t *p;
   range_t **prevpp = ranges;
-  int size;
 
   for (p = *ranges; p != NULL; p = p->next) {
     if (p->lo == lo) {
       *prevpp = p->next;
-      size = p->hi - p->lo + 1;
       free(p);
       break;
     }

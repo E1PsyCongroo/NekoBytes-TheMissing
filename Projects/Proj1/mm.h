@@ -6,30 +6,24 @@ extern void *mm_malloc(size_t size);
 extern void mm_free(void *ptr);
 extern void *mm_realloc(void *ptr, size_t size);
 
-/*
- * Students work in teams of one or two.  Teams enter their team name,
- * personal names and login IDs in a struct of this
- * type in their bits.c file.
- */
-typedef struct {
-  char *teamname; /* ID1+ID2 or ID1 */
-  char *name1;    /* full name of first member */
-  char *id1;      /* login ID of first member */
-  char *name2;    /* full name of second member (if any) */
-  char *id2;      /* login ID of second member */
-} team_t;
-
-extern team_t team;
-
+/*块结构体*/
 struct Block {
+  // 指向前一个块的指针，没有则为NULL
   struct Block *pre;
+  // 指向后一个块的指针，没有则为NULL
   struct Block *nxt;
+  // 块所对应的堆空间起始地址
   void *ptr;
+  // 块所占堆空间大小
   size_t size;
+  // 0:块不处于占用状态 1:块处于占用状态
   int empty;
 };
 typedef struct Block block;
-extern block *head, *tail;
+// 头指针，指向链表中第一个块
+extern block *head;
+// 尾指针，指向链表中最后一个块
+extern block *tail;
 
 extern void block_init(block *bk);
 
