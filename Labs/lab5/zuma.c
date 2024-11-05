@@ -169,6 +169,13 @@ void print_all() {
 int main() {
   // freopen("random_case.in", "r", stdin); //在使用judge时取消引用这句话
   // freopen("myans.out", "w", stdout); //在使用judge时取消引用这句话
+
+  // 你可以使用freopen更方便地对样例进行测试（包括你自己造的样例）
+  // 关于freopen:https://zh.cppreference.com/w/c/io/freopen
+
+  // freopen("case1.in", "r", stdin); //使用case1.in作为输入
+  // freopen("myans.out", "w", stdout); //输出至myans.out
+
   init();
   while (1) {
     ____ = 0;
