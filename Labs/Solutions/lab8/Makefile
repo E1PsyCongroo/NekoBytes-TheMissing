@@ -2,12 +2,12 @@
 CC = gcc
 # 设置编译参数：使用 C11 标准，生成调试信息
 CFLAGS = -std=c11 -g
-LIB = -lm
+LIB = -lm -lcriterion
 
 # 主程序源文件列表
 MAIN_SOURCES = main.c data_utils.c linear_regression.c multiple_regression.c
 # 测试程序源文件列表
-TEST_SOURCES = data_utils.c linear_regression.c test.c
+TEST_SOURCES = data_utils.c linear_regression.c test.c multiple_regression.c
 # 包含的头文件
 HEADERS = regression.h
 

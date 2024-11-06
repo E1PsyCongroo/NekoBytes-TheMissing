@@ -2,10 +2,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+
 
 #include "regression.h"
 
-
+int factorial(int n){
+    if (n == 0 || n == 1){
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
 
 Matrix create_matrix(int rows, int cols) {
     Matrix mat;
@@ -25,6 +32,12 @@ Vector create_vector(int len) {
     return vec;
 }
 
+Vector copy_vector(Vector vector){
+    Vector copy = create_vector(vector.len);
+    memcpy(copy.data,vector.data,sizeof(float) * vector.len);
+    return copy;
+}
+
 void free_matrix(Matrix mat) {
     for (int i = 0; i < mat.rows; i++) {
         free(mat.data[i]);
@@ -34,6 +47,14 @@ void free_matrix(Matrix mat) {
 
 void free_vector(Vector vec) {
     free(vec.data);
+}
+
+Matrix create_matrix_from_vector(Vector vec) {
+    Matrix mat = create_matrix(vec.len, 1);
+    for (int i = 0; i < vec.len; i++) {
+        mat.data[i][0] = vec.data[i];
+    }
+    return mat;
 }
 
 Matrix transpose_matrix(Matrix mat) {
@@ -59,6 +80,32 @@ Matrix multiply_matrices(Matrix mat1, Matrix mat2) {
                 result.data[i][j] += mat1.data[i][k] * mat2.data[k][j];
             }
         }
+    }
+    return result;
+}
+
+void print_Matrix(Matrix mat){
+    for(int i = 0 ; i < mat.rows;i++){
+        for(int j = 0 ; j < mat.cols;j++){
+            printf("%f ",mat.data[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+Vector link_Vector(Vector vector1 , Vector vector2 , bool delete){
+    Vector result = create_vector(vector1.len + vector2.len);
+    for(int i = 0 ; i < vector1.len;i++){
+        result.data[i] = vector1.data[i];
+    }
+
+    for(int i = vector1.len ; i < result.len;i++){
+        result.data[i] = vector2.data[i - vector1.len];
+    }
+
+    if(delete){
+        free_vector(vector1);
+        free_vector(vector2);
     }
     return result;
 }
@@ -125,13 +172,6 @@ Matrix invert_matrix(Matrix mat) {
     return inverse;
 }
 
-Matrix create_matrix_from_vector(Vector vec) {
-    Matrix mat = create_matrix(vec.len, 1);
-    for (int i = 0; i < vec.len; i++) {
-        mat.data[i][0] = vec.data[i];
-    }
-    return mat;
-}
 
 Vector create_vector_from_matrix(Matrix mat) {
     if (mat.cols != 1) {
@@ -162,20 +202,62 @@ Vector calculate_regression_coefficients(Matrix X, Vector y) {
     return beta;
 }
 
-Vector calculate_multiple_regression_coefficients(float* x, float* y, int num_data_points, int degree) {
-    // 创建设计矩阵 X
-    Matrix X = create_matrix(num_data_points, degree + 1);
-    for (int i = 0; i < num_data_points; i++) {
-        X.data[i][0] = 1.0; // 常数项
-        for (int j = 1; j <= degree; j++) {
-            X.data[i][j] = pow(x[i], j); // x 的不同次幂
+Vector generate_combinations(Vector data,int degree){
+    if(degree == 1){
+        return copy_vector(data);
+    }
+    if(data.len == 1){
+        Vector temp = copy_vector(data);
+        temp.data[0] = pow(temp.data[0],degree);
+        return temp;
+    }
+    Vector data_without_first = create_vector(data.len - 1);
+    memcpy(data_without_first.data,data.data + 1,(data_without_first.len) * sizeof(float));
+    Vector temp = generate_combinations(data,degree - 1);
+    Vector result = create_vector(temp.len);
+    for(int i = 0;i < result.len ;i++ )
+        result.data[i] = temp.data[i] * data.data[0];
+    free_vector(temp);
+    result = link_Vector(result,generate_combinations(data_without_first,degree),true);
+    free_vector(data_without_first);
+    return result;
+}
+
+Matrix create_X(Data x_data, int degree){
+    float **x = x_data.data;
+    int num_variables = x_data.cols;
+    int num_data_points = x_data.rows;
+    Matrix X = create_matrix(num_data_points,factorial(num_variables + degree) / (factorial(num_variables) * factorial(degree)));
+    Vector data = create_vector(num_variables);
+    for(int row = 0 ;row < num_data_points ;row++){
+        int count = 0;
+        memcpy(data.data, x[row], num_variables * sizeof(float));
+        for(int deg = 0 ;deg <= degree ;deg++){
+            if(deg == 0){
+                X.data[row][count++] = 1;
+            }
+            else{
+                Vector temp = generate_combinations(data,deg);
+                for(int i = 0 ; i < temp.len;i++)
+                    X.data[row][count++] = temp.data[i];
+                free_vector(temp);
+            }
         }
     }
+    free_vector(data);
+    return X;
+}
 
+Vector calculate_multiple_regression_coefficients(Data x_data, Data y_data, int degree) {
+    // 创建设计矩阵 X
+    Matrix X = create_X(x_data,degree);
+    //print_Matrix(X);
     // 创建目标向量 y_vector
+    int num_data_points = y_data.rows;
     Vector y_vector = create_vector(num_data_points);
+    float** y = y_data.data;
     for (int i = 0; i < num_data_points; i++) {
-        y_vector.data[i] = y[i];
+        y_vector.data[i] = y[i][0];
     }
 
     // 计算回归系数
@@ -188,20 +270,19 @@ Vector calculate_multiple_regression_coefficients(float* x, float* y, int num_da
     return coefficients;
 }
 
-float* multiple_regression_prediction(float* x, int num_data_points, Vector coefficients) {
+float* multiple_regression_prediction(Data x_data,int degree, Vector coefficients) {
+    int num_data_points = x_data.rows;
     float* y_pred = (float*)malloc(num_data_points * sizeof(float));
-    int degree = coefficients.len - 1;
-    if (y_pred == NULL) {
-        printf("Memory allocation failed.\n");
-        exit(1);
+    Matrix X = create_X(x_data,degree);
+    Matrix temp1 = create_matrix_from_vector(coefficients);
+    Matrix temp2 = multiply_matrices(X,temp1);
+    Vector y = create_vector_from_matrix(temp2);
+    for(int i = 0;i < y.len;i++){
+        y_pred[i] = y.data[i];
     }
-
-    for (int i = 0; i < num_data_points; i++) {
-        y_pred[i] = 0.0;
-        for (int j = 0; j <= degree; j++) {
-            y_pred[i] += coefficients.data[j] * pow(x[i], j);
-        }
-    }
-
+    free_matrix(X);
+    free_matrix(temp1);
+    free_matrix(temp2);
+    free_vector(y);
     return y_pred;
 }
