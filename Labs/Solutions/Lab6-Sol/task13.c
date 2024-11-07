@@ -6,7 +6,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *alloc_str(int len) { return malloc(len * sizeof(char)); }
+char *alloc_str(int len) {
+  char *p = (char *)malloc((len + 1) * sizeof(char));
+  p[len] = '\0';
+  return p;
+}
 
 /* Str helper functions */
 typedef struct Str {

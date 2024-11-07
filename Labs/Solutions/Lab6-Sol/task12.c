@@ -10,11 +10,7 @@ void jedi(int *arr, int size) {
   }
 }
 
-void ben(int *arr, int size) {
-  int *ptr = NULL;
-  *ptr = 10;
-  jero(arr, size);
-}
+void ben(int *arr, int size) { jero(arr, size); }
 
 void jero(int *arr, int size) {
   int *new_arr = (int *)malloc(size * sizeof(int));
