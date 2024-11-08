@@ -1,5 +1,12 @@
 # Lab6 使用工具
 
+> [!Tip]
+> 1. 学习Makefile [用Makefile代替Python](https://wizardforcel.gitbooks.io/lcthw/content/ex2.html)
+> 2. 学习Valgrind [Valgrind介绍](https://wizardforcel.gitbooks.io/lcthw/content/ex4.html) 
+> 3. 学习GDB [代码调试](https://wizardforcel.gitbooks.io/lcthw/content/ex31.html)
+> 
+>  我们推荐你结合AI来进一步学习这些工具。
+
 ## GCC、多文件编译和Makefile
 
 ### Task1 错误与警告
