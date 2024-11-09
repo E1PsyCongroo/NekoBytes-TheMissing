@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="./static/css/base.css" rel="stylesheet">
+    <link href="./static/css/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.font.im/css?family=Source+Serif+Pro%7CLato%7CInconsolata" rel="stylesheet"
+        type="text/css">
+    <title> lecture6 </title>
+    <!-- browser favicon -->
+    <link rel="shortcut icon" href="./static/img/favicon.ico">
+    <style>
+        .font-sans {
+            font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
+        }
+
+        .font-serif {
+            font-family: 'Source Serif Pro', 'Songti SC', 'SimSun', 'Serif', serif;
+        }
+    </style>
+    <link rel="stylesheet" href="./static/katex/katex.min.css">
+    <script defer src="./static/katex/katex.min.js"></script>
+    <script defer src="./static/katex/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                // customised options
+                // &#8226; auto-render specific keys, e.g.:
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true }
+                ],
+                // &#8226; rendering keys, e.g.:
+                throwOnError: false
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" href="./static/reveal/reveal.css">
+    <link rel="stylesheet" href="./static/reveal/theme/simple.css" id="theme">
+    <link rel="stylesheet" href="./static/jyy/jyy.css">
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    <div class="reveal">
+        <div class="slides">
+            <section><section><div class="center middle"><div style="width:100%"><div><h1 id="c" class="text-2xl mt-2 font-sans">C 语言项目实现</h1><p class="font-serif my-1">
+    <include src="Slides_Author">
+        <div class="py-16">
+            <p class="font-serif my-1">
+                <a href="" class=" text-amber-900">
+                    晓阳
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="font-serif my-1"/>
+            
+            <div class="author-affiliation">
+                <a href="https://github.com/datawhalechina/cstart" class=" text-amber-900">
+                    <p class="font-serif my-1">
+                        NekoBytes
+                    </p>
+                    <img class="inline-img h-24" src="./static/img/f97e6d415e1a4b25b0d5615817a9b4bb.svg" style="display: inline-block;"/>
+                </a>
+            </div>
+            
+        </div>
+    </include>
+</p></div></div></div></section></section><section><section data-auto-animate><div><h2 id="c" class="text-xl mt-2 pb-2 font-sans">C 语言</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">预处理器</li>
+<li class="ml-8">控制流<ul class="list-disc font-serif">
+<li class="ml-8">if - switch</li>
+<li class="ml-8">for - while - do-while</li>
+<li class="ml-8">continue - break</li>
+<li class="ml-8">goto - return</li>
+</ul>
+</li>
+<li class="ml-8">表达式<ul class="list-disc font-serif">
+<li class="ml-8">值类别: 左值、右值、函数指代器</li>
+<li class="ml-8">常量及字面量</li>
+<li class="ml-8">求值顺序、运算顺序</li>
+<li class="ml-8">运算符</li>
+</ul>
+</li>
+<li class="ml-8">未定义行为</li>
+</ul></div></section><section data-auto-animate><div><ul class="list-disc font-serif">
+<li class="ml-8">对象<ul class="list-disc font-serif">
+<li class="ml-8">类型<ul class="list-disc font-serif">
+<li class="ml-8">基本类型</li>
+<li class="ml-8">函数类型: 声明、定义、可变参数、inline</li>
+<li class="ml-8">数组类型: 字符串、多维、隐式指针转换</li>
+<li class="ml-8">指针类型: 对象指针、函数指针</li>
+<li class="ml-8">枚举类型</li>
+<li class="ml-8">自定义类型: 结构体、联合体、位域</li>
+</ul>
+</li>
+<li class="ml-8">存储说明符: typedef, constexpr, auto, register, static, extern, thread_local</li>
+<li class="ml-8">类型限定符(cv限定符): const、volatile、restrict、_Atomic</li>
+<li class="ml-8">对齐</li>
+<li class="ml-8">存储期与链接</li>
+<li class="ml-8">生存期</li>
+</ul>
+</li>
+</ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/eval_order">求值顺序</a>与运算顺序</h2>
+<blockquote>
+<p class="font-serif my-1">C 语言中没有从左到右或从右到左求值的概念，不要将其与运算符的从左到右或从右到左结合性混淆：</p>
+<p class="font-serif my-1">表达式 f1() + f2() + f3() 因为 operator+ 的从左到右结合性而被分析成 (f1() + f2()) + f3()，</p>
+<p class="font-serif my-1">但运行时对 f3 的函数调用可以最先、最后，或在 f1() 与 f2() 之间求值。</p>
+</blockquote>
+<p class="font-serif my-1">若在子表达式 E1 和 E2 间存在序列点，则 E1 的值计算和副效应都先序于 E2 的所有值计算和副效应。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 未定义行为 */</span>
+<span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">f</span><span class="p">(</span><span class="o">++</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">);</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+<span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">);</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">;</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/behavior">未定义行为</a></h2>
+<p class="font-serif my-1">因为正确的 C 程序是没有未定义行为的，编译器可以在启用优化的条件下编译确实有 UB 的程序时，生成不期待的结果：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="n">有符号溢出</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// 真或为有符号溢出导致的 UB</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p class="font-serif my-1">可以编译成</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="nl">foo:</span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">     </span><span class="no">eax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="nf">ret</span>
+</code></pre></div>
+
+<p class="font-serif my-1">建议开启编译器检查: <code>-fsanitize=undefined</code></p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/variadic">可变参数函数</a></h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="nf">printf</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="kr">restrict</span><span class="w"> </span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">vprintf</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="kr">restrict</span><span class="w"> </span><span class="n">format</span><span class="p">,</span><span class="w"> </span><span class="kt">va_list</span><span class="w"> </span><span class="n">ap</span><span class="p">);</span>
+</code></pre></div>
+
+<p class="font-serif my-1">RTFM: <code>man stdarg</code></p>
+<ul class="list-disc font-serif">
+<li class="ml-8">定义<code>va_list</code>变量</li>
+<li class="ml-8">通过<code>va_start</code>获取可变参数列表</li>
+<li class="ml-8">通过<code>va_arg</code>获取可变参数</li>
+<li class="ml-8">通过<code>va_end</code>销毁资源</li>
+<li class="ml-8">通过<code>va_copy</code>拷贝可变参数列表</li>
+</ul>
+<blockquote>
+<p class="font-serif my-1">可变参数的使用类似动态分配，请记得销毁资源和必要时进行<code>va_copy</code>拷贝</p>
+</blockquote></div></section><section><div><h2 id="inline" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/inline">inline 函数</a></h2>
+<p class="font-serif my-1">内联函数: 通过复制代码到函数调用处的方式<strong>减少函数调用</strong>以提高效率</p>
+<blockquote>
+<p class="font-serif my-1">程序员应该把优化的空间交给编译器，而不是自己做出优化决定!</p>
+</blockquote>
+<p class="font-serif my-1">如今的 <code>inline</code>: 用于使多个函数定义符合<a href="https://zh.cppreference.com/w/c/language/extern">唯一定义规则</a></p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* sum.h</span>
+<span class="cm"> * 使用 inline 使得 sum.h 被多个文件 #include 产生的</span>
+<span class="cm"> * 多个 sum 函数定义不会违反唯一定义规则</span>
+<span class="cm"> */</span>
+<span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="cm">/* main.c */</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"sum.h"</span>
+<span class="cm">/* test.c */</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"sum.h"</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">函数指针</h2>
+<p class="font-serif my-1">指向函数的指针可由函数地址初始化。因为函数到指针存在隐式转换，取址运算符是可选的。</p>
+<p class="font-serif my-1">指向函数的指针可以用作函数调用运算符的左操作数；这会调用所指向的函数。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">qsort</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="n">base</span><span class="p">[.</span><span class="n">size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">.</span><span class="n">nmemb</span><span class="p">],</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">nmemb</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">compar</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">[.</span><span class="n">size</span><span class="p">],</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">[.</span><span class="n">size</span><span class="p">]));</span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">bsearch</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">key</span><span class="p">[.</span><span class="n">size</span><span class="p">],</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">base</span><span class="p">[.</span><span class="n">size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">.</span><span class="n">nmemb</span><span class="p">],</span>
+<span class="w">                </span><span class="kt">size_t</span><span class="w"> </span><span class="n">nmemb</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span>
+<span class="w">                </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">compar</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">[.</span><span class="n">size</span><span class="p">],</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">[.</span><span class="n">size</span><span class="p">]));</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">compare_int</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">compar</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compare_int</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="n">compare_int</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
+<span class="n">compar</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">);</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">compar</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
+<span class="n">qsort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">compar</span><span class="p">);</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">指针与数组与函数</h2>
+<p class="font-serif my-1">理解定义请参考<a href="https://zh.cppreference.com/w/c/language/operator_precedence">运算符优先级</a></p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* 优先级: [] &gt; * &gt; ()</span>
+<span class="cm"> * 变量 p 的运算符使用顺序应该是 (* ( p[] ) ) ()</span>
+<span class="cm"> * p 首先被取下标 [] -&gt; p 是一个 5 个元素的数组</span>
+<span class="cm"> * p[] 可以被解引用 * -&gt; p[] 是一个指针</span>
+<span class="cm"> * (*p[]) 可以进行函数调用 () -&gt; *p[] 是一个函数指代器</span>
+<span class="cm"> * p 是一个 函数指针 的数组，数组有 5 个元素</span>
+<span class="cm"> * 指针指向 int(void) 的函数类型</span>
+<span class="cm"> */</span>
+<span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">5</span><span class="p">])(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="cm">/* 建议使用 typedef 避免复杂类型定义 */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">fn_t</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span><span class="w">  </span><span class="c1">// fn_t 是指向 int(void) 的函数指针</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">fn_t</span><span class="w"> </span><span class="n">fn_arr_t</span><span class="p">[];</span><span class="w">    </span><span class="c1">// fn_arr_t 是 fn_t 的数组</span>
+<span class="n">fn_arr_t</span><span class="w"> </span><span class="n">fn_array</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span><span class="w">       </span><span class="c1">// 类型同 p</span>
+
+<span class="cm">/* 比如我们的标准库的信号处理函数指针 */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="kt">sighandler_t</span><span class="p">)(</span><span class="kt">int</span><span class="p">);</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">结构体与联合体</h2>
+<p class="font-serif my-1">结构体是由一序列的成员组成的类型，成员<strong>顺序分配</strong>于内存中</p>
+<p class="font-serif my-1">联合体相反，联合体是由一个序列的成员组成的类型，成员<strong>重叠</strong>存储在内存中</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">RetType_t</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ret_int</span><span class="p">,</span><span class="w"> </span><span class="n">ret_double</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">RetType_t</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">RetType_t</span><span class="w"> </span><span class="n">ret_type</span><span class="p">;</span>
+<span class="w">  </span><span class="k">union</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">int_val</span><span class="p">;</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">double_val</span><span class="p">;</span>
+<span class="w">  </span><span class="p">};</span><span class="w">    </span><span class="c1">// 匿名联合体</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Ret_t</span><span class="p">;</span>
+<span class="n">Ret_t</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">RetType_t</span><span class="w"> </span><span class="n">ret_type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">switch</span><span class="p">(</span><span class="n">ret_type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="no">ret_int</span><span class="p">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">Ret_t</span><span class="p">){.</span><span class="n">ret_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ret_int</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">int_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">};</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="no">ret_double</span><span class="p">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">Ret_t</span><span class="p">){.</span><span class="n">ret_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ret_double</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">double_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/object">对齐要求</a></h2>
+<p class="font-serif my-1"><code>alignof(类型名)</code> 运算符可以用于查询类型的对齐要求，表示此类型对象可以分配的相继地址之间的字节数。</p>
+<p class="font-serif my-1">结构体和联合体为了同时满足成员和结构体的对齐要求，会导致不同的对象大小和对齐要求。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">struct</span><span class="w"> </span><span class="nc">S</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="c1">// 成员对象大小：1，对齐：1</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="c1">// 成员对象大小：1，对齐：1</span>
+<span class="p">};</span><span class="w"> </span><span class="c1">// 结构体对象大小：2，对齐：1</span>
+<span class="cm">/* struct X 的对象必须分配于 4字节边界</span>
+<span class="cm"> * 因为 X.n 必须分配于 4 字节边界</span>
+<span class="cm"> * 因为 int 的对齐要求（通常）是 4 */</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">X</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w">  </span><span class="c1">// 成员对象大小：4，对齐：4</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w"> </span><span class="c1">// 成员对象大小：1，对齐：1</span>
+<span class="w">  </span><span class="c1">// 剩余的三个字节进行空位填充</span>
+<span class="p">};</span><span class="w"> </span><span class="c1">// 结构体对象大小：8，对齐：4</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/bit_field">位域</a></h2>
+<p class="font-serif my-1">声明带有明确宽度的成员，按位数计。相邻的位域成员可能被打包，共享和分散到各个单独的字节。</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="k">struct</span><span class="w"> </span><span class="nc">S</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// 通常将占用 8 字节</span>
+<span class="w">  </span><span class="c1">// 5 位： b1 的值</span>
+<span class="w">  </span><span class="c1">// 27 位：未使用</span>
+<span class="w">  </span><span class="c1">// 6 位： b2 的值</span>
+<span class="w">  </span><span class="c1">// 11 位：未使用</span>
+<span class="w">  </span><span class="c1">// 15 位： b3 的值</span>
+<span class="w">  </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">b1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="cm">/* 拥有零 宽度 的特殊无名位域打破填充：</span>
+<span class="cm"> * 它指定下个位域在始于下个分配单元的起点 */</span>
+<span class="w">  </span><span class="nl">unsigned</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">b2</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">  </span><span class="nl">unsigned</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">b3</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">类型限定符</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">const: 编译器可以把声明为带 const 限定类型的对象放到只读内存中，并且若程序从来不获取该 const 对象的地址，则可能完全不存储它。<ul class="list-disc font-serif">
+<li class="ml-8">对类型被 const 限定的对象的任何修改尝试都导致未定义行为。</li>
+</ul>
+</li>
+<li class="ml-8">volatile: 阻止编译器对带 volatile 限定类型的对象进行优化，确保对对象的操作严格执行。</li>
+<li class="ml-8">restrict: 仅用于指向对象类型的指针，用于指示指针是程序中<strong>唯一</strong>直接访问其所指向对象的方式，帮助编译器优化。</li>
+<li class="ml-8"><del>_Atomic: 多线程相关</del></li>
+</ul>
+<p class="font-serif my-1">最佳实践:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">仅确保在条件满足时，使用 <code>restrict</code></li>
+<li class="ml-8">使用 <code>const</code> 保护不该被修改的对象</li>
+</ul></div></section><section data-auto-animate><div><h2 id="const" class="text-xl mt-2 pb-2 font-sans">指针与 const</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="cm">/* 标明 p1 指针指向 const int</span>
+<span class="cm"> * 无法通过 p1 指针修改指向的对象</span>
+<span class="cm"> */</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">;</span>
+<span class="cm">/* 标明 p2 指针本身不可修改</span>
+<span class="cm"> * 保证 p2 指针始终指向对象 a</span>
+<span class="cm"> */</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">;</span>
+<span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="c1">// 编译错误</span>
+
+<span class="cm">/* 指针与指向对象均不可修改 */</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">p3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">;</span>
+
+<span class="cm">/* 危险，可能导致 UB */</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">;</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/storage_duration">生存期、存储期与链接</a></h2>
+<p class="font-serif my-1">生存期=对象存储期或临时对象</p>
+<ul class="list-disc font-serif">
+<li class="ml-8"><del>auto - 自动存储期与无链接</del></li>
+<li class="ml-8"><del>register - 自动存储期与无链接；不能取这种对象的地址</del></li>
+<li class="ml-8">static - 静态存储期与内部链接（除非在块作用域）</li>
+<li class="ml-8">extern - 静态存储期与外部链接（除非已声明带内部链接）</li>
+<li class="ml-8"><del>thread_local - 线程存储期</del></li>
+</ul>
+<p class="font-serif my-1">若不提供存储类说明符，则默认为：</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">对所有函数为 extern</li>
+<li class="ml-8">对在文件作用域的对象为 extern</li>
+<li class="ml-8">对在块作用域的对象为 auto</li>
+</ul></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">存储期</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">自动存储期。当进入对象所声明于其中的块时分配其存储，而当以任何方式（goto、return、抵达结尾）退出该块时解分配存储。</li>
+<li class="ml-8">静态存储期。存储期是整个程序的执行过程，只在 main 函数之前初始化一次存储于对象的值。</li>
+<li class="ml-8"><del>线程存储期。</del></li>
+<li class="ml-8">分配存储期。按照请求，用动态内存分配函数分配和解分配存储。</li>
+</ul>
+<p class="font-serif my-1">最佳实践:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">使用 <code>static</code> 声明静态存储期，使对象存在整个程序的执行过程。</li>
+<li class="ml-8">使用动态内存分配手动管理程序内存。</li>
+</ul></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">链接</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">无链接。只能从其所在的作用域指代该标识符。</li>
+<li class="ml-8">内部链接。能从当前翻译单元的所有作用域指代该标识符。</li>
+<li class="ml-8">外部链接。能从整个程序的任何其他翻译单元指代该标识符。</li>
+</ul>
+<p class="font-serif my-1">最佳实践:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">不要使用全局对象: 静态存储期和外部链接</li>
+<li class="ml-8">可以使用静态存储期和内部连接的对象</li>
+<li class="ml-8">使用 <code>static</code> 声明不需要暴露到全局的函数</li>
+</ul></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">多文件编译</h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">头文件:<ul class="list-disc font-serif">
+<li class="ml-8">头文件保护</li>
+<li class="ml-8">宏定义</li>
+<li class="ml-8">类型声明</li>
+<li class="ml-8">暴露类型定义</li>
+<li class="ml-8">对象声明</li>
+<li class="ml-8">函数声明</li>
+<li class="ml-8">static/inline 函数定义</li>
+</ul>
+</li>
+<li class="ml-8">源文件:<ul class="list-disc font-serif">
+<li class="ml-8">类型定义</li>
+<li class="ml-8">对象定义</li>
+<li class="ml-8">函数定义</li>
+</ul>
+</li>
+</ul></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">头文件保护</h2>
+<p class="font-serif my-1">考虑下面这种情况:</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cm">/* a.h */</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"b.h"</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="cm">/* b.h */</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"a.h"</span>
+<span class="cm">/* main.c */</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"a.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"b.h"</span>
+</code></pre></div>
+
+<p class="font-serif my-1">其中函数 sum 的定义在 main.c 引入了两次，违反了唯一定义规则，会导致编译错误。</p></div></section><section data-auto-animate><div><p class="font-serif my-1">使用头文件保护确保头文件仅能被同一个源文件<code>#include</code>一次</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#ifndef __HEAD_FILENAME_H__</span>
+<span class="cp">#define __HEAD_FILENAME_H__</span>
+<span class="cm">/* ... */</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+
+<p class="font-serif my-1">或</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#pragma once</span>
+</code></pre></div>
+
+<p class="font-serif my-1"><code>#pragma once</code> 是受到绝大多数现代编译器支持的<strong>非标准语用</strong>。当某个头文件中包含它时，指示编译器只对其分析一次，即使它在同一源文件中（直接或间接）被包含了多次也是如此。</p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">头文件最佳实践</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#ifndef __MATH_UTILS_H__</span>
+<span class="cp">#define __MATH_UTILS_H__</span>
+<span class="c1">// 1. 包含其他头文件</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+<span class="c1">// 2. 宏定义</span>
+<span class="cp">#define PI 3.14159</span>
+<span class="cp">#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))</span>
+<span class="c1">// 3. 类型定义</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Point</span><span class="p">;</span>
+<span class="c1">// 4. 函数声明</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">double_equal</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<span class="c1">// 5. 内联函数</span>
+<span class="kr">inline</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="cp">#endif </span><span class="c1">// __MATH_UTILS_H__</span>
+</code></pre></div></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">编译器</h2>
+<p class="font-serif my-1">RTFM: <a href="https://gcc.gnu.org/onlinedocs/gcc/index.html"><code>man gcc</code></a></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">编译选项</th>
+<th style="text-align: center;">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>-E</code></td>
+<td style="text-align: center;">对源文件进行预处理</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-S</code></td>
+<td style="text-align: center;">将源文件编译为汇编代码(C 代码 -&gt; 汇编代码)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-c</code></td>
+<td style="text-align: center;">将源文件编译为对象文件(C 代码 -&gt; 机器代码)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-o</code></td>
+<td style="text-align: center;">指定输出文件名</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-std=...</code></td>
+<td style="text-align: center;">选择使用的 C 语言标准规范</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-Wall</code></td>
+<td style="text-align: center;">开启所有可能的警告（建议开启）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-Werror</code></td>
+<td style="text-align: center;">将所有警告视为错误（建议开启）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-g</code></td>
+<td style="text-align: center;">生成调试信息（为调试器提供信息）</td>
+</tr>
+</tbody>
+</table></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">编译器</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">编译选项</th>
+<th style="text-align: center;">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>-O(g/1/2/3/s, ...)</code></td>
+<td style="text-align: center;">启用优化（需要调试程序时，建议使用<code>-Og</code>或不优化）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-Idir</code></td>
+<td style="text-align: center;">指定头文件搜索路径（dir）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-Ldir</code></td>
+<td style="text-align: center;">指定库文件搜索路径（dir）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-Dmacro</code></td>
+<td style="text-align: center;">定义宏（macro = 定义的值）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-llib</code></td>
+<td style="text-align: center;">指定连接的库文件</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-fsanitize=type</code></td>
+<td style="text-align: center;">启用类型相关的问题运行时检测，帮助识别类型不匹配和越界</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-v</code></td>
+<td style="text-align: center;">输出详细的编译过程信息</td>
+</tr>
+</tbody>
+</table></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">免费的午餐</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="c1"># 开启调试信息</span>
+<span class="c1"># 启用严格的编译检查</span>
+<span class="c1"># 开启程序运行时检测（地址访问与未定义行为检测）</span>
+<span class="c1"># sanitize 建议使用 clang，gcc的支持不够好</span>
+clang<span class="w"> </span>-g<span class="w"> </span>-Og<span class="w"> </span>-Wall<span class="w"> </span>-Werror<span class="w"> </span>-fsanitize<span class="o">=</span>address<span class="w"> </span><span class="se">\</span>
+-fsanitize<span class="o">=</span>undefined<span class="w"> </span>-o<span class="w"> </span>output<span class="w"> </span>input.c
+
+<span class="c1"># 开启 O2 优化，一般很少使用 O3</span>
+<span class="c1"># 开启链接时优化</span>
+gcc<span class="w"> </span>-O2<span class="w"> </span>-flto<span class="w"> </span>-Wall<span class="w"> </span>-Werror<span class="w"> </span>-o<span class="w"> </span>output<span class="w"> </span>input.c
+</code></pre></div>
+
+<blockquote>
+<p class="font-serif my-1">熟悉基础设施，可以提高效率！</p>
+</blockquote></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/language/translation_phases">编译详解</a></h2>
+<p class="font-serif my-1"><img class="center" src="./static/img/e109692d810a487fae1a2648615b54d6.png"/>
+<img class="center" src="./static/img/a1ff3155f35846a5a9dd79e7bf66b781.png"/></p></div></section><section data-auto-animate><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">编译详解</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>gcc<span class="w"> </span>-v<span class="w"> </span>-Wl,-verbose<span class="w"> </span>-o<span class="w"> </span>output<span class="w"> </span>input.c
+</code></pre></div>
+
+<ul class="list-disc font-serif">
+<li class="ml-8">预处理阶段: 替换注释为空格、宏文本替换<ul class="list-disc font-serif">
+<li class="ml-8"><code>-Idir</code>: <code>#include</code> 的搜索目录</li>
+</ul>
+</li>
+<li class="ml-8">编译阶段: 编译翻译单元为汇编代码</li>
+<li class="ml-8">汇编阶段: 编译汇编代码为对象文件</li>
+<li class="ml-8">链接阶段: 链接程序运行环境<ul class="list-disc font-serif">
+<li class="ml-8"><code>-Ldir</code>: <code>-llib</code> 的搜索目录</li>
+<li class="ml-8"><code>-static</code>: 进行静态链接（默认为动态链接）</li>
+<li class="ml-8"><code>-llib</code>: 尝试链接 <code>liblib.so</code> 和 <code>liblib.a</code> 文件</li>
+<li class="ml-8"><code>ldd</code>: 查看程序动态链接的动态库</li>
+<li class="ml-8">动态链接: 程序加载时根据路径加载动态链接库</li>
+<li class="ml-8">静态链接: 编译链接时将库编译进可执行文件</li>
+</ul>
+</li>
+</ul></div></section></section><section><section><div><h2 id="gnu-make" class="text-xl mt-2 pb-2 font-sans"><a href="https://www.gnu.org/software/make/manual/make.html">GNU Make</a></h2>
+<p class="font-serif my-1">GNU Make是一个自动化构建工具，用于管理和维护大型程序和项目的构建过程。通过读取定义了一系列规则的“Makefile”文件，根据文件修改时间来使用命令重新重新目标。</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">目标: 通常是Makefile中要生成的文件或要执行的动作<ul class="list-disc font-serif">
+<li class="ml-8">写在规则行的最左边。</li>
+<li class="ml-8">比如: 可执行文件</li>
+</ul>
+</li>
+<li class="ml-8">依赖: 确定目标如何生成，列出生成目标需要依赖的文件。<ul class="list-disc font-serif">
+<li class="ml-8">位于目标后列出的文件或目标。</li>
+<li class="ml-8">比如: 源代码和头文件</li>
+</ul>
+</li>
+<li class="ml-8">规则: 描述目标与依赖文件之间的依赖关系 <code>target: dependencies</code></li>
+<li class="ml-8">命令: 指定如何编译代码或构建目标。<ul class="list-disc font-serif">
+<li class="ml-8">位于规则下方，需要使用<strong>Tab缩进</strong>。</li>
+</ul>
+</li>
+</ul></div></section><section><div><h2 id="makefile" class="text-xl mt-2 pb-2 font-sans">Makefile 示例</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="c"># 变量定义</span>
+<span class="nv">CC</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span>gcc
+<span class="nv">CFLAGS</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span>-Wall<span class="w"> </span>-Werror<span class="w"> </span>-g<span class="w"> </span>-Og
+<span class="nv">TARGET</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span>program
+<span class="nv">SRCS</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span>main.c
+<span class="nv">OBJS</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">$(</span>SRCS:.c<span class="o">=</span>.o<span class="k">)</span>
+<span class="c"># 首个规则为 make 的默认目标</span>
+<span class="nf">all</span><span class="o">:</span><span class="w"> </span><span class="k">$(</span><span class="nv">TARGET</span><span class="k">)</span>
+<span class="c"># 链接目标文件</span>
+<span class="nf">$(TARGET)</span><span class="o">:</span><span class="w"> </span><span class="k">$(</span><span class="nv">OBJS</span><span class="k">)</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span><span class="k">$(</span>CFLAGS<span class="k">)</span><span class="w"> </span>-o<span class="w"> </span><span class="k">$(</span>TARGET<span class="k">)</span><span class="w"> </span><span class="k">$(</span>OBJS<span class="k">)</span>
+<span class="c"># 生成对象文件</span>
+<span class="nf">%.o</span><span class="o">:</span><span class="w"> </span>%.<span class="n">c</span>
+<span class="w">    </span><span class="k">$(</span>CC<span class="k">)</span><span class="w"> </span><span class="k">$(</span>CFLAGS<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span>-o<span class="w"> </span><span class="nv">$@</span><span class="w"> </span>$&lt;
+<span class="c"># 清理生成的文件</span>
+<span class="nf">clean</span><span class="o">:</span>
+<span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="k">$(</span>OBJS<span class="k">)</span><span class="w"> </span><span class="k">$(</span>TARGET<span class="k">)</span>
+<span class="c"># 伪目标</span>
+<span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">all</span> <span class="n">clean</span>
+</code></pre></div></div></section></section><section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">调试理论</h2>
+<p class="font-serif my-1">Code -&gt; Executable file -&gt; Fault -&gt; Error -&gt; Failure</p>
+<p class="font-serif my-1">软件工程领域中的三种 “错误”:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">Fault - 有bug的代码<ul class="list-disc font-serif">
+<li class="ml-8">如数组访问越界, 根据C语言标准, 这是UB</li>
+</ul>
+</li>
+<li class="ml-8">Error - 程序运行时刻的非预期状态<ul class="list-disc font-serif">
+<li class="ml-8">如某些内存的值被错误改写</li>
+</ul>
+</li>
+<li class="ml-8">Failure - 可观测的致命结果<ul class="list-disc font-serif">
+<li class="ml-8">如输出乱码/assert失败/段错误等</li>
+</ul>
+</li>
+</ul>
+<p class="font-serif my-1">调试 = 看着Failure, 找到Fault</p></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">调试过程</h2>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>Start                 Fault              Failure
++---------------------+------------------+
+                      |------ Error -----|
+</code></pre></div>
+
+<p class="font-serif my-1">程序员能做的:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">看到Failure, 知道肯定有问题</li>
+<li class="ml-8">可以检查程序的某个状态是否正确</li>
+</ul>
+<p class="font-serif my-1">但检查这件事并不容易</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">需要程序员来模拟一个应该正确的状态机的转移<ul class="list-disc font-serif">
+<li class="ml-8">人肉DiffTest</li>
+</ul>
+</li>
+<li class="ml-8">看上去都 “没什么问题”, 只能慢慢定位</li>
+</ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans">调试公理</h2>
+<h3 id="1">1. <red>机器永远是对的</red></h3>
+<blockquote>
+<p class="font-serif my-1">程序出错了, 不要怀疑真机的硬件/操作系统/编译器, 先怀疑自己的代码</p>
+</blockquote>
+<h3 id="2">2. <red>未测试代码永远是错的</red></h3>
+<blockquote>
+<p class="font-serif my-1">bug往往出现在那些你觉得“应该没问题”的地方</p>
+</blockquote>
+<h3 id="_2">要解决问题, 先摆正心态</h3></div></section><section><div><h2 id="tracer" class="text-xl mt-2 pb-2 font-sans">Tracer</h2>
+<p class="font-serif my-1">输出日志追踪程序状态</p>
+<ul class="list-disc font-serif">
+<li class="ml-8"><code>__func__</code>: 当前函数</li>
+<li class="ml-8"><code>__FILE__</code>: 当前文件名</li>
+<li class="ml-8"><code>__LINE__</code>: 当前行号</li>
+<li class="ml-8"><code>__VA_ARGS__</code>: 可变参数</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#define ANSI_FG_BLUE    "\33[1;34m"</span>
+<span class="cp">#define ANSI_NONE       "\33[0m"</span>
+<span class="cp">#define ANSI_FMT(str, fmt) fmt str ANSI_NONE</span>
+<span class="cp">#define Log(format, ...) \</span>
+<span class="cp">    printf(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_BLUE) "\n", \</span>
+<span class="cp">        __FILE__, __LINE__, __func__, ## __VA_ARGS__)</span>
+</code></pre></div></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.cppreference.com/w/c/error">断言</a></h2>
+<ul class="list-disc font-serif">
+<li class="ml-8">assert - 将预期的正确行为直接写到程序中</li>
+<li class="ml-8">保证程序运行中的不变量</li>
+<li class="ml-8">免费的午餐: <code>#define NDEBUG</code></li>
+</ul>
+<p class="font-serif my-1">调试理论层面的意义:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">如果捕捉到Error, 通过终止程序马上转变为可观测的Failure</li>
+<li class="ml-8">避免Error继续传播, 造成更难理解的Failure</li>
+<li class="ml-8">能够大幅提升调试效率</li>
+</ul>
+<p class="font-serif my-1">一些好的编程习惯:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">访问数组前先检查下标assert(idx &lt; ARRAY_SIZE);</li>
+<li class="ml-8">指针解引用前先assert(p != NULL);</li>
+<li class="ml-8">switch-case不存在默认情况时default: assert(0);</li>
+</ul></div></section><section><div><h2 id="_1" class="text-xl mt-2 pb-2 font-sans"><a href="https://zh.wikipedia.org/zh-sg/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95">单元测试</a></h2>
+<p class="font-serif my-1">在计算机编程中，单元测试又称为模块测试 ，是针对程序模块（软件设计的最小单位）来进行正确性检验的测试工作。</p>
+<p class="font-serif my-1">写单元测试是份累活:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">枚举所有可能的输入情况<ul class="list-disc font-serif">
+<li class="ml-8">你不会愿意一个个手写出来的 😂</li>
+</ul>
+</li>
+<li class="ml-8">需要软件工具来辅助我们<ul class="list-disc font-serif">
+<li class="ml-8">全遍历测试 - 写个程序/脚本, 生成全排列的测试用例</li>
+<li class="ml-8">随机测试 - 随机生成输入情况</li>
+</ul>
+</li>
+<li class="ml-8">对于复杂的设计: 验证空间 vs. 边界情况覆盖率<ul class="list-disc font-serif">
+<li class="ml-8">需要更好的规则指导, 这是一个前沿的研究问题</li>
+</ul>
+</li>
+</ul></div></section><section><div><h2 id="lint" class="text-xl mt-2 pb-2 font-sans">免费的午餐: Lint</h2>
+<p class="font-serif my-1">通过分析代码(静态程序分析), 提示编译通过但有潜在错误风险的代码</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">在编译阶段消灭Fault!</li>
+<li class="ml-8">虽然无法捕捉所有Fault, 但非常划算</li>
+</ul>
+<p class="font-serif my-1">编译器一般自带lint工具</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">gcc中的-Wall, -Werror</li>
+<li class="ml-8">clang中的analyzer</li>
+</ul>
+<p class="font-serif my-1">clangd和clang-tidy</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">格式化代码: 观察控制流语句的缩进</li>
+<li class="ml-8">静态分析: 未初始化的变量，未使用的变量</li>
+</ul></div></section><section><div><h2 id="sanitize-valgrind" class="text-xl mt-2 pb-2 font-sans">sanitize 与 valgrind</h2>
+<p class="font-serif my-1">sanitize:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">让编译器自动插入assert, 拦截常见的非预期行为</li>
+<li class="ml-8">AddressSanitizer - 检查指针越界, use-after-free</li>
+<li class="ml-8">LeakSanitizer - 检查内存泄漏</li>
+<li class="ml-8">UndefinedBehaviorSanitizer - 检查UB</li>
+<li class="ml-8">man gcc查看具体用法</li>
+</ul>
+<p class="font-serif my-1">valgrind:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">更加强大的 sanitize</li>
+<li class="ml-8">不需要编译时启用</li>
+</ul>
+<p class="font-serif my-1">使用它们后程序运行效率有所下降</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">但调试的时候非常值得, 躺着就能让工具帮你找bug</li>
+</ul></div></section><section data-auto-animate><div><h2 id="gdb" class="text-xl mt-2 pb-2 font-sans">调试器: <a href="https://sourceware.org/gdb/">GDB</a></h2>
+<p class="font-serif my-1">调试器: 可以根据需要暂停程序，并允许观察程序当前状态</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>GDB 命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>启动 GDB</td>
+<td><code>gdb ./your_program</code></td>
+<td>启动 GDB 并加载指定程序</td>
+</tr>
+<tr>
+<td>运行程序</td>
+<td><code>run</code></td>
+<td>启动并运行程序</td>
+</tr>
+<tr>
+<td>退出 GDB</td>
+<td><code>quit</code></td>
+<td>退出 GDB</td>
+</tr>
+<tr>
+<td>设置断点</td>
+<td><code>break main</code></td>
+<td>在 <code>main</code> 函数入口设置断点</td>
+</tr>
+<tr>
+<td/>
+<td><code>break 10</code></td>
+<td>在第 10 行设置断点</td>
+</tr>
+<tr>
+<td>删除断点</td>
+<td><code>delete</code></td>
+<td>删除所有断点</td>
+</tr>
+<tr>
+<td/>
+<td><code>delete &lt;breakpoint_number&gt;</code></td>
+<td>删除特定断点，例如 <code>delete 1</code></td>
+</tr>
+</tbody>
+</table></div></section><section data-auto-animate><div><h2 id="gdb" class="text-xl mt-2 pb-2 font-sans">GDB</h2>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>GDB 命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查看当前断点</td>
+<td><code>info breakpoints</code></td>
+<td>显示所有断点信息</td>
+</tr>
+<tr>
+<td>继续执行</td>
+<td><code>continue</code></td>
+<td>从断点处继续执行程序</td>
+</tr>
+<tr>
+<td>单步执行</td>
+<td><code>next</code></td>
+<td>单步执行下一行</td>
+</tr>
+<tr>
+<td/>
+<td><code>step</code></td>
+<td>单步执行，并进入函数调用</td>
+</tr>
+<tr>
+<td>运行到下一断点</td>
+<td><code>finish</code></td>
+<td>执行当前函数直到返回</td>
+</tr>
+<tr>
+<td>查看当前堆栈</td>
+<td><code>where</code></td>
+<td>显示当前的堆栈跟踪</td>
+</tr>
+<tr>
+<td>查看变量值</td>
+<td><code>print variable_name</code></td>
+<td>查看变量值，例如 <code>print a</code></td>
+</tr>
+<tr>
+<td>查看内存值</td>
+<td><code>x pointer</code></td>
+<td>查看指针指向的内存的值</td>
+</tr>
+<tr>
+<td>查看帮助</td>
+<td><code>help</code></td>
+<td>显示 GDB 的帮助信息</td>
+</tr>
+</tbody>
+</table></div></section><section><div><h2 id="fault" class="text-xl mt-2 pb-2 font-sans">正确的编程模式: 少写Fault</h2>
+<blockquote>
+<p class="font-serif my-1">正确的代码 != 好代码</p>
+<p class="font-serif my-1">好代码更大概率是正确的</p>
+</blockquote>
+<p class="font-serif my-1">好代码的两条重要准则:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8"><strong><green>不言自明</green> - <red>仅看代码就能明白</red>是做什么的(specification)</strong></li>
+<li class="ml-8"><strong><green>不言自证</green> - <red>仅看代码就能验证</red>实现是对的(verification)</strong></li>
+</ul>
+<p class="font-serif my-1">使用正确的编程模式写出好代码:</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">防御性编程 - 通过assert检查非预期行为</li>
+<li class="ml-8">减少代码中的隐含依赖 - 使得 “打破依赖”不会发生<ul class="list-disc font-serif">
+<li class="ml-8">头文件 + 源文件</li>
+</ul>
+</li>
+<li class="ml-8">编写可复用的代码 - 不要Copy-Paste</li>
+<li class="ml-8">使用合适的语言特性 - 把细节交给语言规范和编译器</li>
+</ul></div></section></section>
+        </div>
+    </div>
+
+    <script src="./static/reveal/reveal.js"></script>
+
+    <script>
+        Reveal.initialize({
+
+            width: 1024, height: 768,
+
+            slideNumber: 'c/t',
+            controlsTutorial: false,
+            progress: false,
+            hash: true,
+            center: false,
+            autoAnimateUnmatched: true,
+            autoAnimateEasing: 'ease-out',
+            autoAnimateDuration: 0.3,
+            transitionSpeed: 'fast'
+        });
+    </script>
+</body>
+
+</html>
