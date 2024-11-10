@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="./static/css/base.css" rel="stylesheet">
+    <link href="./static/css/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.font.im/css?family=Source+Serif+Pro%7CLato%7CInconsolata" rel="stylesheet"
+        type="text/css">
+    <title> Lecture-8 </title>
+    <!-- browser favicon -->
+    <link rel="shortcut icon" href="./static/img/favicon.png">
+    <style>
+        .font-sans {
+            font-family: 'Lato', 'SimHei', 'STHeiti', 'SimHei', 'Serif';
+        }
+
+        .font-serif {
+            font-family: 'Source Serif Pro', 'Songti SC', 'SimSun', 'Serif', serif;
+        }
+    </style>
+    <!-- <link rel="stylesheet" href="https://jyywiki.cn/static/katex/katex.min.css">
+    <script defer src="https://jyywiki.cn/static/katex/katex.min.js"></script> -->
+    <link rel="stylesheet" href="./static/katex/katex.min.css">
+    <script defer src="./static/katex/katex.min.js"></script>
+    <!-- <script defer src="https://jyywiki.cn/static/katex/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script> -->
+    <script defer src="./static/katex/auto-render.min.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                // customised options
+                // &#8226; auto-render specific keys, e.g.:
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true }
+                ],
+                // &#8226; rendering keys, e.g.:
+                throwOnError: false
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" href="./static/reveal/reveal.css">
+    <link rel="stylesheet" href="./static/reveal/theme/simple.css" id="theme">
+    <link rel="stylesheet" href="./static/jyy/jyy.css">
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    <div class="reveal">
+        <div class="slides">
+            <section><section><div class="center middle"><div style="width:100%"><div><h1 id="nekobytes-week8-io-ai-introduction" class="text-2xl mt-2 font-sans">NekoBytes Week8 I/O &amp; AI Introduction</h1><p class="font-serif my-1">
+    <include src="Slides_Author">
+        <div class="py-16">
+            <p class="font-serif my-1">
+                <a href="" class=" text-amber-900">
+                    晓阳
+                </a>
+            </p>
+        </div>
+        <div class="row">
+            <p class="font-serif my-1"/>
+            
+            <div class="author-affiliation">
+                <a href="" class=" text-amber-900">
+                    <p class="font-serif my-1">
+                        　　计算机科学联合会　　
+                    </p>
+                    <img class="inline-img h-24" src=".\static\img\c41c5cc21e4746ceb34f9d4bfa5638ae.ico" style="display: inline-block;"/>
+                </a>
+            </div>
+            
+        </div>
+    </include>
+</p></div></div></div></section></section><section><section><div class="center middle"><div style="width:100%"><div><h1 id="part1-io-introduction" class="text-2xl mt-2 font-sans">Part1 I/O Introduction</h1>
+<p class="font-serif my-1"><img class="float-right" src=".\static\img\2b89b7beada1487aac208b5df7cb0788.png" width="450px"/></p><div class="fragment" data-fragment-index="1"><p class="font-serif my-1"/><center><strong>We need save!</strong></center></div><div class="fragment" data-fragment-index="2"><p class="font-serif my-1"/><center><strong>Save need I/O</strong></center></div></div></div></div></section><section><div><h3 id="agenda">Agenda</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8">
+<ol>
+<li class="ml-8">C语言I/O库概述</li>
+</ol>
+</li>
+<li class="ml-8">
+<ol>
+<li class="ml-8">标准输入输出函数</li>
+</ol>
+</li>
+<li class="ml-8">
+<ol>
+<li class="ml-8">文件操作</li>
+</ol>
+</li>
+<li class="ml-8">
+<ol>
+<li class="ml-8">标准输入输出和错误输出</li>
+</ol>
+</li>
+<li class="ml-8">
+<ol>
+<li class="ml-8">终端重定向</li>
+</ol>
+</li>
+</ul></div></section><section><div><h3 id="cio">C语言I/O库概述</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8"><code>stdio.h</code> 是C标准库中的头文件，提供了输入输出功能的定义和声明。</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+</code></pre></div>
+
+<p class="font-serif my-1"><img src=".\static\img\41ec3fa0dcc244f988437ba591e4ba67.png"/></p></div></section><section><div><h3 id="_1">标准输入输出函数</h3>
+<p class="font-serif my-1">更为细节的用法可以参看C primer plus 或者在vscode中将鼠标指针悬停在函数名上，就能看到具体需要的参数</p>
+<ul class="list-disc font-serif">
+<li class="ml-8"><code>scanf()</code> 和 <code>printf()</code> 用于格式化输入输出。</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">//一个简单的示例代码，用于实现输出和用户输入相同的整数</span>
+<span class="c1">//使用visual stdio的同学需要使用scanf_s或者取消SDL检查</span>
+</code></pre></div></div></section><section><div><ul class="list-disc font-serif">
+<li class="ml-8"><code>getchar()</code> 和 <code>gets()</code> 用于字符输入。</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+<span class="w">    </span><span class="n">c</span><span class="o">=</span><span class="n">getchar</span><span class="p">();</span>
+<span class="w">    </span><span class="n">gets</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">//getchar从标准输入中读取一个字符</span>
+<span class="c1">//gets会读至空格，且不会检查目标缓冲区大小，所以不推荐使用，可以使用fgets替代</span>
+</code></pre></div></div></section><section><div><ul class="list-disc font-serif">
+<li class="ml-8"><code>puts()</code> 和 <code>putchar()</code> 用于字符串和字符输出。</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'a'</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">d</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"NekoBytes"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">putchar</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+<span class="w">    </span><span class="n">putchar</span><span class="p">(</span><span class="sc">'\n'</span><span class="p">);</span>
+<span class="w">    </span><span class="n">puts</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h3 id="_1">文件操作</h3>
+<p class="font-serif my-1"><img src=".\static\img\0d542d90cdea48bc993df9f072212da7.png"/></p></div></section><section><div><div class="fragment" data-fragment-index="1"><ul class="list-disc font-serif">
+<li class="ml-8">为什么使用缓存(buffer)？</li>
+</ul></div><div class="fragment" data-fragment-index="2"><div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>- 提高效率：
+</code></pre></div>
+
+<p class="font-serif my-1">直接从磁盘读取数据到内存或从内存写入数据到磁盘是相对较慢的操作。通过使用缓存区，可以减少对磁盘的直接访问次数。操作系统会将数据先读入缓存区，然后再从缓存区读取到应用程序，这样可以显著提高数据访问速度。</p></div><div class="fragment" data-fragment-index="3"><div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>- 减少I/O操作次数：
+</code></pre></div>
+
+<p class="font-serif my-1">磁盘I/O操作是计算机系统中最慢的操作之一。通过缓存区，可以将多次小的读写请求合并成一次较大的读写操作，从而减少I/O操作的次数，提高系统性能。</p></div></div></section><section><div><ul class="list-disc font-serif">
+<li class="ml-8">为什么使用缓存(buffer)？</li>
+</ul><div class="fragment" data-fragment-index="1"><div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>- 数据完整性：
+</code></pre></div>
+
+<p class="font-serif my-1">在文件写入过程中，数据首先被写入到缓存区。当缓存区满了或者操作系统决定将数据写入磁盘时，缓存区的数据才会被一次性写入磁盘。这种方式可以确保数据的完整性，避免因突然断电等情况导致的数据丢失。</p></div><div class="fragment" data-fragment-index="2"><div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>- 数据一致性：
+</code></pre></div>
+
+<p class="font-serif my-1">缓存区还可以帮助维护数据的一致性。当多个进程或线程同时访问同一个文件时，缓存区可以协调这些访问，确保数据的一致性和正确性。</p></div></div></section><section><div><ul class="list-disc font-serif">
+<li class="ml-8">为什么使用缓存(buffer)？</li>
+</ul><div class="fragment" data-fragment-index="1"><div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>- 预读和后写：
+</code></pre></div>
+
+<p class="font-serif my-1">操作系统通常会实现预读（预加载）和后写（延迟写入）策略。预读是指操作系统预测应用程序接下来可能会读取的数据，并提前将其从磁盘读入缓存区。后写则是将数据暂时存储在缓存区，直到系统认为合适的时候再写入磁盘。这两种策略都可以提高文件操作的效率。</p></div><div class="fragment" data-fragment-index="2"><div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>- 减少磁盘磨损：
+</code></pre></div>
+
+<p class="font-serif my-1">频繁的磁盘读写操作会加速磁盘的物理磨损。通过缓存区，可以减少对磁盘的直接访问，从而延长磁盘的使用寿命。</p></div></div></section><section><div><ul class="list-disc font-serif">
+<li class="ml-8">为什么使用缓存(buffer)？</li>
+</ul><div class="fragment" data-fragment-index="1"><div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>- 支持随机访问：
+</code></pre></div>
+
+<p class="font-serif my-1">缓存区使得文件的随机访问变得更加容易。应用程序可以通过缓存区快速访问之前已经读取过的数据，而不需要每次都从磁盘读取。</p></div><div class="fragment" data-fragment-index="2"><div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>- 支持多种文件访问模式：
+</code></pre></div>
+
+<p class="font-serif my-1">缓存区可以支持不同的文件访问模式，如顺序访问、随机访问等。这使得文件操作更加灵活和高效。</p></div></div></section><section><div><ul class="list-disc font-serif">
+<li class="ml-8">
+<p class="font-serif my-1">文件操作涉及到操作句柄<code>FILE*</code>。</p>
+<ul class="list-disc font-serif">
+<li class="ml-8">打开文件<code>fopen()</code>，关闭文件<code>fclose()</code></li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="w">    </span><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">FILE</span><span class="o">*</span><span class="w"> </span><span class="n">fp</span><span class="p">;</span>
+<span class="w">        </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">"filename"</span><span class="p">,</span><span class="err">'</span><span class="n">mode</span><span class="err">'</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">//参数顾名思义</span>
+<span class="w">        </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">//关闭文件</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre></div></div></section><section><div><h3 id="_1">标准输入输出和错误输出</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8">标准输入：<code>stdin</code></li>
+<li class="ml-8">标准输出：<code>stdout</code></li>
+<li class="ml-8">标准错误输出：<code>stderr</code></li>
+</ul>
+<p class="font-serif my-1">由此，我们可以在程序中将标准输入输出重定向到某个文件</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">freopen</span><span class="p">(</span><span class="s">"data1.txt"</span><span class="p">,</span><span class="s">"r"</span><span class="p">,</span><span class="n">stdin</span><span class="p">);</span><span class="c1">//输入重定向至data1.txt</span>
+<span class="w">    </span><span class="n">freopen</span><span class="p">(</span><span class="s">"data2.txt"</span><span class="p">,</span><span class="s">"w"</span><span class="p">,</span><span class="n">stdout</span><span class="p">);</span><span class="c1">//输出重定向至data2.txt</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">;</span>
+<span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">num</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="n">num</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><h3 id="_1">终端重定向</h3>
+<p class="font-serif my-1"><img src=".\static\img\c2a8b014891548efa10b0b1f2012362a.png"/></p></div></section><section><div><ul class="list-disc font-serif">
+<li class="ml-8">通过使用<code>&lt;</code>或<code>&gt;</code>符号，可以在终端完成输入输出的重定向。
+在此处，我们假定hello.c如下：</li>
+</ul>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+<span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span><span class="n">s</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span><span class="n">s</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div></section><section><div><p class="font-serif my-1">要在终端中重定向输入输出，我们首先需要将对于的源码程序编译为可执行文件：</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>gcc<span class="w"> </span>./test.c<span class="w"> </span>-o<span class="w"> </span>test.out
+</code></pre></div>
+
+<p class="font-serif my-1">随后，使用"&lt;"重定向输入，"&gt;"重定向输出</p>
+<div class="codehilite"><pre class="bg-gray-100 overflow-x-auto rounded p-2 mb-2 mt-2"><span/><code>gcc<span class="w"> </span>./test.out<span class="w"> </span>&lt;<span class="w"> </span>data1.txt<span class="w"> </span>&gt;<span class="w"> </span>data2.txt
+</code></pre></div>
+
+<p class="font-serif my-1">这样就能实现从data1.txt中读取字符串，再输出至data2.txt中</p></div></section></section><section><section><div class="center middle"><div style="width:100%"><div><h1 id="part2-ai-introduction" class="text-2xl mt-2 font-sans">Part2 AI Introduction</h1></div></div></div></section><section><div><h3 id="_1">人工智能 &amp; 机器学习导论</h3>
+<p class="font-serif my-1"><img src=".\static\img\c9edb650d3994c05b6c7a6ee9721f0f7.png"/></p></div></section><section><div><h3 id="agenda">Agenda</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8">
+<ol>
+<li class="ml-8">AI vs ML</li>
+</ol>
+</li>
+<li class="ml-8">
+<ol>
+<li class="ml-8">AI能帮我做什么？</li>
+</ol>
+</li>
+<li class="ml-8">
+<ol>
+<li class="ml-8">机器学习的主要类型</li>
+</ol>
+</li>
+<li class="ml-8">
+<ol>
+<li class="ml-8">线性回归的基本讲解</li>
+</ol>
+</li>
+</ul></div></section><section><div><h3 id="ai-vs-ml">AI vs ML</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8">AI（人工智能）：模拟人类智能进行任务的能力。</li>
+<li class="ml-8">ML（机器学习）：通过数据和算法让系统自动学习和改进。</li>
+</ul></div></section><section><div><h3 id="ai">AI能帮我做什么？</h3>
+<p class="font-serif my-1"><img src=".\static\img\977c6cef7f78466ea0265cdd1b536a8f.png"/></p></div></section><section><div><div class="fragment" data-fragment-index="1"><ul class="list-disc font-serif">
+<li class="ml-8">代码debug<ul class="list-disc font-serif">
+<li class="ml-8">直接将代码和出现的报错丢给GPT/KIMI/文心一言，可以快速找出一些简单的语法错误，或者快速将看不懂的报错翻译成看得懂的报错，从而为后续debug提供帮助。</li>
+</ul>
+</li>
+</ul></div><div class="fragment" data-fragment-index="2"><ul class="list-disc font-serif">
+<li class="ml-8">快速给出设计思路<ul class="list-disc font-serif">
+<li class="ml-8">搭建论文的框架，提供论文的讨论方向，为程序设计思路，甚至午饭吃什么！</li>
+</ul>
+</li>
+</ul></div><div class="fragment" data-fragment-index="3"><ul class="list-disc font-serif">
+<li class="ml-8">翻译外文文献<ul class="list-disc font-serif">
+<li class="ml-8">传统的翻译软件目前已经在开始引入大模型，但是既然都是引入了，为什么不直接把文献丢给大模型呢？相对而言，你会得到更好的上下文连贯性和相对精确的专业名词解释。</li>
+</ul>
+</li>
+</ul></div></div></section><section><div><div class="fragment" data-fragment-index="1"><ul class="list-disc font-serif">
+<li class="ml-8">总结报告<ul class="list-disc font-serif">
+<li class="ml-8">文献太长？T(oo)L(ong)D(on't)R(ead)！目前很多大模型都已经支持了上传pdf等格式的文件，将冗长的文献丢给AI让它为你精确概括似乎是提高阅读效率的一种方式。</li>
+</ul>
+</li>
+</ul></div><div class="fragment" data-fragment-index="2"><ul class="list-disc font-serif">
+<li class="ml-8">提供搜索引擎服务<ul class="list-disc font-serif">
+<li class="ml-8">同上，网上驳杂的信息太多，又或者你自己都不知道应该如何提问，那么不妨试试大模型吧！把问题给他，至少他不会在你问出无意义问题时告诉你”STFW“或者”RTFM“，相反，他会尽他所能为你罗列可能遇到的情况，这样就能加快你的搜索效率。</li>
+</ul>
+</li>
+</ul></div><div class="fragment" data-fragment-index="3"><ul class="list-disc font-serif">
+<li class="ml-8">解释难题<ul class="list-disc font-serif">
+<li class="ml-8">虽然AI做数学题往往会用错误的过程推出错误的答案，但是它仍然可以在你一筹莫展时为你提供一些之前没有想到的思路，甚至直接告诉你正解，相对于大多数拍题软件只给答案不给过程，大模型通常会告诉你每一步的原因（虽然很多时候是错的），不过结合搜题软件的过程让它解释为什么也不失为一个好的方式。</li>
+</ul>
+</li>
+</ul></div><div class="fragment" data-fragment-index="4"><ul class="list-disc font-serif">
+<li class="ml-8"><del>在完全不听的情况下完成水课作业</del></li>
+</ul></div></div></section><section><div><h3 id="_1">机器学习的主要类型</h3>
+<p class="font-serif my-1"><img src=".\static\img\6d6381489cb6422390b75721aaeb4f8a.png"/></p></div></section><section><div><ul class="list-disc font-serif">
+<li class="ml-8">监督学习（Supervised Learning）：<ul class="list-disc font-serif">
+<li class="ml-8">目标是训练一个模型，使其能够预测或决定未见过的数据的标签。
+包括回归（Regression）和分类（Classification）问题。
+常用的算法有：线性回归、逻辑回归、决策树、支持向量机（SVM）、神经网络等。</li>
+</ul>
+</li>
+<li class="ml-8">无监督学习（Unsupervised Learning）：<ul class="list-disc font-serif">
+<li class="ml-8">目标是发现数据中的模式或结构，而不需要预先定义的标签。
+主要包括聚类（Clustering）和降维（Dimensionality Reduction）。
+常用的算法有：K-means聚类、层次聚类、主成分分析（PCA）、自编码器等。</li>
+</ul>
+</li>
+<li class="ml-8">半监督学习（Semi-supervised Learning）：<ul class="list-disc font-serif">
+<li class="ml-8">结合了监督学习和无监督学习的特点，使用少量的标记数据和大量的未标记数据进行训练。
+常用于数据标签获取成本较高或数据量巨大的情况。</li>
+</ul>
+</li>
+</ul></div></section><section><div><ul class="list-disc font-serif">
+<li class="ml-8">强化学习（Reinforcement Learning）：<ul class="list-disc font-serif">
+<li class="ml-8">通过与环境的交互来学习如何做出决策，目标是最大化累积奖励。
+常用于游戏、机器人控制等领域。
+常用的算法有：Q学习、Sarsa、深度Q网络（DQN）、策略梯度方法等。</li>
+</ul>
+</li>
+</ul></div></section><section><div><h3 id="_1">线性回归的基本讲解</h3>
+<ul class="list-disc font-serif">
+<li class="ml-8">回归分析是一种预测性建模技术，研究自变量和因变量的关系。</li>
+<li class="ml-8">线性回归使用线或曲线拟合数据点。
+<img src=".\static\img\99331cc758d24c24b868375dc1fd130a.png"/></li>
+</ul></div></section><section><div><p class="font-serif my-1">可参考 </p>
+<p class="font-serif my-1"><a href="https://blog.csdn.net/iqdutao/article/details/109402570">线性回归模型详解(Linear Regression)</a></p>
+<p class="font-serif my-1"><a href="https://www.bilibili.com/video/BV1Ux411j7ri/?spm_id_from=333.999.0.0&amp;vd_source=064201691336866daa89c1444d12e27a">深度学习之梯度下降法 Part 2 ver 0.9 beta</a></p></div></section></section><section><section><div><h3 id="_1">作业</h3>
+<ol>
+<li class="ml-8">读取数据集的线性回归预测方法 (Lab)</li>
+<li class="ml-8">SoftMax分类或简易神经网络搭建 (Proj3)</li>
+</ol></div></section></section>
+        </div>
+    </div>
+
+    <script src="./static/reveal/reveal.js"></script>
+
+    <script>
+        Reveal.initialize({
+
+            width: 1024, height: 768,
+
+            slideNumber: 'c/t',
+            controlsTutorial: false,
+            progress: false,
+            hash: true,
+            center: false,
+            autoAnimateUnmatched: true,
+            autoAnimateEasing: 'ease-out',
+            autoAnimateDuration: 0.3,
+            transitionSpeed: 'fast'
+        });
+    </script>
+</body>
+
+</html>
