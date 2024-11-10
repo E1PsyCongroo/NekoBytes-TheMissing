@@ -30,28 +30,46 @@ NekoBytes-TheMissing
 ├── Projects/             // 课程大作业
 ├── Tools/                // 工具
 │   └── Setup/            // Linux初始化配置工具
-├── Web/                  // 课程主页
 ├── Others/               // 其他杂项，比如辅助阅读资源、课程示例代码
 ```
 
 ## 项目任务说明
 对应模块的任务说明请**参考对应目录**下的 README 文档。
 ### Labs
-- 课程实验，应保证实验框架注释充分明确，为每个实验配备对应的README文档指引，提供基本的单元测试
-- 本项目实验环境均为 **Ubuntu 22.04**，请贡献者确保课程实验能在该环境下正确进行
-- 目录下实验应确保为 Linux 环境下的 **tar.gz** 压缩格式。命名格式如下: Lab0.tar.gz, Lab1.tar.gz, Lab2.tar.gz, ...
+
+
+课程实验，包含Linux、tools、C语言，每个实验都有对应的README文档提供指引。目录下实验为Linux环境下的`tar.gz`压缩格式。
+
+命名格式如下: Lab0.tar.gz, Lab1.tar.gz, Lab2.tar.gz, etc.
+
 #### Solutions
-- 项目实验配套解决方案，同样为 **tar.gz** 压缩格式。命名格式如下: Lab0-Sol.tar.gz, Lab1-Sol.tar.gz, ...
-- 如有需要，可附文档文字说明
+
+实验配套解决方案，同样为`tar.gz`压缩格式。
+命名格式如下: Lab0-Sol.tar.gz, Lab1-Sol.tar.gz, etc.
+
 ### Lectures
-课程幻灯片，最终格式确保导出为 **PDF , 开发分支需要上传可供编辑修改的版本**。
+
+课程幻灯片，格式为PDF。
+
 ### Notes
-课程讲义，最终格式确保导出为 **MarkDown 与 PDF , 开发分支需要上传可供编辑修改的版本**。
+
+课程讲义，格式为PDF。
+
 ### Projects
-- 课程大作业，应配备完善的单元测试，README 文档。
-- 本项目实验环境均为 **Ubuntu 22.04**，请贡献者确保课程实验能在该环境下正确进行
-- 目录下作业应确保为 Linux 环境下的 **tar.gz** 压缩格式。命名格式如下: Proj0.tar.gz, Proj1.tar.gz, ...
-- 不必提供对应的解决方案。
+
+课程大项目，同样为`tar.gz`压缩格式。
+
+命名格式如下: Proj0.tar.gz, Proj1.tar.gz, etc.
+
+不提供对应的解决方案。
+
 ### Tools
 #### Setup
-Linux系统统一配置管理工具，为 Ubuntu 22.04 提供统一的环境可自定义初始化的配置工具。
+
+Linux系统统一配置管理工具
+
+### Others
+#### VSCode C/C++ 配置文件
+
+请使用VSCode导入配置文件：C-C++.code-profile
+

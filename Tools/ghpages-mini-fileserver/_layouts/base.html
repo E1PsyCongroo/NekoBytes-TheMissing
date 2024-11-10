@@ -1,0 +1,49 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="title">{{ page.title }}</title>
+  <link href="{{ '/assets/css/Karlheinz.css' | relative_url }}" rel="stylesheet">
+  <!-- css list start
+    <link href="{{ '/assets/css/openwrt.css' | relative_url }}" rel="stylesheet">
+    css list end-->
+  {% seo %}
+</head>
+
+<body>
+
+  {{ content }}
+
+  <p>
+    powered by <a href="https://github.com/muink/ghpages-mini-fileserver" target="_blank">ghpages-mini-fileserver</a> ©
+    Anya Lin
+    <br>
+    based on <a href="https://github.com/Karlheinzniebuhr/ghpages-fileserver" target="_blank">ghpages-fileserver</a> ©
+    Karlheinzniebuhr
+  </p>
+</body>
+
+<script>
+  var path = window.location.pathname;
+  var href = ["<a href='/'><em>(root)</em></a> /"];
+  var papart = path.trim().split("/");
+  var count = papart.length - 2;
+
+  if (count > 0) {
+    let regex = '';
+    for (var i = 1; i <= count; i++) {
+      regex = new RegExp('^/' + '([^/]+/){' + i + '}');
+      if (i > 1) {
+        href[i] = "<a href='" + path.match(regex)[0] + "'>" + decodeURI(papart[i]) + "</a> /";
+      } else {
+        href[i] = "<a href='" + path.match(regex)[0] + "'>~</a> /";
+      }
+    }
+  }
+
+  document.getElementById('title').innerHTML = "Index of " + decodeURI(path);
+  document.getElementById('path').innerHTML = "Index of " + href.join(" ");
+</script>
+
+</html>
