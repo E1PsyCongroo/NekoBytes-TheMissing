@@ -207,6 +207,7 @@ Vector generate_combinations(Vector data,int degree){
 }
 
 Matrix create_X(Data x_data, int degree){
+    //TODO
     return (Matrix){0,0,NULL};
 }
 

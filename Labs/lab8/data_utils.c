@@ -31,11 +31,9 @@ Data read_csv(int start_row, int num_rows, int start_col, int num_cols, char* fi
         printf("File could not be opened.\n");
         return (Data){0, 0, NULL};
     }
-
-    Data data = create_Data(num_rows, num_cols);
     //TODO
-
-    return data;
+    fclose(file);
+    return (Data){0, 0, NULL};
 }
 
 int get_file_len(char* file_path) {

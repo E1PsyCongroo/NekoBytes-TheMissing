@@ -17,15 +17,13 @@ float average(Data data) {
 }
 
 float calculate_slope(Data x_data,Data y_data) {
-    //TODO
-
     return 0;
+    //TODO
 }
 
 float calculate_intercept(float slope, float x_average, float y_average) {
-    //TODO
-    
     return 0;
+    //TODO
 }
 
 float calculate_residual_variance(Data actual, float* predicted) {
