@@ -1,10 +1,8 @@
-<div align="center">
-  <img src="https://cdn.xyxsw.site/hdu-cs-wiki%20full.svg" alt="logo" width="450rem" height="450rem"/>
-</div>
+# Lab8: 线性回归
 
 ## 1. 项目总览
 
-本次任务是实现一个简单的一元线性回归模型。我们将通过以下几个主要步骤来完成任务：
+本次任务是实现简单的线性回归模型。我们将通过以下几个主要步骤来完成任务：
 
 * **读取CSV文件**：实现一个函数 read_csv 来读取指定列的数据。
 
