@@ -2,56 +2,79 @@
 #include <stdio.h>
 #include "regression.h"
 
-int equal(float t1,float t2);
-int test_calculate_slope();
-int test_calculate_intercept();
-int test_read_csv();
+#include <criterion/criterion.h>
 
-int main() {
-    int flag = 1;
-    flag = test_calculate_slope();
-    flag = flag && test_calculate_intercept();
-    flag = flag && test_read_csv();
-
-    if(flag) {
-        printf("%s","ALL PASS\n");
+Test(linear,calculate_slope){
+    Data x = create_Data(5,1);
+    Data y = create_Data(5,1);
+    // y = 2x + 1
+    for(int i = 0 ; i < 5 ;i ++){
+        x.data[i][0] = i;
+        y.data[i][0] = i * 2 + 1;
     }
+    float result = calculate_slope(x,y);
+    cr_assert_eq(result,2.0);
+    free_Data(x);
+    free_Data(y);
 }
 
-int equal(float t1,float t2) {
-    return t1 > t2 - 1e-4 && t1 < t2 + 1e-4;
-}
-
-int test_calculate_slope() {
-    float x [] = {2,4,6};
-    float y [] = {5,9,13};
-    float slope = calculate_slope(x,y,3,4,9);
-    if (equal(slope,2)) {
-        printf("%s","calculate_slope pass\n");
-        return 1;
+Test(multiply,multiple_regression_predictio){
+    Data x = create_Data(10,1);
+    Data y = create_Data(10,1);
+    // y = 3x^2 + 2x + 10
+    for(int i = 0 ; i < 10 ;i ++){
+        x.data[i][0] = i;
+        y.data[i][0] = 3 * i * i + 2 * i + 10;
     }
-    printf("%s","calculate_slope faild\n");
-    return 0;
+
+    Vector coefficients = calculate_multiple_regression_coefficients(x,y,2);
+    
+    Data z = create_Data(1,1);
+    z.data[0][0] = 10;
+
+    float* result = multiple_regression_prediction(z,2,coefficients);
+    float ans = 3 *10 * 10 + 2 * 10 + 10;
+
+    free_vector(coefficients);
+    free_Data(x);
+    free_Data(y);
 }
 
-int test_calculate_intercept() {
-    float x [] = {2,4,6};
-    float y [] = {5,9,13};
-    float intercept = calculate_intercept(2,4,9);
-    if (equal(intercept,1)) {
-        printf("%s","calculate_intercept pass\n");
-        return 1;
-    }
-    printf("%s","calculate_intercept faild\n");
-    return 0;
-}
+//int main(){
+    //如果测试不通过，可以在下面取消注释来进行调试
 
-int test_read_csv() {
-    float* data = read_csv(1,3,1,"BostonHousing.csv");
-    if(equal(data[0],18) && equal(data[1],0) && equal(data[2],0)) {
-        printf("%s","read_csv pass\n");
-        return 1;
-    }
-    printf("%s","read_csv faild\n");
-    return 0;
-}
+    //     Data x = create_Data(5,1);
+    // Data y = create_Data(5,1);
+    // for(int i = 0 ; i < 5 ;i ++){
+    //     x.data[i][0] = i;
+    //     y.data[i][0] = i * 2 + 1;
+    // }
+    // float result = calculate_slope(x,y);
+    // printf("%d\n",result);
+    // free_Data(&x);
+    // free_Data(&y);
+
+    //上下不要同时取消注释
+    /* -------------------------------------------------------------*/
+
+    // Data x = create_Data(10,1);
+    // Data y = create_Data(10,1);
+    // // y = 3x^2 + 2x + 10
+    // for(int i = 0 ; i < 10 ;i ++){
+    //     x.data[i][0] = i;
+    //     y.data[i][0] = 3 * i * i + 2 * i + 10;
+    // }
+
+    // Vector coefficients = calculate_multiple_regression_coefficients(x,y,2);
+    
+    // Data z = create_Data(1,1);
+    // z.data[0][0] = 10;
+
+    // float* result = multiple_regression_prediction(z,2,coefficients);
+    // float ans = 3 *10 * 10 + 2 * 10 + 10;
+    // printf("%f , %f \n",ans,result[0]);
+
+    // free_Data(&x);
+    // free_Data(&y);
+//}
+

@@ -1,14 +1,12 @@
-<div align="center">
-  <img src="https://cdn.xyxsw.site/hdu-cs-wiki%20full.svg" alt="logo" width="450rem" height="450rem"/>
-</div>
+# Lab8: 线性回归
 
 ## 1. 项目总览
 
-本次任务是实现一个简单的一元线性回归模型。我们将通过以下几个主要步骤来完成任务：
+本次任务是实现简单的线性回归模型。我们将通过以下几个主要步骤来完成任务：
 
-* **读取CSV文件**：实现一个函数 float* read_csv(int start_row, int num_rows, int col, char* file_path) 来读取指定列的数据。
+* **读取CSV文件**：实现一个函数 read_csv 来读取指定列的数据。
 
-* **计算回归系数和截距**：实现 float calculate_slope(float* x, float* y, int n, float x_average, float y_average) 和 float calculate_intercept(float slope, float x_average, float y_average) 来计算线性回归模型的斜率和截距。
+* **计算回归系数和截距**：实现几个函数来计算线性回归模型的斜率和截距。
 
 ### 编译与使用
 
@@ -28,8 +26,19 @@
 
 ### read_csv:
 
-打开路径为file_path的文件，读取从start_row行开始的num_rows行，第col列的数据，返回一个float数组。
+打开路径为file_path的文件，读取从start_row行开始的num_rows行，第col列的数据，返回一个Data。
 
+关于Data结构体的定义如下：
+
+```c
+
+typedef struct {
+ int rows; // 行数
+ int cols; // 列数
+ float** data; // 数据
+} Data;
+
+```
 可能用到的函数：
 
 * fopen
@@ -54,6 +63,10 @@
 - \( \bar{y} \) 是因变量 \( y \) 的平均值。
 - \( n \) 是数据点的数量。
 
+Data结构体是一个二维数组，但在目前，我们只需要一维的数据，所以我们在实现一元一次回归时默认Data的列数为1。
+
+计算平均数可以使用average函数。
+
 ### calculate_intercept:
 
 计算线性回归模型的截距。
@@ -68,59 +81,124 @@
 - \( \bar{x} \) 是自变量 \( x \) 的平均值。
 - \( \bar{y} \) 是因变量 \( y \) 的平均值。
 
+完成这个函数后你应该可以通过第一个测试了
+
+### 多元多次的线性回归
+
+接下来我们要实现多元多次的线性回归
+
+ <span style="color: red;">下面的内容大量涉及数学，如果不想看可以直接看公式,跳过推导过程</span>
+
+## 多元多次线性回归的矩阵方法
+
+### 1. 线性回归模型
+
+在多元线性回归中，模型可以表示为：
+
+\[ 
+y = X\beta + \epsilon 
+\]
+
+其中：
+- \( y \) 是因变量的向量。
+- \( X \) 是设计矩阵，包括所有自变量。
+- \( \beta \) 是回归系数的向量。
+- \( \epsilon \) 是误差向量。
+
+### 2. 设计矩阵 \( X \)
+
+设计矩阵可以表示为：
+
+\[
+X = \begin{bmatrix}
+1 & x_{11} & x_{12} & x_{11}^2 & x_{12}^2 & x_{11}x_{12} & \cdots \\
+1 & x_{21} & x_{22} & x_{21}^2 & x_{22}^2 & x_{21}x_{22} & \cdots \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots \\
+1 & x_{n1} & x_{n2} & x_{n1}^2 & x_{n2}^2 & x_{n1}x_{n2} & \cdots \\
+\end{bmatrix}
+\]
+
+### 3. 回归系数的估计
+
+通过最小二乘法，我们估计回归系数：
+
+\[
+\hat{\beta} = (X^TX)^{-1}X^Ty
+\]
+
+### 4. 推导过程
+
+我们需要最小化误差平方和（残差平方和）：
+
+\[
+S(\beta) = (y - X\beta)^T(y - X\beta)
+\]
+
+展开这个目标函数：
+
+\[
+= y^Ty - 2\beta^TX^Ty + \beta^TX^TX\beta
+\]
+
+对 \(\beta\) 求导，并设导数为零：
+
+\[
+\frac{\partial S}{\partial \beta} = -2X^Ty + 2X^TX\beta = 0
+\]
+
+解方程：
+
+\[
+X^TX\beta = X^Ty
+\]
+
+假设 \(X^TX\) 可逆：
+
+\[
+\beta = (X^TX)^{-1}X^Ty
+\]
+
+### 5. 预测
+
+对新的数据点的预测为：
+
+\[
+\hat{y} = X_{\text{new}}\hat{\beta}
+\]
+
+
+我已经帮你完成了绝大部分内容，需要完成的是create_X函数
+此函数返回一个设计矩阵。
+
+完成此函数的方法有很多，你可以不按顺序填充此矩阵，只要确保最后所有变量的组合都
+在矩阵中且不重复就行。
+
+这里提供一种思路：设计一个函数，输入一组数和最大次数，返回所有的组合情况，再用这个函数去完成create_X。我声明了这个函数generate_combinations，当然你可以不实现这个函数，直接用你自己的方法。
+比如 输入 2,3和最大次数2,返回
+1 (0次)
+2,3(一次)
+6,4,9(二次)
+
+
+完成这个函数后你应该可以通过第二个测试了
 ***
 
 ## 3.测试
 
-以上函数都有对应的测试，可以通过以下命令进行测试：
 
     ./test
 
 我提供的测试非常简单，你可以根据需要自己编写测试
+同时可以运行memory_test.sh来检查是否有内存溢出
 
 ## 运行
 
-运行主程序：
+完成测试后就可以运行主程序了：
 
     ./main
 
-你会看到运行结果还挺不错的。
-这是应为data.csv中的数据是我自己生成的，我在一元一次函数中加了点噪声
-现在我们用上真正的数据集，波士顿房价数据集来试一下
-将文件名改成BostonHousing.csv
-我们选择看房间数量和放假的关系
-也就是把代码改成这样
-```c
-    float* train_x = read_csv(1, train_len, 5, file_path); // 第6列：房间数量（RM）
-    float* train_y = read_csv(1, train_len, 13, file_path); // 第14列：房价（MEDV）
-    float* test_x = read_csv(train_len + 1, test_len, 5, file_path);
-    float* test_y = read_csv(train_len + 1, test_len, 13, file_path);
+这里我们使用了波士顿房价数据来做测试。选用了三个变量，最大次数选择了两次。
+可以看到多元多次的效果比一元一次的效果要好不少。
 
-```
-运行之后看起来loss还挺大的
-接下来我们尝试使用多次去拟合
-现在选择使用三次函数去拟合
-```c
-    Vector v = calculate_multiple_regression_coefficients(train_x, train_y, train_len, 3);
-    float* multiple_pre = multiple_regression_prediction(test_x, test_len, v);
-    printf("Multiple Regression LOSS: %.5f\n", calculate_residual_variance(test_y, multiple_pre, test_len));
-```
-
-应该可以看到loss下降了，但还是不低，能不能用更高次去拟合
-
-尝试使用6次去拟合
-```c
-    Vector v = calculate_multiple_regression_coefficients(train_x, train_y, train_len, 6);
-```
-但是loss反而增加了
-如果去把在训练集上的loss也打印出来
-```c
-    Vector v = calculate_multiple_regression_coefficients(train_x, train_y, train_len, 6);
-    float* multiple_pre = multiple_regression_prediction(train_x, train_len, v);
-    printf("Multiple Regression LOSS: %.5f\n", calculate_residual_variance(train_y, multiple_pre, train_len));
-```
-你会发现随着次数增加，训练集上的loss在减少，但是测试的loss基本不动甚至增加这种现象被称为过拟合。主要原因是模型过于复杂，记住了训练数据中的噪声和细节，而不是学习到数据的整体趋势。
-
-所以我们应该选择一个合适的次数去拟合，使得训练集和测试集上的loss都尽可能小。
-
-同时，因为我们只选择了一个特征来进行预测，选择多个特征来进行预测结果会好很多。
+但是我们完成的代码也有不少问题
+现在发现的问题有次数不能选太高，选择3时效果变得非常差，可能是由于有些数据太大，或者太小，所以在做矩阵运算时容易出现问题。同时也不能选择太接近0的数据作为输入数据，不然会出现nan。
