@@ -45,5 +45,6 @@ int main(void) {
     free(multiple_pre);
     free(train_pre);
     free_vector(v);
+    
     return 0;
 }
